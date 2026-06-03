@@ -1,0 +1,499 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>红怪导航 · 工具墙</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background-color: #FFF5E6;
+            font-family: '微软雅黑', 'Segoe UI', 'Inter', sans-serif;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 40px 20px;
+            position: relative;
+        }
+
+        /* 右上角语言切换器 - 独立于卡片之外，位于背景右上角 */
+        .language-selector {
+            position: fixed;
+            top: 20px;
+            right: 24px;
+            z-index: 200;
+            background-color: #FFFFFF;
+            border: 1px solid #F0E0D0;
+            border-radius: 40px;
+            padding: 6px 12px;
+            display: flex;
+            gap: 8px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+            backdrop-filter: blur(2px);
+        }
+
+        .lang-btn {
+            background: none;
+            border: none;
+            font-size: 13px;
+            font-weight: 500;
+            cursor: pointer;
+            padding: 4px 10px;
+            border-radius: 30px;
+            transition: all 0.2s;
+            color: #888888;
+            font-family: inherit;
+        }
+
+        .lang-btn.active {
+            background-color: #FF8C42;
+            color: white;
+        }
+
+        .lang-btn:not(.active):hover {
+            background-color: #FFF0E5;
+            color: #E67A30;
+        }
+
+        .card {
+            background-color: #FFFFFF;
+            border: 1px solid #F0E0D0;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.05);
+            width: 540px;
+            max-width: 100%;
+            padding: 0 28px 36px 28px;
+        }
+
+        .top-orange-strip {
+            width: calc(100% + 56px);
+            margin: 0 -28px 0 -28px;
+            height: 6px;
+            background-color: #FF8C42;
+        }
+
+        .top-white-bar {
+            width: calc(100% + 56px);
+            margin: 0 -28px 0 -28px;
+            background-color: #FFFFFF;
+            padding: 12px 28px;
+            border-bottom: 1px solid #F0E0D0;
+            font-size: 16px;
+            font-weight: 600;
+            color: #2D2D2D;
+            display: flex;
+            justify-content: flex-start;
+            align-items: center;
+            box-sizing: border-box;
+        }
+
+        .top-white-bar span::before {
+            content: "🐤 ";
+            font-size: 15px;
+        }
+
+        .big-btn {
+            background-color: #FF8C42;
+            color: white;
+            font-size: 16px;
+            font-weight: bold;
+            padding: 14px 20px;
+            width: 100%;
+            border: none;
+            cursor: pointer;
+            text-align: center;
+            display: inline-block;
+            text-decoration: none;
+            transition: all 0.2s;
+            margin-top: 24px;
+            margin-bottom: 12px;
+            letter-spacing: 2px;
+            border-radius: 4px;
+        }
+
+        .big-btn:hover {
+            background-color: #E67A30;
+            transform: translateY(-1px);
+        }
+
+        .hint-text {
+            color: #888888;
+            font-size: 11px;
+            text-align: center;
+            margin-bottom: 24px;
+        }
+
+        .divider {
+            height: 1px;
+            background-color: #F0E0D0;
+            margin: 20px 0;
+            width: 100%;
+        }
+
+        .links-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin: 16px 0;
+        }
+
+        .link-card {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            background: #FFFFFF;
+            border: 1px solid #F0E0D0;
+            padding: 12px 16px;
+            text-decoration: none;
+            color: #2D2D2D;
+            transition: all 0.2s;
+            cursor: pointer;
+        }
+
+        .link-card:hover {
+            background-color: #FFF5E6;
+            border-color: #FF8C42;
+            transform: translateX(4px);
+        }
+
+        .link-icon {
+            width: 40px;
+            height: 40px;
+            background: #FFF0E5;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            color: #FF8C42;
+            border-radius: 8px;
+        }
+
+        .link-info {
+            flex: 1;
+        }
+
+        .link-name {
+            font-weight: 600;
+            font-size: 14px;
+            margin-bottom: 4px;
+        }
+
+        .link-desc {
+            font-size: 11px;
+            color: #AAAAAA;
+            word-break: break-all;
+        }
+
+        .section-title {
+            font-size: 14px;
+            font-weight: 600;
+            color: #2D2D2D;
+            margin: 20px 0 12px 0;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            border-left: 3px solid #FF8C42;
+            padding-left: 12px;
+        }
+
+        @media (max-width: 560px) {
+            body {
+                padding: 20px 16px;
+            }
+            .card {
+                padding: 0 20px 28px 20px;
+            }
+            .top-orange-strip {
+                width: calc(100% + 40px);
+                margin: 0 -20px 0 -20px;
+            }
+            .top-white-bar {
+                width: calc(100% + 40px);
+                margin: 0 -20px 0 -20px;
+                padding: 10px 20px;
+            }
+            .language-selector {
+                top: 12px;
+                right: 16px;
+                padding: 4px 8px;
+            }
+            .lang-btn {
+                font-size: 11px;
+                padding: 2px 8px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- 右上角语言选项 -->
+    <div class="language-selector">
+        <button class="lang-btn active" data-lang="zh">中文</button>
+        <button class="lang-btn" data-lang="en">English</button>
+    </div>
+
+    <div class="card">
+        <div class="top-orange-strip"></div>
+        <div class="top-white-bar">
+            <span>红怪</span>
+        </div>
+
+        <div>
+            <a href="https://space.bilibili.com/394466602" target="_blank" class="big-btn" data-key="bilibiliBtn">📁 红怪的B站首页</a>
+            <div class="hint-text" data-key="hintText">💡 点击按钮跳转B站，或使用下方链接</div>
+        </div>
+
+        <div class="divider"></div>
+
+        <div class="section-title">
+            <span data-key="linkCollectionIcon">🔗</span> <span data-key="linkCollectionTitle">链接收藏</span>
+        </div>
+        <div class="links-grid">
+            <a href="https://discord.gg/nB2w3NQhkE" target="_blank" class="link-card">
+                <div class="link-icon">💬</div>
+                <div class="link-info">
+                    <div class="link-name" data-key="discordName">Discord 社区</div>
+                    <div class="link-desc" data-key="discordDesc">红怪的 Discord 邀请链接</div>
+                </div>
+            </a>
+            <a href="https://github.com/hong-a-debug" target="_blank" class="link-card">
+                <div class="link-icon">🐙</div>
+                <div class="link-info">
+                    <div class="link-name" data-key="githubName">GitHub 主页</div>
+                    <div class="link-desc" data-key="githubDesc">杂七杂八的东西</div>
+                </div>
+            </a>
+        </div>
+
+        <div class="section-title">
+            <span data-key="toolsIcon">🛠️</span> <span data-key="toolsTitle">工具直链</span>
+        </div>
+        <div class="links-grid">
+            <a href="https://wwbkg.lanzouu.com/iu9qA3qmj4rc" target="_blank" class="link-card">
+                <div class="link-icon">🐤</div>
+                <div class="link-info">
+                    <div class="link-name" data-key="toolName">小鸡头像自动工具</div>
+                    <div class="link-desc" data-key="toolDesc">密码：discord社区 | 蓝奏云下载 18.3M</div>
+                </div>
+            </a>
+            <div class="link-card" id="pclHomeBtn" style="cursor: pointer;">
+                <div class="link-icon">🚀</div>
+                <div class="link-info">
+                    <div class="link-name" data-key="pclName">PCL主页</div>
+                    <div class="link-desc" data-key="pclDesc">空白弹窗，内含可复制内容</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 语言包
+        const translations = {
+            zh: {
+                bilibiliBtn: "📁 红怪的B站首页",
+                hintText: "💡 点击按钮跳转B站，或使用下方链接",
+                linkCollectionIcon: "🔗",
+                linkCollectionTitle: "链接收藏",
+                discordName: "Discord 社区",
+                discordDesc: "红怪的 Discord 邀请链接",
+                githubName: "GitHub 主页",
+                githubDesc: "杂七杂八的东西",
+                toolsIcon: "🛠️",
+                toolsTitle: "工具直链",
+                toolName: "小鸡头像自动工具",
+                toolDesc: "密码：discord社区 | 蓝奏云下载 18.3M",
+                pclName: "PCL主页",
+                pclDesc: "空白弹窗，内含可复制内容"
+            },
+            en: {
+                bilibiliBtn: "📁 Hongguai's Bilibili",
+                hintText: "💡 Click to visit Bilibili, or use links below",
+                linkCollectionIcon: "🔗",
+                linkCollectionTitle: "Link Collection",
+                discordName: "Discord Community",
+                discordDesc: "Hongguai's Discord invite",
+                githubName: "GitHub Home",
+                githubDesc: "Miscellaneous stuff",
+                toolsIcon: "🛠️",
+                toolsTitle: "Tools",
+                toolName: "Chick Avatar Tool",
+                toolDesc: "Password: discord community | Lanzou 18.3M",
+                pclName: "PCL Home",
+                pclDesc: "Popup with copyable content"
+            }
+        };
+
+        let currentLang = 'zh';
+
+        function switchLanguage(lang) {
+            currentLang = lang;
+            const texts = translations[lang];
+            
+            // 更新所有带 data-key 属性的元素
+            document.querySelectorAll('[data-key]').forEach(el => {
+                const key = el.getAttribute('data-key');
+                if (texts[key]) {
+                    if (el.tagName === 'A' && el.classList.contains('big-btn')) {
+                        el.innerHTML = texts[key];
+                    } else if (el.tagName === 'SPAN' || el.tagName === 'DIV' || el.tagName === 'A') {
+                        // 对于链接内的文本，直接更新 innerHTML 会移除子元素，需谨慎
+                        // 这里只更新纯文本或简单内容
+                        if (el.childNodes.length === 1 && el.childNodes[0].nodeType === Node.TEXT_NODE) {
+                            el.childNodes[0].nodeValue = texts[key];
+                        } else if (el.children.length === 0) {
+                            el.innerHTML = texts[key];
+                        } else {
+                            // 对于有子元素但 data-key 在父级的情况，只更新文本节点
+                            const walk = document.createTreeWalker(el, NodeFilter.SHOW_TEXT, null, false);
+                            while (walk.nextNode()) {
+                                const node = walk.currentNode;
+                                if (node.nodeType === Node.TEXT_NODE && node.textContent.trim() !== '') {
+                                    if (key === 'linkCollectionIcon' || key === 'toolsIcon') {
+                                        // 图标部分保留 emoji
+                                        node.textContent = texts[key];
+                                    } else {
+                                        node.textContent = texts[key];
+                                    }
+                                    break;
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+            
+            // 特殊处理 .link-name 和 .link-desc 因为被 data-key 标记在父级了
+            const discordName = document.querySelector('a[href="https://discord.gg/nB2w3NQhkE"] .link-name');
+            if (discordName) discordName.textContent = texts.discordName;
+            const discordDesc = document.querySelector('a[href="https://discord.gg/nB2w3NQhkE"] .link-desc');
+            if (discordDesc) discordDesc.textContent = texts.discordDesc;
+            
+            const githubName = document.querySelector('a[href="https://github.com/hong-a-debug"] .link-name');
+            if (githubName) githubName.textContent = texts.githubName;
+            const githubDesc = document.querySelector('a[href="https://github.com/hong-a-debug"] .link-desc');
+            if (githubDesc) githubDesc.textContent = texts.githubDesc;
+            
+            const toolName = document.querySelector('a[href="https://wwbkg.lanzouu.com/iu9qA3qmj4rc"] .link-name');
+            if (toolName) toolName.textContent = texts.toolName;
+            const toolDesc = document.querySelector('a[href="https://wwbkg.lanzouu.com/iu9qA3qmj4rc"] .link-desc');
+            if (toolDesc) toolDesc.textContent = texts.toolDesc;
+            
+            const pclName = document.querySelector('#pclHomeBtn .link-name');
+            if (pclName) pclName.textContent = texts.pclName;
+            const pclDesc = document.querySelector('#pclHomeBtn .link-desc');
+            if (pclDesc) pclDesc.textContent = texts.pclDesc;
+        }
+
+        // 绑定语言切换按钮事件
+        document.querySelectorAll('.lang-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                const lang = btn.getAttribute('data-lang');
+                if (!lang) return;
+                currentLang = lang;
+                // 更新按钮激活样式
+                document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                switchLanguage(lang);
+            });
+        });
+
+        // PCL主页 弹窗逻辑（原封不动保留）
+        document.getElementById('pclHomeBtn').addEventListener('click', function() {
+            const textToCopy = 'https://raw.githubusercontent.com/hong-a-debug/w/main/Custom.xaml';
+            
+            const modalOverlay = document.createElement('div');
+            modalOverlay.style.position = 'fixed';
+            modalOverlay.style.top = '0';
+            modalOverlay.style.left = '0';
+            modalOverlay.style.width = '100%';
+            modalOverlay.style.height = '100%';
+            modalOverlay.style.backgroundColor = 'rgba(0,0,0,0.5)';
+            modalOverlay.style.display = 'flex';
+            modalOverlay.style.justifyContent = 'center';
+            modalOverlay.style.alignItems = 'center';
+            modalOverlay.style.zIndex = '1000';
+            
+            const modalContent = document.createElement('div');
+            modalContent.style.backgroundColor = '#fff';
+            modalContent.style.padding = '24px';
+            modalContent.style.borderRadius = '16px';
+            modalContent.style.width = '320px';
+            modalContent.style.maxWidth = '90%';
+            modalContent.style.boxShadow = '0 20px 35px -12px rgba(0,0,0,0.3)';
+            modalContent.style.border = '1px solid #F0E0D0';
+            modalContent.style.textAlign = 'center';
+            
+            const title = document.createElement('h3');
+            title.innerText = currentLang === 'zh' ? '📋 复制内容' : '📋 Copy Text';
+            title.style.marginBottom = '16px';
+            title.style.fontSize = '18px';
+            title.style.color = '#2D2D2D';
+            
+            const textContainer = document.createElement('div');
+            textContainer.style.backgroundColor = '#FFF5E6';
+            textContainer.style.padding = '12px';
+            textContainer.style.borderRadius = '8px';
+            textContainer.style.marginBottom = '20px';
+            textContainer.style.wordBreak = 'break-all';
+            textContainer.style.fontSize = '12px';
+            textContainer.style.fontFamily = 'monospace';
+            textContainer.style.color = '#E67A30';
+            textContainer.innerText = textToCopy;
+            
+            const copyBtn = document.createElement('button');
+            copyBtn.innerText = currentLang === 'zh' ? '复制文本' : 'Copy';
+            copyBtn.style.backgroundColor = '#FF8C42';
+            copyBtn.style.color = 'white';
+            copyBtn.style.border = 'none';
+            copyBtn.style.padding = '8px 20px';
+            copyBtn.style.borderRadius = '40px';
+            copyBtn.style.fontSize = '14px';
+            copyBtn.style.cursor = 'pointer';
+            copyBtn.style.marginRight = '12px';
+            
+            const closeBtn = document.createElement('button');
+            closeBtn.innerText = currentLang === 'zh' ? '关闭' : 'Close';
+            closeBtn.style.backgroundColor = '#EAEAEA';
+            closeBtn.style.color = '#555';
+            closeBtn.style.border = 'none';
+            closeBtn.style.padding = '8px 20px';
+            closeBtn.style.borderRadius = '40px';
+            closeBtn.style.fontSize = '14px';
+            closeBtn.style.cursor = 'pointer';
+            
+            const btnWrapper = document.createElement('div');
+            btnWrapper.appendChild(copyBtn);
+            btnWrapper.appendChild(closeBtn);
+            
+            modalContent.appendChild(title);
+            modalContent.appendChild(textContainer);
+            modalContent.appendChild(btnWrapper);
+            modalOverlay.appendChild(modalContent);
+            document.body.appendChild(modalOverlay);
+            
+            copyBtn.addEventListener('click', () => {
+                navigator.clipboard.writeText(textToCopy).then(() => {
+                    copyBtn.innerText = currentLang === 'zh' ? '✅ 已复制' : '✅ Copied';
+                    setTimeout(() => {
+                        copyBtn.innerText = currentLang === 'zh' ? '复制文本' : 'Copy';
+                    }, 1500);
+                }).catch(() => {
+                    alert(currentLang === 'zh' ? '复制失败，请手动选择文本' : 'Copy failed, please select manually');
+                });
+            });
+            
+            const closeModal = () => {
+                document.body.removeChild(modalOverlay);
+            };
+            closeBtn.addEventListener('click', closeModal);
+            modalOverlay.addEventListener('click', (e) => {
+                if (e.target === modalOverlay) closeModal();
+            });
+        });
+    </script>
+</body>
+</html>
