@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
     <title>红怪的个人博客</title>
-    <!-- 标签页图标 -->
     <link rel="icon" type="image/png" href="/icon/icon.png">
     <style>
         * {
@@ -135,6 +134,51 @@
             width: 100%;
         }
 
+        .search-section {
+            margin: 16px 0 20px 0;
+        }
+
+        .search-container {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+        }
+
+        .search-input {
+            flex: 1;
+            padding: 10px 14px;
+            border: 1px solid #F0E0D0;
+            border-radius: 40px;
+            font-size: 14px;
+            font-family: inherit;
+            background-color: #FFFFFF;
+            transition: all 0.2s;
+            outline: none;
+        }
+
+        .search-input:focus {
+            border-color: #FF8C42;
+            box-shadow: 0 0 0 2px rgba(255, 140, 66, 0.2);
+        }
+
+        .search-btn {
+            background-color: #FF8C42;
+            color: white;
+            border: none;
+            padding: 10px 18px;
+            border-radius: 40px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-family: inherit;
+        }
+
+        .search-btn:hover {
+            background-color: #E67A30;
+            transform: translateY(-1px);
+        }
+
         .links-grid {
             display: flex;
             flex-direction: column;
@@ -159,6 +203,10 @@
             background-color: #FFF5E6;
             border-color: #FF8C42;
             transform: translateX(4px);
+        }
+
+        .link-card.hidden {
+            display: none;
         }
 
         .link-icon {
@@ -189,16 +237,16 @@
             word-break: break-all;
         }
 
-        .section-title {
-            font-size: 14px;
-            font-weight: 600;
-            color: #2D2D2D;
-            margin: 20px 0 12px 0;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            border-left: 3px solid #FF8C42;
-            padding-left: 12px;
+        .no-result {
+            text-align: center;
+            padding: 20px;
+            color: #AAAAAA;
+            font-size: 13px;
+            display: none;
+        }
+
+        .no-result.show {
+            display: block;
         }
 
         @media (max-width: 560px) {
@@ -226,6 +274,17 @@
                 font-size: 11px;
                 padding: 2px 8px;
             }
+            .search-container {
+                gap: 6px;
+            }
+            .search-input {
+                padding: 8px 12px;
+                font-size: 13px;
+            }
+            .search-btn {
+                padding: 8px 14px;
+                font-size: 13px;
+            }
         }
     </style>
 </head>
@@ -248,45 +307,44 @@
 
         <div class="divider"></div>
 
-        <div class="section-title">
-            <span data-key="linkCollectionIcon">🔗</span> <span data-key="linkCollectionTitle">链接收藏</span>
+        <div class="search-section">
+            <div class="search-container">
+                <input type="text" id="searchInput" class="search-input" placeholder="搜索链接..." data-key="searchPlaceholder">
+                <button id="searchBtn" class="search-btn" data-key="searchBtn">搜索</button>
+            </div>
         </div>
-        <div class="links-grid">
-            <a href="https://discord.gg/nB2w3NQhkE" target="_blank" class="link-card">
+
+        <div class="links-grid" id="linksGrid">
+            <a href="https://discord.gg/nB2w3NQhkE" target="_blank" class="link-card" data-name="Discord 社区" data-desc="红怪的 Discord 邀请链接">
                 <div class="link-icon">💬</div>
                 <div class="link-info">
                     <div class="link-name" data-key="discordName">Discord 社区</div>
                     <div class="link-desc" data-key="discordDesc">红怪的 Discord 邀请链接</div>
                 </div>
             </a>
-            <a href="https://github.com/hong-a-debug" target="_blank" class="link-card">
+            <a href="https://github.com/hong-a-debug" target="_blank" class="link-card" data-name="GitHub 主页" data-desc="杂七杂八的东西">
                 <div class="link-icon">🐙</div>
                 <div class="link-info">
                     <div class="link-name" data-key="githubName">GitHub 主页</div>
                     <div class="link-desc" data-key="githubDesc">杂七杂八的东西</div>
                 </div>
             </a>
-        </div>
-
-        <div class="section-title">
-            <span data-key="toolsIcon">🛠️</span> <span data-key="toolsTitle">工具直链</span>
-        </div>
-        <div class="links-grid">
-            <a href="https://wwbkg.lanzouu.com/iu9qA3qmj4rc" target="_blank" class="link-card">
+            <a href="https://wwbkg.lanzouu.com/iu9qA3qmj4rc" target="_blank" class="link-card" data-name="小鸡头像自动工具" data-desc="密码：discord社区 | 蓝奏云下载 18.3M">
                 <div class="link-icon">🐤</div>
                 <div class="link-info">
                     <div class="link-name" data-key="toolName">小鸡头像自动工具</div>
                     <div class="link-desc" data-key="toolDesc">密码：discord社区 | 蓝奏云下载 18.3M</div>
                 </div>
             </a>
-            <div class="link-card" id="pclHomeBtn" style="cursor: pointer;">
+            <div class="link-card" id="pclHomeBtn" style="cursor: pointer;" data-name="PCL主页" data-desc="点击弹窗复制内容">
                 <div class="link-icon">🚀</div>
                 <div class="link-info">
                     <div class="link-name" data-key="pclName">PCL主页</div>
-                    <div class="link-desc" data-key="pclDesc">空白弹窗，内含可复制内容</div>
+                    <div class="link-desc" data-key="pclDesc">点击弹窗复制内容</div>
                 </div>
             </div>
         </div>
+        <div class="no-result" id="noResult" data-key="noResult">😢 没有找到相关链接</div>
     </div>
 
     <script>
@@ -294,34 +352,32 @@
             zh: {
                 bilibiliBtn: "📁 红怪的B站首页",
                 hintText: "💡 点击按钮跳转B站，或使用下方链接",
-                linkCollectionIcon: "🔗",
-                linkCollectionTitle: "链接收藏",
+                searchPlaceholder: "搜索链接...",
+                searchBtn: "搜索",
                 discordName: "Discord 社区",
                 discordDesc: "红怪的 Discord 邀请链接",
                 githubName: "GitHub 主页",
                 githubDesc: "杂七杂八的东西",
-                toolsIcon: "🛠️",
-                toolsTitle: "工具直链",
                 toolName: "小鸡头像自动工具",
                 toolDesc: "密码：discord社区 | 蓝奏云下载 18.3M",
                 pclName: "PCL主页",
-                pclDesc: "空白弹窗，内含可复制内容"
+                pclDesc: "点击弹窗复制内容",
+                noResult: "😢 没有找到相关链接"
             },
             en: {
                 bilibiliBtn: "📁 Hongguai's Bilibili",
                 hintText: "💡 Click to visit Bilibili, or use links below",
-                linkCollectionIcon: "🔗",
-                linkCollectionTitle: "Link Collection",
+                searchPlaceholder: "Search links...",
+                searchBtn: "Search",
                 discordName: "Discord Community",
                 discordDesc: "Hongguai's Discord invite",
                 githubName: "GitHub Home",
                 githubDesc: "Miscellaneous stuff",
-                toolsIcon: "🛠️",
-                toolsTitle: "Tools",
                 toolName: "Chick Avatar Tool",
                 toolDesc: "Password: discord community | Lanzou 18.3M",
                 pclName: "PCL Home",
-                pclDesc: "Popup with copyable content"
+                pclDesc: "Click to copy",
+                noResult: "😢 No matching links found"
             }
         };
 
@@ -333,30 +389,16 @@
             
             document.querySelectorAll('[data-key]').forEach(el => {
                 const key = el.getAttribute('data-key');
-                if (texts[key] && el.tagName !== 'A') {
-                    el.textContent = texts[key];
+                if (texts[key]) {
+                    if (el.tagName === 'A' && el.classList.contains('big-btn')) {
+                        el.innerHTML = texts[key];
+                    } else if (el.tagName === 'INPUT') {
+                        el.placeholder = texts[key];
+                    } else {
+                        el.textContent = texts[key];
+                    }
                 }
             });
-            
-            const discordName = document.querySelector('a[href="https://discord.gg/nB2w3NQhkE"] .link-name');
-            if (discordName) discordName.textContent = texts.discordName;
-            const discordDesc = document.querySelector('a[href="https://discord.gg/nB2w3NQhkE"] .link-desc');
-            if (discordDesc) discordDesc.textContent = texts.discordDesc;
-            
-            const githubName = document.querySelector('a[href="https://github.com/hong-a-debug"] .link-name');
-            if (githubName) githubName.textContent = texts.githubName;
-            const githubDesc = document.querySelector('a[href="https://github.com/hong-a-debug"] .link-desc');
-            if (githubDesc) githubDesc.textContent = texts.githubDesc;
-            
-            const toolName = document.querySelector('a[href="https://wwbkg.lanzouu.com/iu9qA3qmj4rc"] .link-name');
-            if (toolName) toolName.textContent = texts.toolName;
-            const toolDesc = document.querySelector('a[href="https://wwbkg.lanzouu.com/iu9qA3qmj4rc"] .link-desc');
-            if (toolDesc) toolDesc.textContent = texts.toolDesc;
-            
-            const pclName = document.querySelector('#pclHomeBtn .link-name');
-            if (pclName) pclName.textContent = texts.pclName;
-            const pclDesc = document.querySelector('#pclHomeBtn .link-desc');
-            if (pclDesc) pclDesc.textContent = texts.pclDesc;
             
             const bigBtn = document.querySelector('.big-btn');
             if (bigBtn) bigBtn.innerHTML = texts.bilibiliBtn;
@@ -371,7 +413,46 @@
                 document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active'));
                 btn.classList.add('active');
                 switchLanguage(lang);
+                filterLinks();
             });
+        });
+
+        function filterLinks() {
+            const keyword = document.getElementById('searchInput').value.trim().toLowerCase();
+            const links = document.querySelectorAll('#linksGrid .link-card');
+            let hasVisible = false;
+            
+            links.forEach(link => {
+                const name = link.getAttribute('data-name') || '';
+                const desc = link.getAttribute('data-desc') || '';
+                if (keyword === '' || name.toLowerCase().includes(keyword) || desc.toLowerCase().includes(keyword)) {
+                    link.classList.remove('hidden');
+                    hasVisible = true;
+                } else {
+                    link.classList.add('hidden');
+                }
+            });
+            
+            const noResult = document.getElementById('noResult');
+            if (hasVisible || keyword === '') {
+                noResult.classList.remove('show');
+            } else {
+                noResult.classList.add('show');
+            }
+        }
+
+        document.getElementById('searchBtn').addEventListener('click', filterLinks);
+        
+        document.getElementById('searchInput').addEventListener('input', function() {
+            if (this.value.trim() === '') {
+                filterLinks();
+            }
+        });
+        
+        document.getElementById('searchInput').addEventListener('keyup', (e) => {
+            if (e.key === 'Enter') {
+                filterLinks();
+            }
         });
 
         document.getElementById('pclHomeBtn').addEventListener('click', function() {
@@ -403,6 +484,16 @@
             title.style.marginBottom = '16px';
             title.style.fontSize = '18px';
             title.style.color = '#2D2D2D';
+            
+            const tipText = document.createElement('div');
+            tipText.innerText = currentLang === 'zh' ? '复制到设置→个性化→主页→联网更新→下载地址' : 'Copy to Settings → Personalization → Home → Online Update → Download URL';
+            tipText.style.backgroundColor = '#FFF0E5';
+            tipText.style.padding = '8px';
+            tipText.style.borderRadius = '8px';
+            tipText.style.marginBottom = '16px';
+            tipText.style.fontSize = '12px';
+            tipText.style.color = '#E67A30';
+            tipText.style.textAlign = 'center';
             
             const textContainer = document.createElement('div');
             textContainer.style.backgroundColor = '#FFF5E6';
@@ -441,6 +532,7 @@
             btnWrapper.appendChild(closeBtn);
             
             modalContent.appendChild(title);
+            modalContent.appendChild(tipText);
             modalContent.appendChild(textContainer);
             modalContent.appendChild(btnWrapper);
             modalOverlay.appendChild(modalContent);
