@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>火车站 · 规则说明</title>
+    <link rel="icon" type="image/png" href="/icon/icon.png">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background-color: #FFF5E6;
+            font-family: '微软雅黑', 'Segoe UI', system-ui, -apple-system, sans-serif;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 40px 20px;
+            position: relative;
+        }
+
+        .card {
+            background-color: #FFFFFF;
+            border: 1px solid #F0E0D0;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.05);
+            width: 550px;
+            max-width: 100%;
+            padding: 0 28px 36px 28px;
+        }
+
+        .top-orange-strip {
+            width: calc(100% + 56px);
+            margin: 0 -28px 0 -28px;
+            height: 6px;
+            background-color: #FF8C42;
+        }
+
+        .top-white-bar {
+            width: calc(100% + 56px);
+            margin: 0 -28px 0 -28px;
+            background-color: #FFFFFF;
+            padding: 12px 28px;
+            border-bottom: 1px solid #F0E0D0;
+            font-size: 16px;
+            font-weight: 600;
+            color: #2D2D2D;
+            display: flex;
+            justify-content: flex-start;
+            align-items: center;
+            box-sizing: border-box;
+        }
+
+        .page-title {
+            font-size: 24px;
+            font-weight: 700;
+            color: #2D2D2D;
+            text-align: center;
+            margin: 30px 0 20px 0;
+        }
+
+        .content {
+            font-size: 15px;
+            line-height: 1.8;
+            color: #2D2D2D;
+            margin: 20px 0;
+        }
+
+        .content p {
+            margin-bottom: 12px;
+        }
+
+        .back-link {
+            display: inline-block;
+            margin-top: 20px;
+            padding: 8px 16px;
+            background-color: #F5F5F5;
+            border-radius: 30px;
+            text-decoration: none;
+            font-size: 13px;
+            color: #888888;
+            transition: all 0.2s;
+        }
+
+        .back-link:hover {
+            background-color: #FFF0E5;
+            color: #FF8C42;
+        }
+
+        @media (max-width: 560px) {
+            body {
+                padding: 20px 16px;
+            }
+            .card {
+                padding: 0 20px 28px 20px;
+            }
+            .top-orange-strip {
+                width: calc(100% + 40px);
+                margin: 0 -20px 0 -20px;
+            }
+            .top-white-bar {
+                width: calc(100% + 40px);
+                margin: 0 -20px 0 -20px;
+                padding: 10px 20px;
+            }
+            .page-title {
+                font-size: 20px;
+                margin: 20px 0 15px 0;
+            }
+            .content {
+                font-size: 14px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="card">
+        <div class="top-orange-strip"></div>
+        <div class="top-white-bar">
+            <span>规则说明</span>
+        </div>
+
+        <div class="page-title">📜 规则</div>
+
+        <div class="content">
+            <p>1. 拿绳子不能打到人</p>
+        </div>
+
+        <a href="/Games/List/01.html" class="back-link">← 返回火车站</a>
+    </div>
+</body>
+</html>
