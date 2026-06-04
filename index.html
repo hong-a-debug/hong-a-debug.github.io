@@ -134,6 +134,51 @@
             width: 100%;
         }
 
+        .search-section {
+            margin: 20px 0;
+        }
+
+        .search-container {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+        }
+
+        .search-input {
+            flex: 1;
+            padding: 10px 14px;
+            border: 1px solid #F0E0D0;
+            border-radius: 40px;
+            font-size: 14px;
+            font-family: inherit;
+            background-color: #FFFFFF;
+            transition: all 0.2s;
+            outline: none;
+        }
+
+        .search-input:focus {
+            border-color: #FF8C42;
+            box-shadow: 0 0 0 2px rgba(255, 140, 66, 0.2);
+        }
+
+        .search-btn {
+            background-color: #FF8C42;
+            color: white;
+            border: none;
+            padding: 10px 18px;
+            border-radius: 40px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-family: inherit;
+        }
+
+        .search-btn:hover {
+            background-color: #E67A30;
+            transform: translateY(-1px);
+        }
+
         .links-grid {
             display: flex;
             flex-direction: column;
@@ -158,6 +203,10 @@
             background-color: #FFF5E6;
             border-color: #FF8C42;
             transform: translateX(4px);
+        }
+
+        .link-card.hidden {
+            display: none;
         }
 
         .link-icon {
@@ -188,16 +237,16 @@
             word-break: break-all;
         }
 
-        .section-title {
-            font-size: 14px;
-            font-weight: 600;
-            color: #2D2D2D;
-            margin: 20px 0 12px 0;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            border-left: 3px solid #FF8C42;
-            padding-left: 12px;
+        .no-result {
+            text-align: center;
+            padding: 20px;
+            color: #AAAAAA;
+            font-size: 13px;
+            display: none;
+        }
+
+        .no-result.show {
+            display: block;
         }
 
         @media (max-width: 560px) {
@@ -225,6 +274,17 @@
                 font-size: 11px;
                 padding: 2px 8px;
             }
+            .search-container {
+                gap: 6px;
+            }
+            .search-input {
+                padding: 8px 12px;
+                font-size: 13px;
+            }
+            .search-btn {
+                padding: 8px 14px;
+                font-size: 13px;
+            }
         }
     </style>
 </head>
@@ -247,46 +307,50 @@
 
         <div class="divider"></div>
 
-        <div class="section-title">
-            <span data-key="linkCollectionIcon">🔗</span> <span data-key="linkCollectionTitle">链接收藏</span>
+        <div class="search-section">
+            <div class="search-container">
+                <input type="text" id="searchInput" class="search-input" placeholder="搜索链接..." data-key="searchPlaceholder">
+                <button id="searchBtn" class="search-btn" data-key="searchBtn">搜索</button>
+            </div>
         </div>
-        <div class="links-grid">
-            <a href="https://discord.gg/nB2w3NQhkE" target="_blank" class="link-card">
+
+        <div class="links-grid" id="linksGrid">
+            <a href="https://discord.gg/nB2w3NQhkE" target="_blank" class="link-card" data-name="Discord 社区" data-desc="红怪的 Discord 邀请链接">
                 <div class="link-icon">💬</div>
                 <div class="link-info">
                     <div class="link-name" data-key="discordName">Discord 社区</div>
                     <div class="link-desc" data-key="discordDesc">红怪的 Discord 邀请链接</div>
                 </div>
             </a>
-            <a href="https://github.com/hong-a-debug" target="_blank" class="link-card">
+            <a href="https://github.com/hong-a-debug" target="_blank" class="link-card" data-name="GitHub 主页" data-desc="杂七杂八的东西">
                 <div class="link-icon">🐙</div>
                 <div class="link-info">
                     <div class="link-name" data-key="githubName">GitHub 主页</div>
                     <div class="link-desc" data-key="githubDesc">杂七杂八的东西</div>
                 </div>
             </a>
-            <a href="https://wwbkg.lanzouu.com/iu9qA3qmj4rc" target="_blank" class="link-card">
+            <a href="https://wwbkg.lanzouu.com/iu9qA3qmj4rc" target="_blank" class="link-card" data-name="小鸡头像自动工具" data-desc="密码: discord社区、QQ | 蓝奏云下载 18.3M">
                 <div class="link-icon">🐤</div>
                 <div class="link-info">
                     <div class="link-name" data-key="toolName">小鸡头像自动工具</div>
                     <div class="link-desc" data-key="toolDesc">密码: discord社区、QQ | 蓝奏云下载 18.3M</div>
                 </div>
             </a>
-            <div class="link-card" id="pclHomeBtn" style="cursor: pointer;">
+            <div class="link-card" id="pclHomeBtn" style="cursor: pointer;" data-name="PCL主页" data-desc="点击弹窗复制内容">
                 <div class="link-icon">🚀</div>
                 <div class="link-info">
                     <div class="link-name" data-key="pclName">PCL主页</div>
                     <div class="link-desc" data-key="pclDesc">点击弹窗复制内容</div>
                 </div>
             </div>
-            <div class="link-card" id="qqBtn" style="cursor: pointer;">
+            <div class="link-card" id="qqBtn" style="cursor: pointer;" data-name="QQ社区" data-desc="点击复制QQ号">
                 <div class="link-icon">💬</div>
                 <div class="link-info">
                     <div class="link-name" data-key="qqName">QQ社区</div>
                     <div class="link-desc" data-key="qqDesc">点击复制QQ号</div>
                 </div>
             </div>
-            <a href="/GameList.html" class="link-card">
+            <a href="/GameList.html" class="link-card" data-name="游戏库" data-desc="这是给同学们看的，无关的人请不要看">
                 <div class="link-icon">🎮</div>
                 <div class="link-info">
                     <div class="link-name" data-key="gameLibraryName">游戏库</div>
@@ -294,6 +358,7 @@
                 </div>
             </a>
         </div>
+        <div class="no-result" id="noResult" data-key="noResult">😢 没有找到相关链接</div>
     </div>
 
     <script>
@@ -301,8 +366,8 @@
             zh: {
                 bilibiliBtn: "📁 红怪的B站首页",
                 hintText: "💡 点击按钮跳转B站，或使用下方链接",
-                linkCollectionIcon: "🔗",
-                linkCollectionTitle: "链接收藏",
+                searchPlaceholder: "搜索链接...",
+                searchBtn: "搜索",
                 discordName: "Discord 社区",
                 discordDesc: "红怪的 Discord 邀请链接",
                 githubName: "GitHub 主页",
@@ -314,13 +379,14 @@
                 qqName: "QQ社区",
                 qqDesc: "点击复制QQ号",
                 gameLibraryName: "游戏库",
-                gameLibraryDesc: "这是给同学们看的，无关的人请不要看"
+                gameLibraryDesc: "这是给同学们看的，无关的人请不要看",
+                noResult: "😢 没有找到相关链接"
             },
             en: {
                 bilibiliBtn: "📁 Hongguai's Bilibili",
                 hintText: "💡 Click to visit Bilibili, or use links below",
-                linkCollectionIcon: "🔗",
-                linkCollectionTitle: "Link Collection",
+                searchPlaceholder: "Search links...",
+                searchBtn: "Search",
                 discordName: "Discord Community",
                 discordDesc: "Hongguai's Discord invite",
                 githubName: "GitHub Home",
@@ -332,7 +398,8 @@
                 qqName: "QQ Community",
                 qqDesc: "Click to copy QQ number",
                 gameLibraryName: "Game Library",
-                gameLibraryDesc: "This is for classmates only, please do not watch if you are not"
+                gameLibraryDesc: "This is for classmates only, please do not watch if you are not",
+                noResult: "😢 No matching links found"
             }
         };
 
@@ -347,11 +414,41 @@
                 if (texts[key]) {
                     if (el.tagName === 'A' && el.classList.contains('big-btn')) {
                         el.innerHTML = texts[key];
+                    } else if (el.tagName === 'INPUT') {
+                        el.placeholder = texts[key];
+                    } else if (el.tagName === 'BUTTON' && el.id === 'searchBtn') {
+                        el.textContent = texts[key];
                     } else {
                         el.textContent = texts[key];
                     }
                 }
             });
+            
+            filterLinks();
+        }
+
+        function filterLinks() {
+            const keyword = document.getElementById('searchInput').value.trim().toLowerCase();
+            const links = document.querySelectorAll('#linksGrid .link-card');
+            let hasVisible = false;
+            
+            links.forEach(link => {
+                const name = link.getAttribute('data-name') || '';
+                const desc = link.getAttribute('data-desc') || '';
+                if (keyword === '' || name.toLowerCase().includes(keyword) || desc.toLowerCase().includes(keyword)) {
+                    link.classList.remove('hidden');
+                    hasVisible = true;
+                } else {
+                    link.classList.add('hidden');
+                }
+            });
+            
+            const noResult = document.getElementById('noResult');
+            if (hasVisible || keyword === '') {
+                noResult.classList.remove('show');
+            } else {
+                noResult.classList.add('show');
+            }
         }
 
         document.querySelectorAll('.lang-btn').forEach(btn => {
@@ -364,8 +461,19 @@
             });
         });
 
-        // PCL 主页弹窗（带提示文字）
-        document.getElementById('pclHomeBtn').addEventListener('click', function() {
+        document.getElementById('searchBtn').addEventListener('click', filterLinks);
+        document.getElementById('searchInput').addEventListener('input', function() {
+            if (this.value.trim() === '') {
+                filterLinks();
+            }
+        });
+        document.getElementById('searchInput').addEventListener('keyup', (e) => {
+            if (e.key === 'Enter') {
+                filterLinks();
+            }
+        });
+
+        function createPCLModal() {
             const textToCopy = 'https://raw.githubusercontent.com/hong-a-debug/w/main/Custom.xaml';
             const modalOverlay = document.createElement('div');
             modalOverlay.style.position = 'fixed';
@@ -466,10 +574,9 @@
             modalOverlay.addEventListener('click', (e) => {
                 if (e.target === modalOverlay) closeModal();
             });
-        });
+        }
 
-        // QQ社区弹窗（只有标题和号码，无额外提示）
-        document.getElementById('qqBtn').addEventListener('click', function() {
+        function createQQModal() {
             const textToCopy = '301595234';
             const modalOverlay = document.createElement('div');
             modalOverlay.style.position = 'fixed';
@@ -559,7 +666,10 @@
             modalOverlay.addEventListener('click', (e) => {
                 if (e.target === modalOverlay) closeModal();
             });
-        });
+        }
+
+        document.getElementById('pclHomeBtn').addEventListener('click', createPCLModal);
+        document.getElementById('qqBtn').addEventListener('click', createQQModal);
     </script>
 </body>
 </html>
