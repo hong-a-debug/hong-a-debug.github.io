@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>FRS · 规则与玩法</title>
+    <link rel="icon" type="image/png" href="/icon/icon.png">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background-color: #FFF5E6;
+            font-family: '微软雅黑', 'Segoe UI', system-ui, -apple-system, sans-serif;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 40px 20px;
+            position: relative;
+        }
+
+        .language-selector {
+            position: fixed;
+            top: 20px;
+            right: 24px;
+            z-index: 200;
+            background-color: #FFFFFF;
+            border: 1px solid #F0E0D0;
+            border-radius: 40px;
+            padding: 6px 12px;
+            display: flex;
+            gap: 8px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+        }
+
+        .lang-btn {
+            background: none;
+            border: none;
+            font-size: 13px;
+            font-weight: 500;
+            cursor: pointer;
+            padding: 4px 10px;
+            border-radius: 30px;
+            transition: all 0.2s;
+            color: #888888;
+            font-family: inherit;
+        }
+
+        .lang-btn.active {
+            background-color: #FF8C42;
+            color: white;
+        }
+
+        .lang-btn:not(.active):hover {
+            background-color: #FFF0E5;
+            color: #E67A30;
+        }
+
+        .card {
+            background-color: #FFFFFF;
+            border: 1px solid #F0E0D0;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.05);
+            width: 500px;
+            max-width: 100%;
+            padding: 0 28px 36px 28px;
+        }
+
+        .top-orange-strip {
+            width: calc(100% + 56px);
+            margin: 0 -28px 0 -28px;
+            height: 6px;
+            background-color: #FF8C42;
+        }
+
+        .top-white-bar {
+            width: calc(100% + 56px);
+            margin: 0 -28px 0 -28px;
+            background-color: #FFFFFF;
+            padding: 12px 28px;
+            border-bottom: 1px solid #F0E0D0;
+            font-size: 16px;
+            font-weight: 600;
+            color: #2D2D2D;
+            display: flex;
+            justify-content: flex-start;
+            align-items: center;
+            box-sizing: border-box;
+        }
+
+        .page-title {
+            font-size: 24px;
+            font-weight: 700;
+            color: #2D2D2D;
+            text-align: center;
+            margin: 30px 0 20px 0;
+        }
+
+        .links-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+            margin: 20px 0;
+        }
+
+        .link-card {
+            display: block;
+            background: #FFFFFF;
+            border: 1px solid #F0E0D0;
+            padding: 16px 20px;
+            text-decoration: none;
+            color: #2D2D2D;
+            transition: all 0.2s;
+            cursor: pointer;
+            text-align: center;
+        }
+
+        .link-card:hover {
+            background-color: #FFF5E6;
+            border-color: #FF8C42;
+            transform: translateX(4px);
+        }
+
+        .link-name {
+            font-weight: 700;
+            font-size: 18px;
+            margin-bottom: 6px;
+            color: #FF8C42;
+        }
+
+        .link-desc {
+            font-size: 13px;
+            color: #888888;
+        }
+
+        .back-link {
+            display: inline-block;
+            margin-top: 20px;
+            padding: 8px 16px;
+            background-color: #F5F5F5;
+            border-radius: 30px;
+            text-decoration: none;
+            font-size: 13px;
+            color: #888888;
+            transition: all 0.2s;
+        }
+
+        .back-link:hover {
+            background-color: #FFF0E5;
+            color: #FF8C42;
+        }
+
+        @media (max-width: 560px) {
+            body {
+                padding: 20px 16px;
+            }
+            .card {
+                padding: 0 20px 28px 20px;
+            }
+            .top-orange-strip {
+                width: calc(100% + 40px);
+                margin: 0 -20px 0 -20px;
+            }
+            .top-white-bar {
+                width: calc(100% + 40px);
+                margin: 0 -20px 0 -20px;
+                padding: 10px 20px;
+            }
+            .language-selector {
+                top: 12px;
+                right: 16px;
+                padding: 4px 8px;
+            }
+            .lang-btn {
+                font-size: 11px;
+                padding: 2px 8px;
+            }
+            .page-title {
+                font-size: 20px;
+                margin: 20px 0 15px 0;
+            }
+            .link-name {
+                font-size: 16px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="language-selector">
+        <button class="lang-btn active" data-lang="zh">中文</button>
+        <button class="lang-btn" data-lang="en">English</button>
+    </div>
+
+    <div class="card">
+        <div class="top-orange-strip"></div>
+        <div class="top-white-bar">
+            <span data-key="title">FRS</span>
+        </div>
+
+        <div class="page-title" data-key="pageTitle">FRS</div>
+
+        <div class="links-grid">
+            <a href="https://hong-a-debug.github.io/Games/Rule/02.html" target="_blank" class="link-card">
+                <div class="link-name" data-key="rulesName">📜 规则</div>
+                <div class="link-desc" data-key="rulesDesc">查看游戏规则</div>
+            </a>
+            <a href="https://hong-a-debug.github.io/Games/HTP/02.html" target="_blank" class="link-card">
+                <div class="link-name" data-key="htpName">🎮 玩法</div>
+                <div class="link-desc" data-key="htpDesc">查看游戏玩法</div>
+            </a>
+        </div>
+
+        <a href="/GameList.html" class="back-link" data-key="backLink">← 返回游戏库</a>
+    </div>
+
+    <script>
+        const translations = {
+            zh: {
+                title: "FRS",
+                pageTitle: "FRS",
+                rulesName: "📜 规则",
+                rulesDesc: "查看游戏规则",
+                htpName: "🎮 玩法",
+                htpDesc: "查看游戏玩法",
+                backLink: "← 返回游戏库"
+            },
+            en: {
+                title: "FRS",
+                pageTitle: "FRS",
+                rulesName: "📜 Rules",
+                rulesDesc: "View game rules",
+                htpName: "🎮 How to Play",
+                htpDesc: "View gameplay instructions",
+                backLink: "← Back to Game Library"
+            }
+        };
+
+        let currentLang = 'zh';
+
+        function switchLanguage(lang) {
+            currentLang = lang;
+            const texts = translations[lang];
+            
+            document.querySelectorAll('[data-key]').forEach(el => {
+                const key = el.getAttribute('data-key');
+                if (texts[key]) {
+                    el.textContent = texts[key];
+                }
+            });
+        }
+
+        document.querySelectorAll('.lang-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                const lang = btn.getAttribute('data-lang');
+                if (!lang) return;
+                document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                switchLanguage(lang);
+            });
+        });
+    </script>
+</body>
+</html>
