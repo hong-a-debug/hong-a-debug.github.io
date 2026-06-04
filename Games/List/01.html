@@ -23,6 +23,43 @@
             position: relative;
         }
 
+        .language-selector {
+            position: fixed;
+            top: 20px;
+            right: 24px;
+            z-index: 200;
+            background-color: #FFFFFF;
+            border: 1px solid #F0E0D0;
+            border-radius: 40px;
+            padding: 6px 12px;
+            display: flex;
+            gap: 8px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+        }
+
+        .lang-btn {
+            background: none;
+            border: none;
+            font-size: 13px;
+            font-weight: 500;
+            cursor: pointer;
+            padding: 4px 10px;
+            border-radius: 30px;
+            transition: all 0.2s;
+            color: #888888;
+            font-family: inherit;
+        }
+
+        .lang-btn.active {
+            background-color: #FF8C42;
+            color: white;
+        }
+
+        .lang-btn:not(.active):hover {
+            background-color: #FFF0E5;
+            color: #E67A30;
+        }
+
         .card {
             background-color: #FFFFFF;
             border: 1px solid #F0E0D0;
@@ -132,6 +169,15 @@
                 margin: 0 -20px 0 -20px;
                 padding: 10px 20px;
             }
+            .language-selector {
+                top: 12px;
+                right: 16px;
+                padding: 4px 8px;
+            }
+            .lang-btn {
+                font-size: 11px;
+                padding: 2px 8px;
+            }
             .page-title {
                 font-size: 20px;
                 margin: 20px 0 15px 0;
@@ -143,26 +189,78 @@
     </style>
 </head>
 <body>
+    <div class="language-selector">
+        <button class="lang-btn active" data-lang="zh">中文</button>
+        <button class="lang-btn" data-lang="en">English</button>
+    </div>
+
     <div class="card">
         <div class="top-orange-strip"></div>
         <div class="top-white-bar">
-            <span>火车站</span>
+            <span data-key="title">火车站</span>
         </div>
 
-        <div class="page-title">火车站</div>
+        <div class="page-title" data-key="pageTitle">火车站</div>
 
         <div class="links-grid">
             <a href="https://hong-a-debug.github.io/Games/Rule/01.html" target="_blank" class="link-card">
-                <div class="link-name">📜 规则</div>
-                <div class="link-desc">查看游戏规则</div>
+                <div class="link-name" data-key="rulesName">📜 规则</div>
+                <div class="link-desc" data-key="rulesDesc">查看游戏规则</div>
             </a>
             <a href="https://hong-a-debug.github.io/Games/HTP/01.html" target="_blank" class="link-card">
-                <div class="link-name">🎮 玩法</div>
-                <div class="link-desc">查看游戏玩法</div>
+                <div class="link-name" data-key="htpName">🎮 玩法</div>
+                <div class="link-desc" data-key="htpDesc">查看游戏玩法</div>
             </a>
         </div>
 
-        <a href="/GameList.html" class="back-link">← 返回游戏库</a>
+        <a href="/GameList.html" class="back-link" data-key="backLink">← 返回游戏库</a>
     </div>
+
+    <script>
+        const translations = {
+            zh: {
+                title: "火车站",
+                pageTitle: "火车站",
+                rulesName: "📜 规则",
+                rulesDesc: "查看游戏规则",
+                htpName: "🎮 玩法",
+                htpDesc: "查看游戏玩法",
+                backLink: "← 返回游戏库"
+            },
+            en: {
+                title: "Train Station",
+                pageTitle: "Train Station",
+                rulesName: "📜 Rules",
+                rulesDesc: "View game rules",
+                htpName: "🎮 How to Play",
+                htpDesc: "View gameplay instructions",
+                backLink: "← Back to Game Library"
+            }
+        };
+
+        let currentLang = 'zh';
+
+        function switchLanguage(lang) {
+            currentLang = lang;
+            const texts = translations[lang];
+            
+            document.querySelectorAll('[data-key]').forEach(el => {
+                const key = el.getAttribute('data-key');
+                if (texts[key]) {
+                    el.textContent = texts[key];
+                }
+            });
+        }
+
+        document.querySelectorAll('.lang-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                const lang = btn.getAttribute('data-lang');
+                if (!lang) return;
+                document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                switchLanguage(lang);
+            });
+        });
+    </script>
 </body>
 </html>
