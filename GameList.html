@@ -91,11 +91,6 @@
             box-sizing: border-box;
         }
 
-        .top-white-bar span::before {
-            content: "🎮 ";
-            font-size: 15px;
-        }
-
         .search-section {
             margin: 20px 0;
         }
@@ -246,7 +241,7 @@
     <div class="card">
         <div class="top-orange-strip"></div>
         <div class="top-white-bar">
-            <span>红怪的游戏库</span>
+            <span data-key="title">红怪的游戏库</span>
         </div>
 
         <div class="search-section">
@@ -264,23 +259,27 @@
         const gamesData = {
             zh: {
                 games: [
-                    { name: "火车站", desc: "最开始的游戏", url: "https://hong-a-debug.github.io/Games/List/01.html" }
+                    { name: "火车站", desc: "最开始的游戏", url: "https://hong-a-debug.github.io/Games/List/01.html" },
+                    { name: "FRS", desc: "最火的游戏", url: "https://hong-a-debug.github.io/Games/List/02.html" }
                 ]
             },
             en: {
                 games: [
-                    { name: "Train Station", desc: "The first game", url: "https://hong-a-debug.github.io/Games/List/01.html" }
+                    { name: "Train Station", desc: "The first game", url: "https://hong-a-debug.github.io/Games/List/01.html" },
+                    { name: "FRS", desc: "The hottest game", url: "https://hong-a-debug.github.io/Games/List/02.html" }
                 ]
             }
         };
 
         const translations = {
             zh: {
+                title: "红怪的游戏库",
                 searchPlaceholder: "搜索游戏...",
                 searchBtn: "搜索",
                 noResult: "😢 没有找到相关游戏"
             },
             en: {
+                title: "Hongguai's Game Library",
                 searchPlaceholder: "Search games...",
                 searchBtn: "Search",
                 noResult: "😢 No games found"
