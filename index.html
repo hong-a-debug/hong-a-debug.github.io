@@ -200,19 +200,6 @@
             padding-left: 12px;
         }
 
-        .footer-section {
-            margin-top: 20px;
-            padding-top: 16px;
-            border-top: 1px solid #F0E0D0;
-            text-align: center;
-        }
-
-        .warning-text {
-            font-size: 11px;
-            color: #AAAAAA;
-            margin-top: 8px;
-        }
-
         @media (max-width: 560px) {
             body {
                 padding: 20px 16px;
@@ -282,7 +269,7 @@
                 <div class="link-icon">🐤</div>
                 <div class="link-info">
                     <div class="link-name" data-key="toolName">小鸡头像自动工具</div>
-                    <div class="link-desc" data-key="toolDesc">密码：discord社区 | 蓝奏云下载 18.3M</div>
+                    <div class="link-desc" data-key="toolDesc">密码: discord社区、QQ | 蓝奏云下载 18.3M</div>
                 </div>
             </a>
             <div class="link-card" id="pclHomeBtn" style="cursor: pointer;">
@@ -290,6 +277,13 @@
                 <div class="link-info">
                     <div class="link-name" data-key="pclName">PCL主页</div>
                     <div class="link-desc" data-key="pclDesc">点击弹窗复制内容</div>
+                </div>
+            </div>
+            <div class="link-card" id="qqBtn" style="cursor: pointer;">
+                <div class="link-icon">💬</div>
+                <div class="link-info">
+                    <div class="link-name" data-key="qqName">QQ社区</div>
+                    <div class="link-desc" data-key="qqDesc">点击复制QQ号</div>
                 </div>
             </div>
             <a href="/GameList.html" class="link-card">
@@ -314,9 +308,11 @@
                 githubName: "GitHub 主页",
                 githubDesc: "杂七杂八的东西",
                 toolName: "小鸡头像自动工具",
-                toolDesc: "密码：discord社区 | 蓝奏云下载 18.3M",
+                toolDesc: "密码: discord社区、QQ | 蓝奏云下载 18.3M",
                 pclName: "PCL主页",
                 pclDesc: "点击弹窗复制内容",
+                qqName: "QQ社区",
+                qqDesc: "点击复制QQ号",
                 gameLibraryName: "游戏库",
                 gameLibraryDesc: "这是给同学们看的，无关的人请不要看"
             },
@@ -330,9 +326,11 @@
                 githubName: "GitHub Home",
                 githubDesc: "Miscellaneous stuff",
                 toolName: "Chick Avatar Tool",
-                toolDesc: "Password: discord community | Lanzou 18.3M",
+                toolDesc: "Password: discord community, QQ | Lanzou 18.3M",
                 pclName: "PCL Home",
                 pclDesc: "Click to copy",
+                qqName: "QQ Community",
+                qqDesc: "Click to copy QQ number",
                 gameLibraryName: "Game Library",
                 gameLibraryDesc: "This is for classmates only, please do not watch if you are not"
             }
@@ -366,8 +364,7 @@
             });
         });
 
-        document.getElementById('pclHomeBtn').addEventListener('click', function() {
-            const textToCopy = 'https://raw.githubusercontent.com/hong-a-debug/w/main/Custom.xaml';
+        function createCopyModal(textToCopy, title) {
             const modalOverlay = document.createElement('div');
             modalOverlay.style.position = 'fixed';
             modalOverlay.style.top = '0';
@@ -390,21 +387,11 @@
             modalContent.style.border = '1px solid #F0E0D0';
             modalContent.style.textAlign = 'center';
             
-            const title = document.createElement('h3');
-            title.innerText = currentLang === 'zh' ? '📋 复制内容' : '📋 Copy Text';
-            title.style.marginBottom = '16px';
-            title.style.fontSize = '18px';
-            title.style.color = '#2D2D2D';
-            
-            const tipText = document.createElement('div');
-            tipText.innerText = currentLang === 'zh' ? '复制到设置→个性化→主页→联网更新→下载地址' : 'Copy to Settings → Personalization → Home → Online Update → Download URL';
-            tipText.style.backgroundColor = '#FFF0E5';
-            tipText.style.padding = '8px';
-            tipText.style.borderRadius = '8px';
-            tipText.style.marginBottom = '16px';
-            tipText.style.fontSize = '12px';
-            tipText.style.color = '#E67A30';
-            tipText.style.textAlign = 'center';
+            const titleEl = document.createElement('h3');
+            titleEl.innerText = title;
+            titleEl.style.marginBottom = '16px';
+            titleEl.style.fontSize = '18px';
+            titleEl.style.color = '#2D2D2D';
             
             const textContainer = document.createElement('div');
             textContainer.style.backgroundColor = '#FFF5E6';
@@ -412,7 +399,7 @@
             textContainer.style.borderRadius = '8px';
             textContainer.style.marginBottom = '20px';
             textContainer.style.wordBreak = 'break-all';
-            textContainer.style.fontSize = '12px';
+            textContainer.style.fontSize = '14px';
             textContainer.style.fontFamily = 'monospace';
             textContainer.style.color = '#E67A30';
             textContainer.innerText = textToCopy;
@@ -442,8 +429,7 @@
             btnWrapper.appendChild(copyBtn);
             btnWrapper.appendChild(closeBtn);
             
-            modalContent.appendChild(title);
-            modalContent.appendChild(tipText);
+            modalContent.appendChild(titleEl);
             modalContent.appendChild(textContainer);
             modalContent.appendChild(btnWrapper);
             modalOverlay.appendChild(modalContent);
@@ -467,6 +453,14 @@
             modalOverlay.addEventListener('click', (e) => {
                 if (e.target === modalOverlay) closeModal();
             });
+        }
+
+        document.getElementById('pclHomeBtn').addEventListener('click', function() {
+            createCopyModal('https://raw.githubusercontent.com/hong-a-debug/w/main/Custom.xaml', currentLang === 'zh' ? '📋 复制内容' : '📋 Copy Text');
+        });
+
+        document.getElementById('qqBtn').addEventListener('click', function() {
+            createCopyModal('301595234', currentLang === 'zh' ? '📋 QQ社区' : '📋 QQ Community');
         });
     </script>
 </body>
