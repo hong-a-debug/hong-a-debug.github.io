@@ -216,6 +216,13 @@
             transform: translateY(-1px);
         }
 
+        .contact-icon {
+            width: 20px;
+            height: 20px;
+            vertical-align: middle;
+            margin-right: 8px;
+        }
+
         @media (max-width: 560px) {
             body {
                 padding: 20px 16px;
@@ -285,7 +292,9 @@
 
         <div class="divider"></div>
 
-        <a href="https://hong-a-debug.github.io/" target="_blank" class="contact-btn" data-key="contactBtn">📞 联系方式</a>
+        <a href="https://hong-a-debug.github.io/" target="_blank" class="contact-btn" id="contactBtn">
+            <img src="https://hong-a-debug.github.io/icon/icon.png" alt="icon" class="contact-icon" onerror="this.style.display='none'"> 个人博客
+        </a>
     </div>
 
     <script>
@@ -309,15 +318,13 @@
                 title: "红怪的游戏库",
                 searchPlaceholder: "搜索游戏...",
                 searchBtn: "搜索",
-                noResult: "😢 没有找到相关游戏",
-                contactBtn: "📞 联系方式"
+                noResult: "😢 没有找到相关游戏"
             },
             en: {
                 title: "Hongguai's Game Library",
                 searchPlaceholder: "Search games...",
                 searchBtn: "Search",
-                noResult: "😢 No games found",
-                contactBtn: "📞 Contact"
+                noResult: "😢 No games found"
             }
         };
 
@@ -358,8 +365,6 @@
                 if (texts[key]) {
                     if (el.tagName === 'INPUT') {
                         el.placeholder = texts[key];
-                    } else if (el.tagName === 'A' && el.classList.contains('contact-btn')) {
-                        el.innerHTML = texts[key];
                     } else {
                         el.textContent = texts[key];
                     }
