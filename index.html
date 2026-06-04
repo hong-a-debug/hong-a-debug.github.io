@@ -364,7 +364,9 @@
             });
         });
 
-        function createCopyModal(textToCopy, title) {
+        // PCL 主页弹窗（带提示文字）
+        document.getElementById('pclHomeBtn').addEventListener('click', function() {
+            const textToCopy = 'https://raw.githubusercontent.com/hong-a-debug/w/main/Custom.xaml';
             const modalOverlay = document.createElement('div');
             modalOverlay.style.position = 'fixed';
             modalOverlay.style.top = '0';
@@ -387,11 +389,115 @@
             modalContent.style.border = '1px solid #F0E0D0';
             modalContent.style.textAlign = 'center';
             
-            const titleEl = document.createElement('h3');
-            titleEl.innerText = title;
-            titleEl.style.marginBottom = '16px';
-            titleEl.style.fontSize = '18px';
-            titleEl.style.color = '#2D2D2D';
+            const title = document.createElement('h3');
+            title.innerText = currentLang === 'zh' ? '📋 复制内容' : '📋 Copy Text';
+            title.style.marginBottom = '16px';
+            title.style.fontSize = '18px';
+            title.style.color = '#2D2D2D';
+            
+            const tipText = document.createElement('div');
+            tipText.innerText = currentLang === 'zh' ? '复制到设置→个性化→主页→联网更新→下载地址' : 'Copy to Settings → Personalization → Home → Online Update → Download URL';
+            tipText.style.backgroundColor = '#FFF0E5';
+            tipText.style.padding = '8px';
+            tipText.style.borderRadius = '8px';
+            tipText.style.marginBottom = '16px';
+            tipText.style.fontSize = '12px';
+            tipText.style.color = '#E67A30';
+            tipText.style.textAlign = 'center';
+            
+            const textContainer = document.createElement('div');
+            textContainer.style.backgroundColor = '#FFF5E6';
+            textContainer.style.padding = '12px';
+            textContainer.style.borderRadius = '8px';
+            textContainer.style.marginBottom = '20px';
+            textContainer.style.wordBreak = 'break-all';
+            textContainer.style.fontSize = '12px';
+            textContainer.style.fontFamily = 'monospace';
+            textContainer.style.color = '#E67A30';
+            textContainer.innerText = textToCopy;
+            
+            const copyBtn = document.createElement('button');
+            copyBtn.innerText = currentLang === 'zh' ? '复制文本' : 'Copy';
+            copyBtn.style.backgroundColor = '#FF8C42';
+            copyBtn.style.color = 'white';
+            copyBtn.style.border = 'none';
+            copyBtn.style.padding = '8px 20px';
+            copyBtn.style.borderRadius = '40px';
+            copyBtn.style.fontSize = '14px';
+            copyBtn.style.cursor = 'pointer';
+            copyBtn.style.marginRight = '12px';
+            
+            const closeBtn = document.createElement('button');
+            closeBtn.innerText = currentLang === 'zh' ? '关闭' : 'Close';
+            closeBtn.style.backgroundColor = '#EAEAEA';
+            closeBtn.style.color = '#555';
+            closeBtn.style.border = 'none';
+            closeBtn.style.padding = '8px 20px';
+            closeBtn.style.borderRadius = '40px';
+            closeBtn.style.fontSize = '14px';
+            closeBtn.style.cursor = 'pointer';
+            
+            const btnWrapper = document.createElement('div');
+            btnWrapper.appendChild(copyBtn);
+            btnWrapper.appendChild(closeBtn);
+            
+            modalContent.appendChild(title);
+            modalContent.appendChild(tipText);
+            modalContent.appendChild(textContainer);
+            modalContent.appendChild(btnWrapper);
+            modalOverlay.appendChild(modalContent);
+            document.body.appendChild(modalOverlay);
+            
+            copyBtn.addEventListener('click', () => {
+                navigator.clipboard.writeText(textToCopy).then(() => {
+                    copyBtn.innerText = currentLang === 'zh' ? '✅ 已复制' : '✅ Copied';
+                    setTimeout(() => {
+                        copyBtn.innerText = currentLang === 'zh' ? '复制文本' : 'Copy';
+                    }, 1500);
+                }).catch(() => {
+                    alert(currentLang === 'zh' ? '复制失败，请手动选择文本' : 'Copy failed, please select manually');
+                });
+            });
+            
+            const closeModal = () => {
+                document.body.removeChild(modalOverlay);
+            };
+            closeBtn.addEventListener('click', closeModal);
+            modalOverlay.addEventListener('click', (e) => {
+                if (e.target === modalOverlay) closeModal();
+            });
+        });
+
+        // QQ社区弹窗（只有标题和号码，无额外提示）
+        document.getElementById('qqBtn').addEventListener('click', function() {
+            const textToCopy = '301595234';
+            const modalOverlay = document.createElement('div');
+            modalOverlay.style.position = 'fixed';
+            modalOverlay.style.top = '0';
+            modalOverlay.style.left = '0';
+            modalOverlay.style.width = '100%';
+            modalOverlay.style.height = '100%';
+            modalOverlay.style.backgroundColor = 'rgba(0,0,0,0.5)';
+            modalOverlay.style.display = 'flex';
+            modalOverlay.style.justifyContent = 'center';
+            modalOverlay.style.alignItems = 'center';
+            modalOverlay.style.zIndex = '1000';
+            
+            const modalContent = document.createElement('div');
+            modalContent.style.backgroundColor = '#fff';
+            modalContent.style.padding = '24px';
+            modalContent.style.borderRadius = '16px';
+            modalContent.style.width = '320px';
+            modalContent.style.maxWidth = '90%';
+            modalContent.style.boxShadow = '0 20px 35px -12px rgba(0,0,0,0.3)';
+            modalContent.style.border = '1px solid #F0E0D0';
+            modalContent.style.textAlign = 'center';
+            
+            const title = document.createElement('h3');
+            title.innerText = currentLang === 'zh' ? '📋 QQ社区' : '📋 QQ Community';
+            title.style.marginBottom = '16px';
+            title.style.fontSize = '18px';
+            title.style.color = '#2D2D2D';
             
             const textContainer = document.createElement('div');
             textContainer.style.backgroundColor = '#FFF5E6';
@@ -429,7 +535,7 @@
             btnWrapper.appendChild(copyBtn);
             btnWrapper.appendChild(closeBtn);
             
-            modalContent.appendChild(titleEl);
+            modalContent.appendChild(title);
             modalContent.appendChild(textContainer);
             modalContent.appendChild(btnWrapper);
             modalOverlay.appendChild(modalContent);
@@ -453,14 +559,6 @@
             modalOverlay.addEventListener('click', (e) => {
                 if (e.target === modalOverlay) closeModal();
             });
-        }
-
-        document.getElementById('pclHomeBtn').addEventListener('click', function() {
-            createCopyModal('https://raw.githubusercontent.com/hong-a-debug/w/main/Custom.xaml', currentLang === 'zh' ? '📋 复制内容' : '📋 Copy Text');
-        });
-
-        document.getElementById('qqBtn').addEventListener('click', function() {
-            createCopyModal('301595234', currentLang === 'zh' ? '📋 QQ社区' : '📋 QQ Community');
         });
     </script>
 </body>
