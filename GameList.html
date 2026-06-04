@@ -187,6 +187,35 @@
             display: block;
         }
 
+        .divider {
+            height: 1px;
+            background-color: #F0E0D0;
+            margin: 24px 0 20px 0;
+            width: 100%;
+        }
+
+        .contact-btn {
+            display: block;
+            background-color: #FF8C42;
+            color: white;
+            font-size: 16px;
+            font-weight: bold;
+            padding: 12px 20px;
+            width: 100%;
+            border: none;
+            cursor: pointer;
+            text-align: center;
+            text-decoration: none;
+            border-radius: 40px;
+            transition: all 0.2s;
+            margin-bottom: 10px;
+        }
+
+        .contact-btn:hover {
+            background-color: #E67A30;
+            transform: translateY(-1px);
+        }
+
         @media (max-width: 560px) {
             body {
                 padding: 20px 16px;
@@ -253,6 +282,10 @@
 
         <div class="games-grid" id="gamesGrid"></div>
         <div class="no-result" id="noResult" data-key="noResult">😢 没有找到相关游戏</div>
+
+        <div class="divider"></div>
+
+        <a href="https://hong-a-debug.github.io/" target="_blank" class="contact-btn" data-key="contactBtn">📞 联系方式</a>
     </div>
 
     <script>
@@ -276,13 +309,15 @@
                 title: "红怪的游戏库",
                 searchPlaceholder: "搜索游戏...",
                 searchBtn: "搜索",
-                noResult: "😢 没有找到相关游戏"
+                noResult: "😢 没有找到相关游戏",
+                contactBtn: "📞 联系方式"
             },
             en: {
                 title: "Hongguai's Game Library",
                 searchPlaceholder: "Search games...",
                 searchBtn: "Search",
-                noResult: "😢 No games found"
+                noResult: "😢 No games found",
+                contactBtn: "📞 Contact"
             }
         };
 
@@ -323,6 +358,8 @@
                 if (texts[key]) {
                     if (el.tagName === 'INPUT') {
                         el.placeholder = texts[key];
+                    } else if (el.tagName === 'A' && el.classList.contains('contact-btn')) {
+                        el.innerHTML = texts[key];
                     } else {
                         el.textContent = texts[key];
                     }
