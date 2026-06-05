@@ -37,8 +37,6 @@
             box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
         }
 
-<!-- 伊一和安迪好cpdd --!>
-
         .lang-btn {
             background: none;
             border: none;
@@ -206,11 +204,11 @@
 
         <div class="links-grid">
             <a href="https://hong-a-debug.github.io/Games/Rule/01.html" target="_blank" class="link-card">
-                <div class="link-name" data-key="rulesName">📜 规则</div>
+                <div class="link-name">📜 规则</div>
                 <div class="link-desc" data-key="rulesDesc">查看游戏规则</div>
             </a>
             <a href="https://hong-a-debug.github.io/Games/HTP/01.html" target="_blank" class="link-card">
-                <div class="link-name" data-key="htpName">🎮 玩法</div>
+                <div class="link-name">🎮 玩法</div>
                 <div class="link-desc" data-key="htpDesc">查看游戏玩法</div>
             </a>
         </div>
@@ -223,18 +221,14 @@
             zh: {
                 title: "火车站",
                 pageTitle: "火车站",
-                rulesName: "📜 规则",
                 rulesDesc: "查看游戏规则",
-                htpName: "🎮 玩法",
                 htpDesc: "查看游戏玩法",
                 backLink: "← 返回游戏库"
             },
             en: {
                 title: "Train Station",
                 pageTitle: "Train Station",
-                rulesName: "📜 Rules",
                 rulesDesc: "View game rules",
-                htpName: "🎮 How to Play",
                 htpDesc: "View gameplay instructions",
                 backLink: "← Back to Game Library"
             }
@@ -246,6 +240,7 @@
             currentLang = lang;
             const texts = translations[lang];
             
+            // 更新带 data-key 的元素
             document.querySelectorAll('[data-key]').forEach(el => {
                 const key = el.getAttribute('data-key');
                 if (texts[key]) {
