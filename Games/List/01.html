@@ -197,38 +197,42 @@
     <div class="card">
         <div class="top-orange-strip"></div>
         <div class="top-white-bar">
-            <span data-key="title">火车站</span>
+            <span id="topTitle">火车站</span>
         </div>
 
-        <div class="page-title" data-key="pageTitle">火车站</div>
+        <div class="page-title" id="pageTitle">火车站</div>
 
         <div class="links-grid">
             <a href="https://hong-a-debug.github.io/Games/Rule/01.html" target="_blank" class="link-card">
-                <div class="link-name">📜 规则</div>
-                <div class="link-desc" data-key="rulesDesc">查看游戏规则</div>
+                <div class="link-name" id="rulesName">📜 规则</div>
+                <div class="link-desc" id="rulesDesc">查看游戏规则</div>
             </a>
             <a href="https://hong-a-debug.github.io/Games/HTP/01.html" target="_blank" class="link-card">
-                <div class="link-name">🎮 玩法</div>
-                <div class="link-desc" data-key="htpDesc">查看游戏玩法</div>
+                <div class="link-name" id="htpName">🎮 玩法</div>
+                <div class="link-desc" id="htpDesc">查看游戏玩法</div>
             </a>
         </div>
 
-        <a href="/GameList.html" class="back-link" data-key="backLink">← 返回游戏库</a>
+        <a href="/GameList.html" class="back-link" id="backLink">← 返回游戏库</a>
     </div>
 
     <script>
         const translations = {
             zh: {
-                title: "火车站",
+                topTitle: "火车站",
                 pageTitle: "火车站",
+                rulesName: "📜 规则",
                 rulesDesc: "查看游戏规则",
+                htpName: "🎮 玩法",
                 htpDesc: "查看游戏玩法",
                 backLink: "← 返回游戏库"
             },
             en: {
-                title: "Train Station",
+                topTitle: "Train Station",
                 pageTitle: "Train Station",
+                rulesName: "📜 Rules",
                 rulesDesc: "View game rules",
+                htpName: "🎮 How to Play",
                 htpDesc: "View gameplay instructions",
                 backLink: "← Back to Game Library"
             }
@@ -240,13 +244,13 @@
             currentLang = lang;
             const texts = translations[lang];
             
-            // 更新带 data-key 的元素
-            document.querySelectorAll('[data-key]').forEach(el => {
-                const key = el.getAttribute('data-key');
-                if (texts[key]) {
-                    el.textContent = texts[key];
-                }
-            });
+            document.getElementById('topTitle').textContent = texts.topTitle;
+            document.getElementById('pageTitle').textContent = texts.pageTitle;
+            document.getElementById('rulesName').textContent = texts.rulesName;
+            document.getElementById('rulesDesc').textContent = texts.rulesDesc;
+            document.getElementById('htpName').textContent = texts.htpName;
+            document.getElementById('htpDesc').textContent = texts.htpDesc;
+            document.getElementById('backLink').textContent = texts.backLink;
         }
 
         document.querySelectorAll('.lang-btn').forEach(btn => {
