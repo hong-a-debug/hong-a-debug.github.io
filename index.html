@@ -305,13 +305,30 @@
             transform: translateY(-1px);
         }
 
-        .cookie-notice {
-            text-align: center;
-            font-size: 10px;
-            color: #AAAAAA;
+        /* 底部同意按钮区域（点击不同意后才显示） */
+        .footer-consent-section {
             margin-top: 16px;
             padding-top: 12px;
             border-top: 1px solid #F0E0D0;
+            text-align: center;
+            display: none;
+        }
+
+        .footer-consent-btn {
+            background-color: #FF8C42;
+            color: white;
+            border: none;
+            padding: 8px 24px;
+            border-radius: 40px;
+            font-size: 13px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .footer-consent-btn:hover {
+            background-color: #E67A30;
+            transform: translateY(-1px);
         }
 
         @media (max-width: 560px) {
@@ -430,7 +447,10 @@
         </div>
         <div class="no-result" id="noResult">😢 没有找到相关链接</div>
 
-        <div class="cookie-notice" id="cookieNotice">⚡ 如果你没有同意 Cookie，语言选项不会被保存</div>
+        <!-- 底部同意按钮区域（点击不同意后才显示） -->
+        <div class="footer-consent-section" id="footerConsentSection">
+            <button id="footerConsentBtn" class="footer-consent-btn">🍪 同意 COOKIE</button>
+        </div>
     </div>
 
     <div id="cookieBanner" class="cookie-banner" style="display: none;">
@@ -464,7 +484,7 @@
                 cookieText: "🍪 本网站使用 Cookie 来记住您的语言偏好，提升浏览体验。",
                 acceptBtn: "同意",
                 declineBtn: "不同意",
-                cookieNotice: "⚡ 如果你没有同意 Cookie，语言选项不会被保存"
+                footerConsentBtn: "🍪 同意 COOKIE"
             },
             en: {
                 bilibiliBtn: "📁 Hongguai's Bilibili",
@@ -487,7 +507,7 @@
                 cookieText: "🍪 This site uses cookies to remember your language preferences and improve your browsing experience.",
                 acceptBtn: "Agree",
                 declineBtn: "Disagree",
-                cookieNotice: "⚡ If you do not consent to cookies, your language preference will not be saved"
+                footerConsentBtn: "🍪 Agree to COOKIE"
             }
         };
 
@@ -534,7 +554,7 @@
             }
         }
 
-        function switchLanguage(lang) {
+        function switchLanguage(lang, saveToCookie = true) {
             currentLang = lang;
             const texts = translations[lang];
             
@@ -565,25 +585,23 @@
             const declineBtn = document.getElementById('declineCookie');
             if (declineBtn) declineBtn.textContent = texts.declineBtn;
             
-            const cookieNotice = document.getElementById('cookieNotice');
-            if (cookieNotice) cookieNotice.textContent = texts.cookieNotice;
+            const footerConsentBtn = document.getElementById('footerConsentBtn');
+            if (footerConsentBtn) footerConsentBtn.textContent = texts.footerConsentBtn;
             
             filterLinks();
+            
+            if (saveToCookie && getCookie('cookie_consent') === 'accepted') {
+                setCookie('lang', lang, 30);
+            }
         }
 
-        // 语言切换事件 - 只有在已同意 Cookie 的情况下才保存
         document.querySelectorAll('.lang-btn').forEach(btn => {
             btn.addEventListener('click', () => {
                 const lang = btn.getAttribute('data-lang');
                 if (!lang) return;
                 document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active'));
                 btn.classList.add('active');
-                switchLanguage(lang);
-                
-                // 只有在用户已同意 Cookie 的情况下，才保存语言偏好
-                if (getCookie('cookie_consent') === 'accepted') {
-                    setCookie('lang', lang, 30);
-                }
+                switchLanguage(lang, true);
             });
         });
 
@@ -800,45 +818,51 @@
         function initCookieBanner() {
             const cookieConsent = getCookie('cookie_consent');
             const banner = document.getElementById('cookieBanner');
+            const footerSection = document.getElementById('footerConsentSection');
             
-            if (cookieConsent === 'accepted' || cookieConsent === 'declined') {
+            if (cookieConsent === 'accepted') {
                 banner.style.display = 'none';
-                if (cookieConsent === 'accepted') {
-                    const savedLang = getCookie('lang');
-                    if (savedLang && (savedLang === 'zh' || savedLang === 'en')) {
-                        document.querySelectorAll('.lang-btn').forEach(btn => {
-                            const lang = btn.getAttribute('data-lang');
-                            if (lang === savedLang) {
-                                btn.classList.add('active');
-                            } else {
-                                btn.classList.remove('active');
-                            }
-                        });
-                        switchLanguage(savedLang);
-                    }
-                } else {
-                    // 用户不同意，确保没有任何语言 Cookie 残留
-                    deleteCookie('lang');
+                footerSection.style.display = 'none';
+                const savedLang = getCookie('lang');
+                if (savedLang && (savedLang === 'zh' || savedLang === 'en')) {
+                    document.querySelectorAll('.lang-btn').forEach(btn => {
+                        const lang = btn.getAttribute('data-lang');
+                        if (lang === savedLang) {
+                            btn.classList.add('active');
+                        } else {
+                            btn.classList.remove('active');
+                        }
+                    });
+                    switchLanguage(savedLang, false);
                 }
+            } else if (cookieConsent === 'declined') {
+                banner.style.display = 'none';
+                footerSection.style.display = 'block';
+                deleteCookie('lang');
             } else {
                 banner.style.display = 'flex';
-                // 未选择时，确保没有任何语言 Cookie 残留
-                deleteCookie('lang');
+                footerSection.style.display = 'none';
             }
         }
 
         document.getElementById('acceptCookie').addEventListener('click', () => {
             setCookie('cookie_consent', 'accepted', 30);
-            // 保存当前语言
             setCookie('lang', currentLang, 30);
             document.getElementById('cookieBanner').style.display = 'none';
+            document.getElementById('footerConsentSection').style.display = 'none';
         });
 
         document.getElementById('declineCookie').addEventListener('click', () => {
             setCookie('cookie_consent', 'declined', 30);
-            // 删除任何可能残留的语言 Cookie
             deleteCookie('lang');
             document.getElementById('cookieBanner').style.display = 'none';
+            document.getElementById('footerConsentSection').style.display = 'block';
+        });
+
+        document.getElementById('footerConsentBtn').addEventListener('click', () => {
+            setCookie('cookie_consent', 'accepted', 30);
+            setCookie('lang', currentLang, 30);
+            document.getElementById('footerConsentSection').style.display = 'none';
         });
 
         initCookieBanner();
