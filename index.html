@@ -134,51 +134,6 @@
             width: 100%;
         }
 
-        .search-section {
-            margin: 20px 0;
-        }
-
-        .search-container {
-            display: flex;
-            gap: 8px;
-            align-items: center;
-        }
-
-        .search-input {
-            flex: 1;
-            padding: 10px 14px;
-            border: 1px solid #F0E0D0;
-            border-radius: 40px;
-            font-size: 14px;
-            font-family: inherit;
-            background-color: #FFFFFF;
-            transition: all 0.2s;
-            outline: none;
-        }
-
-        .search-input:focus {
-            border-color: #FF8C42;
-            box-shadow: 0 0 0 2px rgba(255, 140, 66, 0.2);
-        }
-
-        .search-btn {
-            background-color: #FF8C42;
-            color: white;
-            border: none;
-            padding: 10px 18px;
-            border-radius: 40px;
-            font-size: 14px;
-            font-weight: 500;
-            cursor: pointer;
-            transition: all 0.2s;
-            font-family: inherit;
-        }
-
-        .search-btn:hover {
-            background-color: #E67A30;
-            transform: translateY(-1px);
-        }
-
         .links-grid {
             display: flex;
             flex-direction: column;
@@ -203,10 +158,6 @@
             background-color: #FFF5E6;
             border-color: #FF8C42;
             transform: translateX(4px);
-        }
-
-        .link-card.hidden {
-            display: none;
         }
 
         .link-icon {
@@ -237,16 +188,56 @@
             word-break: break-all;
         }
 
-        .no-result {
-            text-align: center;
-            padding: 20px;
-            color: #AAAAAA;
-            font-size: 13px;
-            display: none;
+        .section-title {
+            font-size: 14px;
+            font-weight: 600;
+            color: #2D2D2D;
+            margin: 20px 0 12px 0;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            border-left: 3px solid #FF8C42;
+            padding-left: 12px;
         }
 
-        .no-result.show {
-            display: block;
+        /* Cookie 提示条 */
+        .cookie-banner {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background-color: #2D2D2D;
+            color: #FFFFFF;
+            padding: 16px 24px;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            align-items: center;
+            gap: 16px;
+            z-index: 1000;
+            font-size: 13px;
+            box-shadow: 0 -4px 12px rgba(0, 0, 0, 0.15);
+        }
+
+        .cookie-banner p {
+            margin: 0;
+        }
+
+        .cookie-btn {
+            background-color: #FF8C42;
+            color: white;
+            border: none;
+            padding: 8px 20px;
+            border-radius: 40px;
+            font-size: 13px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .cookie-btn:hover {
+            background-color: #E67A30;
+            transform: translateY(-1px);
         }
 
         @media (max-width: 560px) {
@@ -274,16 +265,10 @@
                 font-size: 11px;
                 padding: 2px 8px;
             }
-            .search-container {
-                gap: 6px;
-            }
-            .search-input {
-                padding: 8px 12px;
-                font-size: 13px;
-            }
-            .search-btn {
-                padding: 8px 14px;
-                font-size: 13px;
+            .cookie-banner {
+                padding: 12px 16px;
+                flex-direction: column;
+                text-align: center;
             }
         }
     </style>
@@ -307,50 +292,46 @@
 
         <div class="divider"></div>
 
-        <div class="search-section">
-            <div class="search-container">
-                <input type="text" id="searchInput" class="search-input" placeholder="搜索链接..." data-key="searchPlaceholder">
-                <button id="searchBtn" class="search-btn" data-key="searchBtn">搜索</button>
-            </div>
+        <div class="section-title">
+            <span data-key="linkCollectionIcon">🔗</span> <span data-key="linkCollectionTitle">链接收藏</span>
         </div>
-
-        <div class="links-grid" id="linksGrid">
-            <a href="https://discord.gg/nB2w3NQhkE" target="_blank" class="link-card" data-name="Discord 社区" data-desc="红怪的 Discord 邀请链接">
+        <div class="links-grid">
+            <a href="https://discord.gg/nB2w3NQhkE" target="_blank" class="link-card">
                 <div class="link-icon">💬</div>
                 <div class="link-info">
                     <div class="link-name" data-key="discordName">Discord 社区</div>
                     <div class="link-desc" data-key="discordDesc">红怪的 Discord 邀请链接</div>
                 </div>
             </a>
-            <a href="https://github.com/hong-a-debug" target="_blank" class="link-card" data-name="GitHub 主页" data-desc="杂七杂八的东西">
+            <a href="https://github.com/hong-a-debug" target="_blank" class="link-card">
                 <div class="link-icon">🐙</div>
                 <div class="link-info">
                     <div class="link-name" data-key="githubName">GitHub 主页</div>
                     <div class="link-desc" data-key="githubDesc">杂七杂八的东西</div>
                 </div>
             </a>
-            <a href="https://wwbkg.lanzouu.com/iu9qA3qmj4rc" target="_blank" class="link-card" data-name="小鸡头像自动工具" data-desc="密码: discord社区、QQ | 蓝奏云下载 18.3M">
+            <a href="https://wwbkg.lanzouu.com/iu9qA3qmj4rc" target="_blank" class="link-card">
                 <div class="link-icon">🐤</div>
                 <div class="link-info">
                     <div class="link-name" data-key="toolName">小鸡头像自动工具</div>
                     <div class="link-desc" data-key="toolDesc">密码: discord社区、QQ | 蓝奏云下载 18.3M</div>
                 </div>
             </a>
-            <div class="link-card" id="pclHomeBtn" style="cursor: pointer;" data-name="PCL主页" data-desc="点击弹窗复制内容">
+            <div class="link-card" id="pclHomeBtn" style="cursor: pointer;">
                 <div class="link-icon">🚀</div>
                 <div class="link-info">
                     <div class="link-name" data-key="pclName">PCL主页</div>
                     <div class="link-desc" data-key="pclDesc">点击弹窗复制内容</div>
                 </div>
             </div>
-            <div class="link-card" id="qqBtn" style="cursor: pointer;" data-name="QQ社区" data-desc="点击复制QQ号">
+            <div class="link-card" id="qqBtn" style="cursor: pointer;">
                 <div class="link-icon">💬</div>
                 <div class="link-info">
                     <div class="link-name" data-key="qqName">QQ社区</div>
                     <div class="link-desc" data-key="qqDesc">点击复制QQ号</div>
                 </div>
             </div>
-            <a href="/GameList.html" class="link-card" data-name="游戏库" data-desc="这是给同学们看的，无关的人请不要看">
+            <a href="/GameList.html" class="link-card">
                 <div class="link-icon">🎮</div>
                 <div class="link-info">
                     <div class="link-name" data-key="gameLibraryName">游戏库</div>
@@ -358,7 +339,12 @@
                 </div>
             </a>
         </div>
-        <div class="no-result" id="noResult" data-key="noResult">😢 没有找到相关链接</div>
+    </div>
+
+    <!-- Cookie 提示条 -->
+    <div id="cookieBanner" class="cookie-banner" style="display: none;">
+        <p id="cookieText">🍪 本网站使用 Cookie 来记住您的语言偏好，提升浏览体验。</p>
+        <button id="acceptCookie" class="cookie-btn">接受</button>
     </div>
 
     <script>
@@ -366,8 +352,8 @@
             zh: {
                 bilibiliBtn: "📁 红怪的B站首页",
                 hintText: "💡 点击按钮跳转B站，或使用下方链接",
-                searchPlaceholder: "搜索链接...",
-                searchBtn: "搜索",
+                linkCollectionIcon: "🔗",
+                linkCollectionTitle: "链接收藏",
                 discordName: "Discord 社区",
                 discordDesc: "红怪的 Discord 邀请链接",
                 githubName: "GitHub 主页",
@@ -380,13 +366,13 @@
                 qqDesc: "点击复制QQ号",
                 gameLibraryName: "游戏库",
                 gameLibraryDesc: "这是给同学们看的，无关的人请不要看",
-                noResult: "😢 没有找到相关链接"
+                cookieText: "🍪 本网站使用 Cookie 来记住您的语言偏好，提升浏览体验。"
             },
             en: {
                 bilibiliBtn: "📁 Hongguai's Bilibili",
                 hintText: "💡 Click to visit Bilibili, or use links below",
-                searchPlaceholder: "Search links...",
-                searchBtn: "Search",
+                linkCollectionIcon: "🔗",
+                linkCollectionTitle: "Link Collection",
                 discordName: "Discord Community",
                 discordDesc: "Hongguai's Discord invite",
                 githubName: "GitHub Home",
@@ -399,7 +385,7 @@
                 qqDesc: "Click to copy QQ number",
                 gameLibraryName: "Game Library",
                 gameLibraryDesc: "This is for classmates only, please do not watch if you are not",
-                noResult: "😢 No matching links found"
+                cookieText: "🍪 This site uses cookies to remember your language preferences and improve your browsing experience."
             }
         };
 
@@ -414,40 +400,15 @@
                 if (texts[key]) {
                     if (el.tagName === 'A' && el.classList.contains('big-btn')) {
                         el.innerHTML = texts[key];
-                    } else if (el.tagName === 'INPUT') {
-                        el.placeholder = texts[key];
-                    } else if (el.tagName === 'BUTTON' && el.id === 'searchBtn') {
-                        el.textContent = texts[key];
                     } else {
                         el.textContent = texts[key];
                     }
                 }
             });
             
-            filterLinks();
-        }
-
-        function filterLinks() {
-            const keyword = document.getElementById('searchInput').value.trim().toLowerCase();
-            const links = document.querySelectorAll('#linksGrid .link-card');
-            let hasVisible = false;
-            
-            links.forEach(link => {
-                const name = link.getAttribute('data-name') || '';
-                const desc = link.getAttribute('data-desc') || '';
-                if (keyword === '' || name.toLowerCase().includes(keyword) || desc.toLowerCase().includes(keyword)) {
-                    link.classList.remove('hidden');
-                    hasVisible = true;
-                } else {
-                    link.classList.add('hidden');
-                }
-            });
-            
-            const noResult = document.getElementById('noResult');
-            if (hasVisible || keyword === '') {
-                noResult.classList.remove('show');
-            } else {
-                noResult.classList.add('show');
+            const cookieTextEl = document.getElementById('cookieText');
+            if (cookieTextEl && texts.cookieText) {
+                cookieTextEl.textContent = texts.cookieText;
             }
         }
 
@@ -458,22 +419,62 @@
                 document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active'));
                 btn.classList.add('active');
                 switchLanguage(lang);
+                // 保存语言偏好到 Cookie
+                document.cookie = "lang=" + lang + "; path=/; max-age=" + (60 * 60 * 24 * 30);
             });
         });
 
-        document.getElementById('searchBtn').addEventListener('click', filterLinks);
-        document.getElementById('searchInput').addEventListener('input', function() {
-            if (this.value.trim() === '') {
-                filterLinks();
+        // Cookie 工具函数
+        function getCookie(name) {
+            const value = `; ${document.cookie}`;
+            const parts = value.split(`; ${name}=`);
+            if (parts.length === 2) return parts.pop().split(';').shift();
+            return null;
+        }
+
+        function setCookie(name, value, days) {
+            const date = new Date();
+            date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
+            document.cookie = name + "=" + value + "; expires=" + date.toUTCString() + "; path=/";
+        }
+
+        // Cookie 同意逻辑
+        function initCookieBanner() {
+            const cookieConsent = getCookie('cookie_consent');
+            const banner = document.getElementById('cookieBanner');
+            
+            if (cookieConsent === 'accepted') {
+                banner.style.display = 'none';
+                // 恢复保存的语言偏好
+                const savedLang = getCookie('lang');
+                if (savedLang && (savedLang === 'zh' || savedLang === 'en')) {
+                    currentLang = savedLang;
+                    // 更新按钮状态
+                    document.querySelectorAll('.lang-btn').forEach(btn => {
+                        const lang = btn.getAttribute('data-lang');
+                        if (lang === savedLang) {
+                            btn.classList.add('active');
+                        } else {
+                            btn.classList.remove('active');
+                        }
+                    });
+                    switchLanguage(savedLang);
+                }
+            } else {
+                banner.style.display = 'flex';
             }
-        });
-        document.getElementById('searchInput').addEventListener('keyup', (e) => {
-            if (e.key === 'Enter') {
-                filterLinks();
-            }
+        }
+
+        // 接受 Cookie
+        document.getElementById('acceptCookie').addEventListener('click', () => {
+            setCookie('cookie_consent', 'accepted', 30);
+            // 保存当前语言偏好
+            setCookie('lang', currentLang, 30);
+            document.getElementById('cookieBanner').style.display = 'none';
         });
 
-        function createPCLModal() {
+        // PCL 主页弹窗
+        document.getElementById('pclHomeBtn').addEventListener('click', function() {
             const textToCopy = 'https://raw.githubusercontent.com/hong-a-debug/w/main/Custom.xaml';
             const modalOverlay = document.createElement('div');
             modalOverlay.style.position = 'fixed';
@@ -574,9 +575,10 @@
             modalOverlay.addEventListener('click', (e) => {
                 if (e.target === modalOverlay) closeModal();
             });
-        }
+        });
 
-        function createQQModal() {
+        // QQ 社区弹窗
+        document.getElementById('qqBtn').addEventListener('click', function() {
             const textToCopy = '301595234';
             const modalOverlay = document.createElement('div');
             modalOverlay.style.position = 'fixed';
@@ -666,10 +668,10 @@
             modalOverlay.addEventListener('click', (e) => {
                 if (e.target === modalOverlay) closeModal();
             });
-        }
+        });
 
-        document.getElementById('pclHomeBtn').addEventListener('click', createPCLModal);
-        document.getElementById('qqBtn').addEventListener('click', createQQModal);
+        // 初始化 Cookie 提示条
+        initCookieBanner();
     </script>
 </body>
 </html>
