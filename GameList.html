@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-    <title>红怪的游戏库</title>
+    <title id="pageTitle">红怪的游戏库</title>
     <link rel="icon" type="image/png" href="/icon/icon.png">
     <style>
         * {
@@ -295,7 +295,7 @@
     <div class="card">
         <div class="top-orange-strip"></div>
         <div class="top-white-bar">
-            <span data-key="title">红怪的游戏库</span>
+            <span id="siteName">红怪的游戏库</span>
         </div>
 
         <div class="search-section">
@@ -339,7 +339,8 @@
 
         const translations = {
             zh: {
-                title: "红怪的游戏库",
+                pageTitle: "红怪的游戏库",
+                siteName: "红怪的游戏库",
                 searchPlaceholder: "搜索游戏...",
                 searchBtn: "搜索",
                 noResult: "😢 没有找到相关游戏",
@@ -347,7 +348,8 @@
                 cookieNotice: "⚡ 如果你没有同意 Cookie，语言选项不会被保存，点击 <a href=\"https://hong-a-debug.github.io/\">这里</a> 同意 cookie"
             },
             en: {
-                title: "Hongguai's Game Library",
+                pageTitle: "Hongguai's Game Library",
+                siteName: "Hongguai's Game Library",
                 searchPlaceholder: "Search games...",
                 searchBtn: "Search",
                 noResult: "😢 No games found",
@@ -405,22 +407,20 @@
             currentLang = lang;
             const texts = translations[lang];
             
-            document.querySelectorAll('[data-key]').forEach(el => {
-                const key = el.getAttribute('data-key');
-                if (texts[key]) {
-                    if (el.tagName === 'INPUT') {
-                        el.placeholder = texts[key];
-                    } else if (el.id === 'cookieNotice') {
-                        el.innerHTML = texts[key];
-                    } else {
-                        el.textContent = texts[key];
-                    }
-                }
-            });
+            document.title = texts.pageTitle;
+            document.getElementById('siteName').textContent = texts.siteName;
+            document.getElementById('searchInput').placeholder = texts.searchPlaceholder;
+            document.getElementById('searchBtn').textContent = texts.searchBtn;
+            document.getElementById('noResult').textContent = texts.noResult;
             
             const contactText = document.getElementById('contactText');
             if (contactText) {
                 contactText.textContent = texts.contactText;
+            }
+            
+            const cookieNotice = document.getElementById('cookieNotice');
+            if (cookieNotice) {
+                cookieNotice.innerHTML = texts.cookieNotice;
             }
             
             renderGames();
