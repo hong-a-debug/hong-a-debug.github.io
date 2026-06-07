@@ -506,6 +506,10 @@
             document.cookie = name + "=" + value + "; expires=" + date.toUTCString() + "; path=/";
         }
 
+        function deleteCookie(name) {
+            document.cookie = name + "=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+        }
+
         function filterLinks() {
             const keyword = document.getElementById('searchInput').value.trim().toLowerCase();
             const links = document.querySelectorAll('#linksGrid .link-card');
@@ -530,7 +534,7 @@
             }
         }
 
-        function switchLanguage(lang, saveToCookie = true) {
+        function switchLanguage(lang) {
             currentLang = lang;
             const texts = translations[lang];
             
@@ -565,19 +569,21 @@
             if (cookieNotice) cookieNotice.textContent = texts.cookieNotice;
             
             filterLinks();
-            
-            if (saveToCookie && getCookie('cookie_consent') === 'accepted') {
-                setCookie('lang', lang, 30);
-            }
         }
 
+        // 语言切换事件 - 只有在已同意 Cookie 的情况下才保存
         document.querySelectorAll('.lang-btn').forEach(btn => {
             btn.addEventListener('click', () => {
                 const lang = btn.getAttribute('data-lang');
                 if (!lang) return;
                 document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active'));
                 btn.classList.add('active');
-                switchLanguage(lang, true);
+                switchLanguage(lang);
+                
+                // 只有在用户已同意 Cookie 的情况下，才保存语言偏好
+                if (getCookie('cookie_consent') === 'accepted') {
+                    setCookie('lang', lang, 30);
+                }
             });
         });
 
@@ -808,22 +814,30 @@
                                 btn.classList.remove('active');
                             }
                         });
-                        switchLanguage(savedLang, false);
+                        switchLanguage(savedLang);
                     }
+                } else {
+                    // 用户不同意，确保没有任何语言 Cookie 残留
+                    deleteCookie('lang');
                 }
             } else {
                 banner.style.display = 'flex';
+                // 未选择时，确保没有任何语言 Cookie 残留
+                deleteCookie('lang');
             }
         }
 
         document.getElementById('acceptCookie').addEventListener('click', () => {
             setCookie('cookie_consent', 'accepted', 30);
+            // 保存当前语言
             setCookie('lang', currentLang, 30);
             document.getElementById('cookieBanner').style.display = 'none';
         });
 
         document.getElementById('declineCookie').addEventListener('click', () => {
             setCookie('cookie_consent', 'declined', 30);
+            // 删除任何可能残留的语言 Cookie
+            deleteCookie('lang');
             document.getElementById('cookieBanner').style.display = 'none';
         });
 
