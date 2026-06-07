@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-    <title>红怪的个人博客</title>
+    <title id="pageTitle">红怪的个人博客</title>
     <link rel="icon" type="image/png" href="/icon/icon.png">
     <style>
         * {
@@ -305,7 +305,24 @@
             transform: translateY(-1px);
         }
 
-        /* 底部同意按钮区域（点击不同意后才显示） */
+        .cookie-notice {
+            text-align: center;
+            font-size: 10px;
+            color: #AAAAAA;
+            margin-top: 16px;
+            padding-top: 12px;
+            border-top: 1px solid #F0E0D0;
+        }
+
+        .cookie-notice a {
+            color: #FF8C42;
+            text-decoration: none;
+        }
+
+        .cookie-notice a:hover {
+            text-decoration: underline;
+        }
+
         .footer-consent-section {
             margin-top: 16px;
             padding-top: 12px;
@@ -384,7 +401,7 @@
     <div class="card">
         <div class="top-orange-strip"></div>
         <div class="top-white-bar">
-            <span>红怪</span>
+            <span id="siteName">红怪</span>
         </div>
 
         <div>
@@ -447,7 +464,6 @@
         </div>
         <div class="no-result" id="noResult">😢 没有找到相关链接</div>
 
-        <!-- 底部同意按钮区域（点击不同意后才显示） -->
         <div class="footer-consent-section" id="footerConsentSection">
             <button id="footerConsentBtn" class="footer-consent-btn">🍪 同意 COOKIE</button>
         </div>
@@ -464,6 +480,8 @@
     <script>
         const translations = {
             zh: {
+                pageTitle: "红怪的个人博客",
+                siteName: "红怪",
                 bilibiliBtn: "📁 红怪的B站首页",
                 hintText: "💡 点击按钮跳转B站，或使用下方链接",
                 searchPlaceholder: "搜索链接...",
@@ -487,6 +505,8 @@
                 footerConsentBtn: "🍪 同意 COOKIE"
             },
             en: {
+                pageTitle: "Hongguai's Personal Blog",
+                siteName: "Hongguai",
                 bilibiliBtn: "📁 Hongguai's Bilibili",
                 hintText: "💡 Click to visit Bilibili, or use links below",
                 searchPlaceholder: "Search links...",
@@ -558,6 +578,8 @@
             currentLang = lang;
             const texts = translations[lang];
             
+            document.title = texts.pageTitle;
+            document.getElementById('siteName').textContent = texts.siteName;
             document.getElementById('bilibiliBtn').innerHTML = texts.bilibiliBtn;
             document.getElementById('hintText').textContent = texts.hintText;
             document.getElementById('searchInput').placeholder = texts.searchPlaceholder;
