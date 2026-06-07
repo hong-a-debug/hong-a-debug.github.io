@@ -165,53 +165,66 @@
 </head>
 <body>
     <div class="language-selector">
-        <button class="lang-btn active" data-lang="zh">中文</button>
+        <button class="lang-btn" data-lang="zh">中文</button>
         <button class="lang-btn" data-lang="en">English</button>
     </div>
 
     <div class="card">
         <div class="top-orange-strip"></div>
         <div class="top-white-bar">
-            <span data-key="title">Cities Craft</span>
+            <span id="topTitle">Cities Craft</span>
         </div>
 
-        <div class="page-title" data-key="pageTitle">🏙️ Cities Craft</div>
+        <div class="page-title" id="pageTitle">🏙️ Cities Craft</div>
 
         <div class="game-info">
-            <p data-key="desc">这玩意儿是有电脑版的</p>
+            <p id="gameDesc">这玩意儿是有电脑版的</p>
         </div>
 
-        <a href="/GameList.html" class="back-link" data-key="backLink">← 返回游戏库</a>
+        <a href="/GameList.html" class="back-link" id="backLink">← 返回游戏库</a>
     </div>
 
     <script>
         const translations = {
             zh: {
-                title: "Cities Craft",
+                topTitle: "Cities Craft",
                 pageTitle: "🏙️ Cities Craft",
-                desc: "这玩意儿是有电脑版的",
+                gameDesc: "这玩意儿是有电脑版的",
                 backLink: "← 返回游戏库"
             },
             en: {
-                title: "Cities Craft",
+                topTitle: "Cities Craft",
                 pageTitle: "🏙️ Cities Craft",
-                desc: "This one has a PC version",
+                gameDesc: "This one has a PC version",
                 backLink: "← Back to Game Library"
             }
         };
 
         let currentLang = 'zh';
 
+        function getCookie(name) {
+            const value = `; ${document.cookie}`;
+            const parts = value.split(`; ${name}=`);
+            if (parts.length === 2) return parts.pop().split(';').shift();
+            return null;
+        }
+
+        function setCookie(name, value, days) {
+            const date = new Date();
+            date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
+            document.cookie = name + "=" + value + "; expires=" + date.toUTCString() + "; path=/";
+        }
+
         function switchLanguage(lang) {
             currentLang = lang;
             const texts = translations[lang];
             
-            document.querySelectorAll('[data-key]').forEach(el => {
-                const key = el.getAttribute('data-key');
-                if (texts[key]) {
-                    el.textContent = texts[key];
-                }
-            });
+            document.getElementById('topTitle').textContent = texts.topTitle;
+            document.getElementById('pageTitle').textContent = texts.pageTitle;
+            document.getElementById('gameDesc').textContent = texts.gameDesc;
+            document.getElementById('backLink').textContent = texts.backLink;
+            
+            setCookie('lang', lang, 30);
         }
 
         document.querySelectorAll('.lang-btn').forEach(btn => {
@@ -223,6 +236,19 @@
                 switchLanguage(lang);
             });
         });
+
+        const savedLang = getCookie('lang');
+        if (savedLang && (savedLang === 'zh' || savedLang === 'en')) {
+            document.querySelectorAll('.lang-btn').forEach(btn => {
+                const lang = btn.getAttribute('data-lang');
+                if (lang === savedLang) {
+                    btn.classList.add('active');
+                } else {
+                    btn.classList.remove('active');
+                }
+            });
+            switchLanguage(savedLang);
+        }
     </script>
 </body>
 </html>
