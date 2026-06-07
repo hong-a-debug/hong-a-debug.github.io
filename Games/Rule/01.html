@@ -127,6 +127,24 @@
             color: #FF8C42;
         }
 
+        .cookie-notice {
+            text-align: center;
+            font-size: 10px;
+            color: #AAAAAA;
+            margin-top: 20px;
+            padding-top: 12px;
+            border-top: 1px solid #F0E0D0;
+        }
+
+        .cookie-notice a {
+            color: #FF8C42;
+            text-decoration: none;
+        }
+
+        .cookie-notice a:hover {
+            text-decoration: underline;
+        }
+
         @media (max-width: 560px) {
             body {
                 padding: 20px 16px;
@@ -181,6 +199,10 @@
         </div>
 
         <a href="/Games/List/01.html" class="back-link" id="backLink">← 返回火车站</a>
+
+        <div class="cookie-notice" id="cookieNotice">
+            ⚡ 如果你没有同意 Cookie，语言选项不会被保存，点击 <a href="https://hong-a-debug.github.io/">这里</a> 同意 cookie
+        </div>
     </div>
 
     <script>
@@ -189,13 +211,15 @@
                 topTitle: "规则说明",
                 pageTitle: "📜 规则",
                 ruleText: "1. 拿绳子不能打到人",
-                backLink: "← 返回火车站"
+                backLink: "← 返回火车站",
+                cookieNotice: "⚡ 如果你没有同意 Cookie，语言选项不会被保存，点击 <a href=\"https://hong-a-debug.github.io/\">这里</a> 同意 cookie"
             },
             en: {
                 topTitle: "Rules",
                 pageTitle: "📜 Rules",
                 ruleText: "1. Do not hit people with the rope",
-                backLink: "← Back to Train Station"
+                backLink: "← Back to Train Station",
+                cookieNotice: "⚡ If you do not consent to cookies, your language preference will not be saved, <a href=\"https://hong-a-debug.github.io/\">click here</a> to agree"
             }
         };
 
@@ -214,6 +238,10 @@
             document.cookie = name + "=" + value + "; expires=" + date.toUTCString() + "; path=/";
         }
 
+        function deleteCookie(name) {
+            document.cookie = name + "=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+        }
+
         function switchLanguage(lang) {
             currentLang = lang;
             const texts = translations[lang];
@@ -223,7 +251,8 @@
             document.getElementById('ruleText').textContent = texts.ruleText;
             document.getElementById('backLink').textContent = texts.backLink;
             
-            setCookie('lang', lang, 30);
+            const cookieNotice = document.getElementById('cookieNotice');
+            if (cookieNotice) cookieNotice.innerHTML = texts.cookieNotice;
         }
 
         document.querySelectorAll('.lang-btn').forEach(btn => {
@@ -233,20 +262,30 @@
                 document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active'));
                 btn.classList.add('active');
                 switchLanguage(lang);
+                
+                if (getCookie('cookie_consent') === 'accepted') {
+                    setCookie('lang', lang, 30);
+                }
             });
         });
 
-        const savedLang = getCookie('lang');
-        if (savedLang && (savedLang === 'zh' || savedLang === 'en')) {
-            document.querySelectorAll('.lang-btn').forEach(btn => {
-                const lang = btn.getAttribute('data-lang');
-                if (lang === savedLang) {
-                    btn.classList.add('active');
-                } else {
-                    btn.classList.remove('active');
-                }
-            });
-            switchLanguage(savedLang);
+        const cookieConsent = getCookie('cookie_consent');
+        
+        if (cookieConsent === 'accepted') {
+            const savedLang = getCookie('lang');
+            if (savedLang && (savedLang === 'zh' || savedLang === 'en')) {
+                document.querySelectorAll('.lang-btn').forEach(btn => {
+                    const lang = btn.getAttribute('data-lang');
+                    if (lang === savedLang) {
+                        btn.classList.add('active');
+                    } else {
+                        btn.classList.remove('active');
+                    }
+                });
+                switchLanguage(savedLang);
+            }
+        } else {
+            deleteCookie('lang');
         }
     </script>
 </body>
