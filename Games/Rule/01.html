@@ -107,27 +107,7 @@
         }
 
         .content p {
-            margin-bottom: 8px;
-        }
-
-        .rule-section {
-            margin-bottom: 20px;
-        }
-
-        .rule-title {
-            font-weight: 700;
-            font-size: 16px;
-            color: #FF8C42;
-            margin-bottom: 10px;
-            margin-top: 15px;
-        }
-
-        .rule-list {
-            padding-left: 20px;
-        }
-
-        .rule-list li {
-            margin-bottom: 6px;
+            margin-bottom: 12px;
         }
 
         .back-link {
@@ -197,20 +177,7 @@
         <div class="page-title" id="pageTitle">📜 规则</div>
 
         <div class="content">
-            <div class="rule-section">
-                <div class="rule-title" id="ruleTitle">一、违规直接淘汰（不再局内，进局立即淘汰）</div>
-                <ul class="rule-list" id="ruleList">
-                    <li id="rule1">1. 打78</li>
-                    <li id="rule2">2. 打头</li>
-                    <li id="rule3">3. 假活，不死</li>
-                    <li id="rule4">4. 假举报</li>
-                    <li id="rule5">5. 进入敌方阵营</li>
-                    <li id="rule6">6. 无视无敌</li>
-                    <li id="rule7">7. 打没弹药的</li>
-                    <li id="rule8">8. 不让无敌</li>
-                    <li id="rule9">9. 伤害他人</li>
-                </ul>
-            </div>
+            <p id="ruleText">1. 拿绳子不能打到人</p>
         </div>
 
         <a href="/Games/List/01.html" class="back-link" id="backLink">← 返回火车站</a>
@@ -221,31 +188,13 @@
             zh: {
                 topTitle: "规则说明",
                 pageTitle: "📜 规则",
-                ruleTitle: "一、违规直接淘汰（不再局内，进局立即淘汰）",
-                rule1: "1. 打78",
-                rule2: "2. 打头",
-                rule3: "3. 假活，不死",
-                rule4: "4. 假举报",
-                rule5: "5. 进入敌方阵营",
-                rule6: "6. 无视无敌",
-                rule7: "7. 打没弹药的",
-                rule8: "8. 不让无敌",
-                rule9: "9. 伤害他人",
+                ruleText: "1. 拿绳子不能打到人",
                 backLink: "← 返回火车站"
             },
             en: {
                 topTitle: "Rules",
                 pageTitle: "📜 Rules",
-                ruleTitle: "1. Direct disqualification for violations (eliminated immediately upon entering)",
-                rule1: "1. Hitting 78",
-                rule2: "2. Hitting the head",
-                rule3: "3. Fake alive, not dying",
-                rule4: "4. False reporting",
-                rule5: "5. Entering enemy territory",
-                rule6: "6. Ignoring invincibility",
-                rule7: "7. Hitting those without ammo",
-                rule8: "8. Blocking invincibility",
-                rule9: "9. Harming others",
+                ruleText: "1. Do not hit people with the rope",
                 backLink: "← Back to Train Station"
             }
         };
@@ -271,16 +220,7 @@
             
             document.getElementById('topTitle').textContent = texts.topTitle;
             document.getElementById('pageTitle').textContent = texts.pageTitle;
-            document.getElementById('ruleTitle').textContent = texts.ruleTitle;
-            document.getElementById('rule1').textContent = texts.rule1;
-            document.getElementById('rule2').textContent = texts.rule2;
-            document.getElementById('rule3').textContent = texts.rule3;
-            document.getElementById('rule4').textContent = texts.rule4;
-            document.getElementById('rule5').textContent = texts.rule5;
-            document.getElementById('rule6').textContent = texts.rule6;
-            document.getElementById('rule7').textContent = texts.rule7;
-            document.getElementById('rule8').textContent = texts.rule8;
-            document.getElementById('rule9').textContent = texts.rule9;
+            document.getElementById('ruleText').textContent = texts.ruleText;
             document.getElementById('backLink').textContent = texts.backLink;
             
             setCookie('lang', lang, 30);
