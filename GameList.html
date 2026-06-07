@@ -223,6 +223,15 @@
             margin-right: 8px;
         }
 
+        .cookie-notice {
+            text-align: center;
+            font-size: 10px;
+            color: #AAAAAA;
+            margin-top: 16px;
+            padding-top: 12px;
+            border-top: 1px solid #F0E0D0;
+        }
+
         @media (max-width: 560px) {
             body {
                 padding: 20px 16px;
@@ -295,6 +304,8 @@
         <a href="https://hong-a-debug.github.io/" target="_blank" class="contact-btn" id="contactBtn">
             <img src="https://hong-a-debug.github.io/icon/icon.png" alt="icon" class="contact-icon" onerror="this.style.display='none'"> <span id="contactText">个人博客</span>
         </a>
+
+        <div class="cookie-notice" id="cookieNotice">⚡ 如果你没有同意 Cookie，语言选项不会被保存</div>
     </div>
 
     <script>
@@ -321,21 +332,22 @@
                 searchPlaceholder: "搜索游戏...",
                 searchBtn: "搜索",
                 noResult: "😢 没有找到相关游戏",
-                contactText: "个人博客"
+                contactText: "个人博客",
+                cookieNotice: "⚡ 如果你没有同意 Cookie，语言选项不会被保存"
             },
             en: {
                 title: "Hongguai's Game Library",
                 searchPlaceholder: "Search games...",
                 searchBtn: "Search",
                 noResult: "😢 No games found",
-                contactText: "Personal Blog"
+                contactText: "Personal Blog",
+                cookieNotice: "⚡ If you do not consent to cookies, your language preference will not be saved"
             }
         };
 
         let currentLang = 'zh';
         let allGameCards = [];
 
-        // Cookie 工具函数
         function getCookie(name) {
             const value = `; ${document.cookie}`;
             const parts = value.split(`; ${name}=`);
@@ -374,7 +386,7 @@
             allGameCards = cards;
         }
 
-        function switchLanguage(lang) {
+        function switchLanguage(lang, saveToCookie = true) {
             currentLang = lang;
             const texts = translations[lang];
             
@@ -389,17 +401,22 @@
                 }
             });
             
-            // 单独更新个人博客按钮的文字
             const contactText = document.getElementById('contactText');
             if (contactText) {
                 contactText.textContent = texts.contactText;
             }
             
+            const cookieNotice = document.getElementById('cookieNotice');
+            if (cookieNotice) {
+                cookieNotice.textContent = texts.cookieNotice;
+            }
+            
             renderGames();
             filterGames();
             
-            // 保存语言偏好到 Cookie
-            setCookie('lang', lang, 30);
+            if (saveToCookie && getCookie('cookie_consent') === 'accepted') {
+                setCookie('lang', lang, 30);
+            }
         }
 
         function filterGames() {
@@ -425,14 +442,13 @@
             }
         }
 
-        // 语言切换事件
         document.querySelectorAll('.lang-btn').forEach(btn => {
             btn.addEventListener('click', () => {
                 const lang = btn.getAttribute('data-lang');
                 if (!lang) return;
                 document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active'));
                 btn.classList.add('active');
-                switchLanguage(lang);
+                switchLanguage(lang, true);
             });
         });
 
@@ -448,9 +464,10 @@
             }
         });
 
-        // 初始化：读取 Cookie 中的语言偏好
         const savedLang = getCookie('lang');
-        if (savedLang && (savedLang === 'zh' || savedLang === 'en')) {
+        const cookieConsent = getCookie('cookie_consent');
+        
+        if (cookieConsent === 'accepted' && savedLang && (savedLang === 'zh' || savedLang === 'en')) {
             currentLang = savedLang;
             document.querySelectorAll('.lang-btn').forEach(btn => {
                 const lang = btn.getAttribute('data-lang');
@@ -460,7 +477,7 @@
                     btn.classList.remove('active');
                 }
             });
-            switchLanguage(savedLang);
+            switchLanguage(savedLang, false);
         } else {
             renderGames();
         }
