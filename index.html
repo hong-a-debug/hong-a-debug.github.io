@@ -275,7 +275,7 @@
 </head>
 <body>
     <div class="language-selector">
-        <button class="lang-btn active" data-lang="zh">中文</button>
+        <button class="lang-btn" data-lang="zh">中文</button>
         <button class="lang-btn" data-lang="en">English</button>
     </div>
 
@@ -391,6 +391,20 @@
 
         let currentLang = 'zh';
 
+        // Cookie 工具函数
+        function getCookie(name) {
+            const value = `; ${document.cookie}`;
+            const parts = value.split(`; ${name}=`);
+            if (parts.length === 2) return parts.pop().split(';').shift();
+            return null;
+        }
+
+        function setCookie(name, value, days) {
+            const date = new Date();
+            date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
+            document.cookie = name + "=" + value + "; expires=" + date.toUTCString() + "; path=/";
+        }
+
         function switchLanguage(lang) {
             currentLang = lang;
             const texts = translations[lang];
@@ -410,8 +424,14 @@
             if (cookieTextEl && texts.cookieText) {
                 cookieTextEl.textContent = texts.cookieText;
             }
+            
+            // 如果已同意 Cookie，保存语言偏好
+            if (getCookie('cookie_consent') === 'accepted') {
+                setCookie('lang', lang, 30);
+            }
         }
 
+        // 语言切换事件
         document.querySelectorAll('.lang-btn').forEach(btn => {
             btn.addEventListener('click', () => {
                 const lang = btn.getAttribute('data-lang');
@@ -419,24 +439,8 @@
                 document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active'));
                 btn.classList.add('active');
                 switchLanguage(lang);
-                // 保存语言偏好到 Cookie
-                document.cookie = "lang=" + lang + "; path=/; max-age=" + (60 * 60 * 24 * 30);
             });
         });
-
-        // Cookie 工具函数
-        function getCookie(name) {
-            const value = `; ${document.cookie}`;
-            const parts = value.split(`; ${name}=`);
-            if (parts.length === 2) return parts.pop().split(';').shift();
-            return null;
-        }
-
-        function setCookie(name, value, days) {
-            const date = new Date();
-            date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
-            document.cookie = name + "=" + value + "; expires=" + date.toUTCString() + "; path=/";
-        }
 
         // Cookie 同意逻辑
         function initCookieBanner() {
@@ -449,7 +453,6 @@
                 const savedLang = getCookie('lang');
                 if (savedLang && (savedLang === 'zh' || savedLang === 'en')) {
                     currentLang = savedLang;
-                    // 更新按钮状态
                     document.querySelectorAll('.lang-btn').forEach(btn => {
                         const lang = btn.getAttribute('data-lang');
                         if (lang === savedLang) {
@@ -468,12 +471,11 @@
         // 接受 Cookie
         document.getElementById('acceptCookie').addEventListener('click', () => {
             setCookie('cookie_consent', 'accepted', 30);
-            // 保存当前语言偏好
             setCookie('lang', currentLang, 30);
             document.getElementById('cookieBanner').style.display = 'none';
         });
 
-        // PCL 主页弹窗
+        // PCL 弹窗
         document.getElementById('pclHomeBtn').addEventListener('click', function() {
             const textToCopy = 'https://raw.githubusercontent.com/hong-a-debug/w/main/Custom.xaml';
             const modalOverlay = document.createElement('div');
@@ -577,7 +579,7 @@
             });
         });
 
-        // QQ 社区弹窗
+        // QQ 弹窗
         document.getElementById('qqBtn').addEventListener('click', function() {
             const textToCopy = '301595234';
             const modalOverlay = document.createElement('div');
@@ -670,7 +672,6 @@
             });
         });
 
-        // 初始化 Cookie 提示条
         initCookieBanner();
     </script>
 </body>
