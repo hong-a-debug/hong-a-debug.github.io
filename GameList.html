@@ -232,6 +232,15 @@
             border-top: 1px solid #F0E0D0;
         }
 
+        .cookie-notice a {
+            color: #FF8C42;
+            text-decoration: none;
+        }
+
+        .cookie-notice a:hover {
+            text-decoration: underline;
+        }
+
         @media (max-width: 560px) {
             body {
                 padding: 20px 16px;
@@ -305,7 +314,9 @@
             <img src="https://hong-a-debug.github.io/icon/icon.png" alt="icon" class="contact-icon" onerror="this.style.display='none'"> <span id="contactText">个人博客</span>
         </a>
 
-        <div class="cookie-notice" id="cookieNotice">⚡ 如果你没有同意 Cookie，语言选项不会被保存</div>
+        <div class="cookie-notice" id="cookieNotice">
+            ⚡ 如果你没有同意 Cookie，语言选项不会被保存，<a href="https://hong-a-debug.github.io/" id="cookieLink">点击这里</a>同意 cookie
+        </div>
     </div>
 
     <script>
@@ -333,7 +344,7 @@
                 searchBtn: "搜索",
                 noResult: "😢 没有找到相关游戏",
                 contactText: "个人博客",
-                cookieNotice: "⚡ 如果你没有同意 Cookie，语言选项不会被保存"
+                cookieNotice: "⚡ 如果你没有同意 Cookie，语言选项不会被保存，<a href=\"https://hong-a-debug.github.io/\" id=\"cookieLink\">点击这里</a>同意 cookie"
             },
             en: {
                 title: "Hongguai's Game Library",
@@ -341,7 +352,7 @@
                 searchBtn: "Search",
                 noResult: "😢 No games found",
                 contactText: "Personal Blog",
-                cookieNotice: "⚡ If you do not consent to cookies, your language preference will not be saved"
+                cookieNotice: "⚡ If you do not consent to cookies, your language preference will not be saved, <a href=\"https://hong-a-debug.github.io/\" id=\"cookieLink\">click here</a> to agree"
             }
         };
 
@@ -399,6 +410,8 @@
                 if (texts[key]) {
                     if (el.tagName === 'INPUT') {
                         el.placeholder = texts[key];
+                    } else if (el.id === 'cookieNotice') {
+                        el.innerHTML = texts[key];
                     } else {
                         el.textContent = texts[key];
                     }
@@ -408,11 +421,6 @@
             const contactText = document.getElementById('contactText');
             if (contactText) {
                 contactText.textContent = texts.contactText;
-            }
-            
-            const cookieNotice = document.getElementById('cookieNotice');
-            if (cookieNotice) {
-                cookieNotice.textContent = texts.cookieNotice;
             }
             
             renderGames();
@@ -442,7 +450,6 @@
             }
         }
 
-        // 语言切换事件 - 只有在已同意 Cookie 的情况下才保存
         document.querySelectorAll('.lang-btn').forEach(btn => {
             btn.addEventListener('click', () => {
                 const lang = btn.getAttribute('data-lang');
@@ -488,7 +495,6 @@
                 renderGames();
             }
         } else {
-            // 未同意或不同意，确保没有任何语言 Cookie 残留
             deleteCookie('lang');
             renderGames();
         }
