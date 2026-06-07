@@ -164,37 +164,37 @@
 </head>
 <body>
     <div class="language-selector">
-        <button class="lang-btn active" data-lang="zh">中文</button>
+        <button class="lang-btn" data-lang="zh">中文</button>
         <button class="lang-btn" data-lang="en">English</button>
     </div>
 
     <div class="card">
         <div class="top-orange-strip"></div>
         <div class="top-white-bar">
-            <span data-key="title">玩法说明</span>
+            <span id="topTitle">玩法说明</span>
         </div>
 
-        <div class="page-title" data-key="pageTitle">🎮 玩法</div>
+        <div class="page-title" id="pageTitle">🎮 玩法</div>
 
         <div class="content">
-            <p data-key="desc1">FRS 是一个非常开放的游戏，玩家可以自创玩法！</p>
-            <p data-key="desc2">游戏本身没有固定规则，你可以发挥想象力，创造属于自己的游戏方式。</p>
+            <p id="desc1">FRS 是一个非常开放的游戏，玩家可以自创玩法！</p>
+            <p id="desc2">游戏本身没有固定规则，你可以发挥想象力，创造属于自己的游戏方式。</p>
         </div>
 
-        <a href="/Games/List/02.html" class="back-link" data-key="backLink">← 返回 FRS</a>
+        <a href="/Games/List/02.html" class="back-link" id="backLink">← 返回 FRS</a>
     </div>
 
     <script>
         const translations = {
             zh: {
-                title: "玩法说明",
+                topTitle: "玩法说明",
                 pageTitle: "🎮 玩法",
                 desc1: "FRS 是一个非常开放的游戏，玩家可以自创玩法！",
                 desc2: "游戏本身没有固定规则，你可以发挥想象力，创造属于自己的游戏方式。",
                 backLink: "← 返回 FRS"
             },
             en: {
-                title: "How to Play",
+                topTitle: "How to Play",
                 pageTitle: "🎮 How to Play",
                 desc1: "FRS is a very open game where players can create their own gameplay!",
                 desc2: "The game has no fixed rules. Use your imagination to create your own way to play.",
@@ -204,16 +204,30 @@
 
         let currentLang = 'zh';
 
+        function getCookie(name) {
+            const value = `; ${document.cookie}`;
+            const parts = value.split(`; ${name}=`);
+            if (parts.length === 2) return parts.pop().split(';').shift();
+            return null;
+        }
+
+        function setCookie(name, value, days) {
+            const date = new Date();
+            date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
+            document.cookie = name + "=" + value + "; expires=" + date.toUTCString() + "; path=/";
+        }
+
         function switchLanguage(lang) {
             currentLang = lang;
             const texts = translations[lang];
             
-            document.querySelectorAll('[data-key]').forEach(el => {
-                const key = el.getAttribute('data-key');
-                if (texts[key]) {
-                    el.textContent = texts[key];
-                }
-            });
+            document.getElementById('topTitle').textContent = texts.topTitle;
+            document.getElementById('pageTitle').textContent = texts.pageTitle;
+            document.getElementById('desc1').textContent = texts.desc1;
+            document.getElementById('desc2').textContent = texts.desc2;
+            document.getElementById('backLink').textContent = texts.backLink;
+            
+            setCookie('lang', lang, 30);
         }
 
         document.querySelectorAll('.lang-btn').forEach(btn => {
@@ -225,6 +239,19 @@
                 switchLanguage(lang);
             });
         });
+
+        const savedLang = getCookie('lang');
+        if (savedLang && (savedLang === 'zh' || savedLang === 'en')) {
+            document.querySelectorAll('.lang-btn').forEach(btn => {
+                const lang = btn.getAttribute('data-lang');
+                if (lang === savedLang) {
+                    btn.classList.add('active');
+                } else {
+                    btn.classList.remove('active');
+                }
+            });
+            switchLanguage(savedLang);
+        }
     </script>
 </body>
 </html>
