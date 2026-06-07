@@ -190,7 +190,7 @@
 </head>
 <body>
     <div class="language-selector">
-        <button class="lang-btn active" data-lang="zh">中文</button>
+        <button class="lang-btn" data-lang="zh">中文</button>
         <button class="lang-btn" data-lang="en">English</button>
     </div>
 
@@ -240,6 +240,19 @@
 
         let currentLang = 'zh';
 
+        function getCookie(name) {
+            const value = `; ${document.cookie}`;
+            const parts = value.split(`; ${name}=`);
+            if (parts.length === 2) return parts.pop().split(';').shift();
+            return null;
+        }
+
+        function setCookie(name, value, days) {
+            const date = new Date();
+            date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
+            document.cookie = name + "=" + value + "; expires=" + date.toUTCString() + "; path=/";
+        }
+
         function switchLanguage(lang) {
             currentLang = lang;
             const texts = translations[lang];
@@ -251,6 +264,8 @@
             document.getElementById('htpName').textContent = texts.htpName;
             document.getElementById('htpDesc').textContent = texts.htpDesc;
             document.getElementById('backLink').textContent = texts.backLink;
+            
+            setCookie('lang', lang, 30);
         }
 
         document.querySelectorAll('.lang-btn').forEach(btn => {
@@ -262,6 +277,19 @@
                 switchLanguage(lang);
             });
         });
+
+        const savedLang = getCookie('lang');
+        if (savedLang && (savedLang === 'zh' || savedLang === 'en')) {
+            document.querySelectorAll('.lang-btn').forEach(btn => {
+                const lang = btn.getAttribute('data-lang');
+                if (lang === savedLang) {
+                    btn.classList.add('active');
+                } else {
+                    btn.classList.remove('active');
+                }
+            });
+            switchLanguage(savedLang);
+        }
     </script>
 </body>
 </html>
