@@ -361,6 +361,10 @@
             document.cookie = name + "=" + value + "; expires=" + date.toUTCString() + "; path=/";
         }
 
+        function deleteCookie(name) {
+            document.cookie = name + "=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+        }
+
         function renderGames() {
             const data = gamesData[currentLang];
             const container = document.getElementById('gamesGrid');
@@ -386,7 +390,7 @@
             allGameCards = cards;
         }
 
-        function switchLanguage(lang, saveToCookie = true) {
+        function switchLanguage(lang) {
             currentLang = lang;
             const texts = translations[lang];
             
@@ -413,10 +417,6 @@
             
             renderGames();
             filterGames();
-            
-            if (saveToCookie && getCookie('cookie_consent') === 'accepted') {
-                setCookie('lang', lang, 30);
-            }
         }
 
         function filterGames() {
@@ -442,13 +442,18 @@
             }
         }
 
+        // 语言切换事件 - 只有在已同意 Cookie 的情况下才保存
         document.querySelectorAll('.lang-btn').forEach(btn => {
             btn.addEventListener('click', () => {
                 const lang = btn.getAttribute('data-lang');
                 if (!lang) return;
                 document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active'));
                 btn.classList.add('active');
-                switchLanguage(lang, true);
+                switchLanguage(lang);
+                
+                if (getCookie('cookie_consent') === 'accepted') {
+                    setCookie('lang', lang, 30);
+                }
             });
         });
 
@@ -464,21 +469,27 @@
             }
         });
 
-        const savedLang = getCookie('lang');
         const cookieConsent = getCookie('cookie_consent');
         
-        if (cookieConsent === 'accepted' && savedLang && (savedLang === 'zh' || savedLang === 'en')) {
-            currentLang = savedLang;
-            document.querySelectorAll('.lang-btn').forEach(btn => {
-                const lang = btn.getAttribute('data-lang');
-                if (lang === savedLang) {
-                    btn.classList.add('active');
-                } else {
-                    btn.classList.remove('active');
-                }
-            });
-            switchLanguage(savedLang, false);
+        if (cookieConsent === 'accepted') {
+            const savedLang = getCookie('lang');
+            if (savedLang && (savedLang === 'zh' || savedLang === 'en')) {
+                currentLang = savedLang;
+                document.querySelectorAll('.lang-btn').forEach(btn => {
+                    const lang = btn.getAttribute('data-lang');
+                    if (lang === savedLang) {
+                        btn.classList.add('active');
+                    } else {
+                        btn.classList.remove('active');
+                    }
+                });
+                switchLanguage(savedLang);
+            } else {
+                renderGames();
+            }
         } else {
+            // 未同意或不同意，确保没有任何语言 Cookie 残留
+            deleteCookie('lang');
             renderGames();
         }
     </script>
