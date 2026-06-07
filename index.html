@@ -288,6 +288,23 @@
             transform: translateY(-1px);
         }
 
+        .cookie-btn-decline {
+            background-color: #888888;
+            color: white;
+            border: none;
+            padding: 8px 20px;
+            border-radius: 40px;
+            font-size: 13px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .cookie-btn-decline:hover {
+            background-color: #666666;
+            transform: translateY(-1px);
+        }
+
         @media (max-width: 560px) {
             body {
                 padding: 20px 16px;
@@ -407,7 +424,10 @@
 
     <div id="cookieBanner" class="cookie-banner" style="display: none;">
         <p id="cookieText">🍪 本网站使用 Cookie 来记住您的语言偏好，提升浏览体验。</p>
-        <button id="acceptCookie" class="cookie-btn">接受</button>
+        <div style="display: flex; gap: 12px;">
+            <button id="acceptCookie" class="cookie-btn">接受</button>
+            <button id="declineCookie" class="cookie-btn-decline">不接受</button>
+        </div>
     </div>
 
     <script>
@@ -430,7 +450,9 @@
                 gameLibraryName: "游戏库",
                 gameLibraryDesc: "这是给同学们看的，无关的人请不要看",
                 noResult: "😢 没有找到相关链接",
-                cookieText: "🍪 本网站使用 Cookie 来记住您的语言偏好，提升浏览体验。"
+                cookieText: "🍪 本网站使用 Cookie 来记住您的语言偏好，提升浏览体验。",
+                acceptBtn: "接受",
+                declineBtn: "不接受"
             },
             en: {
                 bilibiliBtn: "📁 Hongguai's Bilibili",
@@ -450,7 +472,9 @@
                 gameLibraryName: "Game Library",
                 gameLibraryDesc: "This is for classmates only, please do not watch if you are not",
                 noResult: "😢 No matching links found",
-                cookieText: "🍪 This site uses cookies to remember your language preferences and improve your browsing experience."
+                cookieText: "🍪 This site uses cookies to remember your language preferences and improve your browsing experience.",
+                acceptBtn: "Accept",
+                declineBtn: "Decline"
             }
         };
 
@@ -517,6 +541,12 @@
             
             const cookieTextEl = document.getElementById('cookieText');
             if (cookieTextEl) cookieTextEl.textContent = texts.cookieText;
+            
+            const acceptBtn = document.getElementById('acceptCookie');
+            if (acceptBtn) acceptBtn.textContent = texts.acceptBtn;
+            
+            const declineBtn = document.getElementById('declineCookie');
+            if (declineBtn) declineBtn.textContent = texts.declineBtn;
             
             filterLinks();
             
@@ -749,19 +779,21 @@
             const cookieConsent = getCookie('cookie_consent');
             const banner = document.getElementById('cookieBanner');
             
-            if (cookieConsent === 'accepted') {
+            if (cookieConsent === 'accepted' || cookieConsent === 'declined') {
                 banner.style.display = 'none';
-                const savedLang = getCookie('lang');
-                if (savedLang && (savedLang === 'zh' || savedLang === 'en')) {
-                    document.querySelectorAll('.lang-btn').forEach(btn => {
-                        const lang = btn.getAttribute('data-lang');
-                        if (lang === savedLang) {
-                            btn.classList.add('active');
-                        } else {
-                            btn.classList.remove('active');
-                        }
-                    });
-                    switchLanguage(savedLang);
+                if (cookieConsent === 'accepted') {
+                    const savedLang = getCookie('lang');
+                    if (savedLang && (savedLang === 'zh' || savedLang === 'en')) {
+                        document.querySelectorAll('.lang-btn').forEach(btn => {
+                            const lang = btn.getAttribute('data-lang');
+                            if (lang === savedLang) {
+                                btn.classList.add('active');
+                            } else {
+                                btn.classList.remove('active');
+                            }
+                        });
+                        switchLanguage(savedLang);
+                    }
                 }
             } else {
                 banner.style.display = 'flex';
@@ -771,6 +803,11 @@
         document.getElementById('acceptCookie').addEventListener('click', () => {
             setCookie('cookie_consent', 'accepted', 30);
             setCookie('lang', currentLang, 30);
+            document.getElementById('cookieBanner').style.display = 'none';
+        });
+
+        document.getElementById('declineCookie').addEventListener('click', () => {
+            setCookie('cookie_consent', 'declined', 30);
             document.getElementById('cookieBanner').style.display = 'none';
         });
 
