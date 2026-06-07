@@ -184,42 +184,42 @@
 </head>
 <body>
     <div class="language-selector">
-        <button class="lang-btn active" data-lang="zh">中文</button>
+        <button class="lang-btn" data-lang="zh">中文</button>
         <button class="lang-btn" data-lang="en">English</button>
     </div>
 
     <div class="card">
         <div class="top-orange-strip"></div>
         <div class="top-white-bar">
-            <span data-key="title">规则说明</span>
+            <span id="topTitle">规则说明</span>
         </div>
 
-        <div class="page-title" data-key="pageTitle">📜 规则</div>
+        <div class="page-title" id="pageTitle">📜 规则</div>
 
         <div class="content">
             <div class="rule-section">
-                <div class="rule-title" data-key="ruleTitle">一、违规直接淘汰（不再局内，进局立即淘汰）</div>
-                <ul class="rule-list" data-key="ruleList">
-                    <li data-key="rule1">1. 打78</li>
-                    <li data-key="rule2">2. 打头</li>
-                    <li data-key="rule3">3. 假活，不死</li>
-                    <li data-key="rule4">4. 假举报</li>
-                    <li data-key="rule5">5. 进入敌方阵营</li>
-                    <li data-key="rule6">6. 无视无敌</li>
-                    <li data-key="rule7">7. 打没弹药的</li>
-                    <li data-key="rule8">8. 不让无敌</li>
-                    <li data-key="rule9">9. 伤害他人</li>
+                <div class="rule-title" id="ruleTitle">一、违规直接淘汰（不再局内，进局立即淘汰）</div>
+                <ul class="rule-list" id="ruleList">
+                    <li id="rule1">1. 打78</li>
+                    <li id="rule2">2. 打头</li>
+                    <li id="rule3">3. 假活，不死</li>
+                    <li id="rule4">4. 假举报</li>
+                    <li id="rule5">5. 进入敌方阵营</li>
+                    <li id="rule6">6. 无视无敌</li>
+                    <li id="rule7">7. 打没弹药的</li>
+                    <li id="rule8">8. 不让无敌</li>
+                    <li id="rule9">9. 伤害他人</li>
                 </ul>
             </div>
         </div>
 
-        <a href="/Games/List/02.html" class="back-link" data-key="backLink">← 返回 FRS</a>
+        <a href="/Games/List/02.html" class="back-link" id="backLink">← 返回 FRS</a>
     </div>
 
     <script>
         const translations = {
             zh: {
-                title: "规则说明",
+                topTitle: "规则说明",
                 pageTitle: "📜 规则",
                 ruleTitle: "一、违规直接淘汰（不再局内，进局立即淘汰）",
                 rule1: "1. 打78",
@@ -234,7 +234,7 @@
                 backLink: "← 返回 FRS"
             },
             en: {
-                title: "Rules",
+                topTitle: "Rules",
                 pageTitle: "📜 Rules",
                 ruleTitle: "1. Direct disqualification for violations (eliminated immediately upon entering)",
                 rule1: "1. Hitting 78",
@@ -252,29 +252,38 @@
 
         let currentLang = 'zh';
 
+        function getCookie(name) {
+            const value = `; ${document.cookie}`;
+            const parts = value.split(`; ${name}=`);
+            if (parts.length === 2) return parts.pop().split(';').shift();
+            return null;
+        }
+
+        function setCookie(name, value, days) {
+            const date = new Date();
+            date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
+            document.cookie = name + "=" + value + "; expires=" + date.toUTCString() + "; path=/";
+        }
+
         function switchLanguage(lang) {
             currentLang = lang;
             const texts = translations[lang];
             
-            document.querySelectorAll('[data-key]').forEach(el => {
-                const key = el.getAttribute('data-key');
-                if (texts[key]) {
-                    if (el.tagName === 'UL') {
-                        // 对于列表，需要单独处理子项
-                        return;
-                    }
-                    el.textContent = texts[key];
-                }
-            });
+            document.getElementById('topTitle').textContent = texts.topTitle;
+            document.getElementById('pageTitle').textContent = texts.pageTitle;
+            document.getElementById('ruleTitle').textContent = texts.ruleTitle;
+            document.getElementById('rule1').textContent = texts.rule1;
+            document.getElementById('rule2').textContent = texts.rule2;
+            document.getElementById('rule3').textContent = texts.rule3;
+            document.getElementById('rule4').textContent = texts.rule4;
+            document.getElementById('rule5').textContent = texts.rule5;
+            document.getElementById('rule6').textContent = texts.rule6;
+            document.getElementById('rule7').textContent = texts.rule7;
+            document.getElementById('rule8').textContent = texts.rule8;
+            document.getElementById('rule9').textContent = texts.rule9;
+            document.getElementById('backLink').textContent = texts.backLink;
             
-            // 单独处理列表项
-            const ruleItems = document.querySelectorAll('.rule-list li');
-            for (let i = 0; i < ruleItems.length; i++) {
-                const key = `rule${i + 1}`;
-                if (texts[key]) {
-                    ruleItems[i].textContent = texts[key];
-                }
-            }
+            setCookie('lang', lang, 30);
         }
 
         document.querySelectorAll('.lang-btn').forEach(btn => {
@@ -286,6 +295,19 @@
                 switchLanguage(lang);
             });
         });
+
+        const savedLang = getCookie('lang');
+        if (savedLang && (savedLang === 'zh' || savedLang === 'en')) {
+            document.querySelectorAll('.lang-btn').forEach(btn => {
+                const lang = btn.getAttribute('data-lang');
+                if (lang === savedLang) {
+                    btn.classList.add('active');
+                } else {
+                    btn.classList.remove('active');
+                }
+            });
+            switchLanguage(savedLang);
+        }
     </script>
 </body>
 </html>
