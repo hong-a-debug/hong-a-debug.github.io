@@ -293,7 +293,7 @@
         <div class="divider"></div>
 
         <a href="https://hong-a-debug.github.io/" target="_blank" class="contact-btn" id="contactBtn">
-            <img src="https://hong-a-debug.github.io/icon/icon.png" alt="icon" class="contact-icon" onerror="this.style.display='none'"> 个人博客
+            <img src="https://hong-a-debug.github.io/icon/icon.png" alt="icon" class="contact-icon" onerror="this.style.display='none'"> <span id="contactText">个人博客</span>
         </a>
     </div>
 
@@ -320,13 +320,15 @@
                 title: "红怪的游戏库",
                 searchPlaceholder: "搜索游戏...",
                 searchBtn: "搜索",
-                noResult: "😢 没有找到相关游戏"
+                noResult: "😢 没有找到相关游戏",
+                contactText: "个人博客"
             },
             en: {
                 title: "Hongguai's Game Library",
                 searchPlaceholder: "Search games...",
                 searchBtn: "Search",
-                noResult: "😢 No games found"
+                noResult: "😢 No games found",
+                contactText: "Personal Blog"
             }
         };
 
@@ -386,6 +388,12 @@
                     }
                 }
             });
+            
+            // 单独更新个人博客按钮的文字
+            const contactText = document.getElementById('contactText');
+            if (contactText) {
+                contactText.textContent = texts.contactText;
+            }
             
             renderGames();
             filterGames();
