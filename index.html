@@ -3,8 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-    <title id="pageTitle">红怪的个人博客</title>
+    <title>红怪的个人博客</title>
     <link rel="icon" type="image/png" href="/icon/icon.png">
+    <!-- Supabase SDK -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <style>
         * {
             margin: 0;
@@ -23,6 +25,148 @@
             position: relative;
         }
 
+        /* 登录区域 - 左上角 */
+        .login-area {
+            position: fixed;
+            top: 20px;
+            left: 24px;
+            z-index: 200;
+        }
+
+        .login-btn {
+            background-color: #FF8C42;
+            color: white;
+            border: none;
+            padding: 6px 16px;
+            border-radius: 40px;
+            font-size: 13px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-family: inherit;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+        }
+
+        .login-btn:hover {
+            background-color: #E67A30;
+            transform: translateY(-1px);
+        }
+
+        .user-status {
+            background-color: #FFFFFF;
+            border: 1px solid #F0E0D0;
+            border-radius: 40px;
+            padding: 6px 16px;
+            font-size: 13px;
+            color: #2D2D2D;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+        }
+
+        .logout-btn {
+            background: none;
+            border: none;
+            color: #FF8C42;
+            cursor: pointer;
+            font-size: 12px;
+            padding-left: 8px;
+            border-left: 1px solid #F0E0D0;
+        }
+
+        .logout-btn:hover {
+            color: #E67A30;
+        }
+
+        /* 登录弹窗 */
+        .login-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.5);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1001;
+        }
+
+        .login-modal-content {
+            background-color: #FFFFFF;
+            border-radius: 16px;
+            padding: 28px;
+            width: 340px;
+            max-width: 90%;
+            text-align: center;
+            border: 1px solid #F0E0D0;
+            box-shadow: 0 20px 35px -12px rgba(0,0,0,0.3);
+        }
+
+        .login-modal-content h3 {
+            margin-bottom: 20px;
+            color: #2D2D2D;
+        }
+
+        .login-modal-content input {
+            width: 100%;
+            padding: 10px 12px;
+            margin-bottom: 16px;
+            border: 1px solid #F0E0D0;
+            border-radius: 40px;
+            font-size: 14px;
+            outline: none;
+        }
+
+        .login-modal-content input:focus {
+            border-color: #FF8C42;
+        }
+
+        .login-modal-content button {
+            background-color: #FF8C42;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 40px;
+            font-size: 14px;
+            cursor: pointer;
+            width: 100%;
+        }
+
+        .login-modal-content button:hover {
+            background-color: #E67A30;
+        }
+
+        .login-modal-content button:disabled {
+            background-color: #CCCCCC;
+            cursor: not-allowed;
+        }
+
+        .login-error {
+            color: #FF0000;
+            font-size: 12px;
+            margin-top: 10px;
+            display: none;
+        }
+
+        .login-switch {
+            margin-top: 16px;
+            font-size: 13px;
+            color: #888888;
+        }
+
+        .login-switch a {
+            color: #FF8C42;
+            cursor: pointer;
+            text-decoration: none;
+        }
+
+        .login-switch a:hover {
+            text-decoration: underline;
+        }
+
+        /* 语言切换器 */
         .language-selector {
             position: fixed;
             top: 20px;
@@ -60,6 +204,7 @@
             color: #E67A30;
         }
 
+        /* 主卡片 */
         .card {
             background-color: #FFFFFF;
             border: 1px solid #F0E0D0;
@@ -237,6 +382,18 @@
             word-break: break-all;
         }
 
+        .section-title {
+            font-size: 14px;
+            font-weight: 600;
+            color: #2D2D2D;
+            margin: 20px 0 12px 0;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            border-left: 3px solid #FF8C42;
+            padding-left: 12px;
+        }
+
         .no-result {
             text-align: center;
             padding: 20px;
@@ -249,6 +406,7 @@
             display: block;
         }
 
+        /* Cookie 提示条 */
         .cookie-banner {
             position: fixed;
             bottom: 0;
@@ -305,24 +463,7 @@
             transform: translateY(-1px);
         }
 
-        .cookie-notice {
-            text-align: center;
-            font-size: 10px;
-            color: #AAAAAA;
-            margin-top: 16px;
-            padding-top: 12px;
-            border-top: 1px solid #F0E0D0;
-        }
-
-        .cookie-notice a {
-            color: #FF8C42;
-            text-decoration: none;
-        }
-
-        .cookie-notice a:hover {
-            text-decoration: underline;
-        }
-
+        /* 底部同意按钮区域（点击不同意后才显示） */
         .footer-consent-section {
             margin-top: 16px;
             padding-top: 12px;
@@ -384,6 +525,14 @@
                 padding: 8px 14px;
                 font-size: 13px;
             }
+            .login-area {
+                top: 12px;
+                left: 16px;
+            }
+            .login-btn, .user-status {
+                padding: 4px 12px;
+                font-size: 11px;
+            }
             .cookie-banner {
                 padding: 12px 16px;
                 flex-direction: column;
@@ -393,15 +542,19 @@
     </style>
 </head>
 <body>
+    <!-- 登录区域 - 左上角 -->
+    <div class="login-area" id="loginArea"></div>
+
+    <!-- 语言切换器 - 右上角 -->
     <div class="language-selector">
-        <button class="lang-btn" data-lang="zh">中文</button>
+        <button class="lang-btn active" data-lang="zh">中文</button>
         <button class="lang-btn" data-lang="en">English</button>
     </div>
 
     <div class="card">
         <div class="top-orange-strip"></div>
         <div class="top-white-bar">
-            <span id="siteName">红怪</span>
+            <span>红怪</span>
         </div>
 
         <div>
@@ -413,62 +566,67 @@
 
         <div class="search-section">
             <div class="search-container">
-                <input type="text" id="searchInput" class="search-input" placeholder="搜索链接...">
-                <button id="searchBtn" class="search-btn">搜索</button>
+                <input type="text" id="searchInput" class="search-input" placeholder="搜索链接..." data-key="searchPlaceholder">
+                <button id="searchBtn" class="search-btn" data-key="searchBtn">搜索</button>
             </div>
         </div>
 
+        <div class="section-title">
+            <span data-key="linkCollectionIcon">🔗</span> <span data-key="linkCollectionTitle">链接收藏</span>
+        </div>
         <div class="links-grid" id="linksGrid">
             <a href="https://discord.gg/nB2w3NQhkE" target="_blank" class="link-card" data-name="Discord 社区" data-desc="红怪的 Discord 邀请链接">
                 <div class="link-icon">💬</div>
                 <div class="link-info">
-                    <div class="link-name" id="discordName">Discord 社区</div>
-                    <div class="link-desc" id="discordDesc">红怪的 Discord 邀请链接</div>
+                    <div class="link-name" data-key="discordName">Discord 社区</div>
+                    <div class="link-desc" data-key="discordDesc">红怪的 Discord 邀请链接</div>
                 </div>
             </a>
             <a href="https://github.com/hong-a-debug" target="_blank" class="link-card" data-name="GitHub 主页" data-desc="杂七杂八的东西">
                 <div class="link-icon">🐙</div>
                 <div class="link-info">
-                    <div class="link-name" id="githubName">GitHub 主页</div>
-                    <div class="link-desc" id="githubDesc">杂七杂八的东西</div>
+                    <div class="link-name" data-key="githubName">GitHub 主页</div>
+                    <div class="link-desc" data-key="githubDesc">杂七杂八的东西</div>
                 </div>
             </a>
             <a href="https://wwbkg.lanzouu.com/iu9qA3qmj4rc" target="_blank" class="link-card" data-name="小鸡头像自动工具" data-desc="密码: discord社区、QQ | 蓝奏云下载 18.3M">
                 <div class="link-icon">🐤</div>
                 <div class="link-info">
-                    <div class="link-name" id="toolName">小鸡头像自动工具</div>
-                    <div class="link-desc" id="toolDesc">密码: discord社区、QQ | 蓝奏云下载 18.3M</div>
+                    <div class="link-name" data-key="toolName">小鸡头像自动工具</div>
+                    <div class="link-desc" data-key="toolDesc">密码: discord社区、QQ | 蓝奏云下载 18.3M</div>
                 </div>
             </a>
             <div class="link-card" id="pclHomeBtn" style="cursor: pointer;" data-name="PCL主页" data-desc="点击弹窗复制内容">
                 <div class="link-icon">🚀</div>
                 <div class="link-info">
-                    <div class="link-name" id="pclName">PCL主页</div>
-                    <div class="link-desc" id="pclDesc">点击弹窗复制内容</div>
+                    <div class="link-name" data-key="pclName">PCL主页</div>
+                    <div class="link-desc" data-key="pclDesc">点击弹窗复制内容</div>
                 </div>
             </div>
             <div class="link-card" id="qqBtn" style="cursor: pointer;" data-name="QQ社区" data-desc="点击复制QQ号">
                 <div class="link-icon">💬</div>
                 <div class="link-info">
-                    <div class="link-name" id="qqName">QQ社区</div>
-                    <div class="link-desc" id="qqDesc">点击复制QQ号</div>
+                    <div class="link-name" data-key="qqName">QQ社区</div>
+                    <div class="link-desc" data-key="qqDesc">点击复制QQ号</div>
                 </div>
             </div>
             <a href="/GameList.html" class="link-card" data-name="游戏库" data-desc="这是给同学们看的，无关的人请不要看">
                 <div class="link-icon">🎮</div>
                 <div class="link-info">
-                    <div class="link-name" id="gameLibraryName">游戏库</div>
-                    <div class="link-desc" id="gameLibraryDesc">这是给同学们看的，无关的人请不要看</div>
+                    <div class="link-name" data-key="gameLibraryName">游戏库</div>
+                    <div class="link-desc" data-key="gameLibraryDesc">这是给同学们看的，无关的人请不要看</div>
                 </div>
             </a>
         </div>
-        <div class="no-result" id="noResult">😢 没有找到相关链接</div>
+        <div class="no-result" id="noResult" data-key="noResult">😢 没有找到相关链接</div>
 
+        <!-- 底部同意按钮区域（点击不同意后才显示） -->
         <div class="footer-consent-section" id="footerConsentSection">
             <button id="footerConsentBtn" class="footer-consent-btn">🍪 同意 COOKIE</button>
         </div>
     </div>
 
+    <!-- Cookie 提示条 -->
     <div id="cookieBanner" class="cookie-banner" style="display: none;">
         <p id="cookieText">🍪 本网站使用 Cookie 来记住您的语言偏好，提升浏览体验。</p>
         <div style="display: flex; gap: 12px;">
@@ -478,14 +636,25 @@
     </div>
 
     <script>
+        // ============================================================
+        // 🔧 Supabase 配置
+        // ============================================================
+        const SUPABASE_URL = 'https://gpfwnjntsienhnyudhib.supabase.co';
+        const SUPABASE_ANON_KEY = 'sb_publishable_9NrkiYunjyukcH-k3Mr5lQ_MCmzaahH';
+
+        const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+        // ============================================================
+        // 翻译数据
+        // ============================================================
         const translations = {
             zh: {
-                pageTitle: "红怪的个人博客",
-                siteName: "红怪",
                 bilibiliBtn: "📁 红怪的B站首页",
                 hintText: "💡 点击按钮跳转B站，或使用下方链接",
                 searchPlaceholder: "搜索链接...",
                 searchBtn: "搜索",
+                linkCollectionIcon: "🔗",
+                linkCollectionTitle: "链接收藏",
                 discordName: "Discord 社区",
                 discordDesc: "红怪的 Discord 邀请链接",
                 githubName: "GitHub 主页",
@@ -502,15 +671,17 @@
                 cookieText: "🍪 本网站使用 Cookie 来记住您的语言偏好，提升浏览体验。",
                 acceptBtn: "同意",
                 declineBtn: "不同意",
-                footerConsentBtn: "🍪 同意 COOKIE"
+                footerConsentBtn: "🍪 同意 COOKIE",
+                loginBtn: "🔐 登录",
+                logoutBtn: "退出"
             },
             en: {
-                pageTitle: "Hongguai's Personal Blog",
-                siteName: "Hongguai",
                 bilibiliBtn: "📁 Hongguai's Bilibili",
                 hintText: "💡 Click to visit Bilibili, or use links below",
                 searchPlaceholder: "Search links...",
                 searchBtn: "Search",
+                linkCollectionIcon: "🔗",
+                linkCollectionTitle: "Link Collection",
                 discordName: "Discord Community",
                 discordDesc: "Hongguai's Discord invite",
                 githubName: "GitHub Home",
@@ -527,12 +698,17 @@
                 cookieText: "🍪 This site uses cookies to remember your language preferences and improve your browsing experience.",
                 acceptBtn: "Agree",
                 declineBtn: "Disagree",
-                footerConsentBtn: "🍪 Agree to COOKIE"
+                footerConsentBtn: "🍪 Agree to COOKIE",
+                loginBtn: "🔐 Login",
+                logoutBtn: "Logout"
             }
         };
 
         let currentLang = 'zh';
 
+        // ============================================================
+        // Cookie 工具函数
+        // ============================================================
         function getCookie(name) {
             const value = `; ${document.cookie}`;
             const parts = value.split(`; ${name}=`);
@@ -550,6 +726,9 @@
             document.cookie = name + "=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
         }
 
+        // ============================================================
+        // 搜索功能
+        // ============================================================
         function filterLinks() {
             const keyword = document.getElementById('searchInput').value.trim().toLowerCase();
             const links = document.querySelectorAll('#linksGrid .link-card');
@@ -574,29 +753,28 @@
             }
         }
 
-        function switchLanguage(lang, saveToCookie = true) {
+        // ============================================================
+        // 语言切换
+        // ============================================================
+        function switchLanguage(lang) {
             currentLang = lang;
             const texts = translations[lang];
             
-            document.title = texts.pageTitle;
-            document.getElementById('siteName').textContent = texts.siteName;
+            document.querySelectorAll('[data-key]').forEach(el => {
+                const key = el.getAttribute('data-key');
+                if (texts[key]) {
+                    if (el.tagName === 'INPUT') {
+                        el.placeholder = texts[key];
+                    } else {
+                        el.textContent = texts[key];
+                    }
+                }
+            });
+            
             document.getElementById('bilibiliBtn').innerHTML = texts.bilibiliBtn;
             document.getElementById('hintText').textContent = texts.hintText;
             document.getElementById('searchInput').placeholder = texts.searchPlaceholder;
             document.getElementById('searchBtn').textContent = texts.searchBtn;
-            document.getElementById('discordName').textContent = texts.discordName;
-            document.getElementById('discordDesc').textContent = texts.discordDesc;
-            document.getElementById('githubName').textContent = texts.githubName;
-            document.getElementById('githubDesc').textContent = texts.githubDesc;
-            document.getElementById('toolName').textContent = texts.toolName;
-            document.getElementById('toolDesc').textContent = texts.toolDesc;
-            document.getElementById('pclName').textContent = texts.pclName;
-            document.getElementById('pclDesc').textContent = texts.pclDesc;
-            document.getElementById('qqName').textContent = texts.qqName;
-            document.getElementById('qqDesc').textContent = texts.qqDesc;
-            document.getElementById('gameLibraryName').textContent = texts.gameLibraryName;
-            document.getElementById('gameLibraryDesc').textContent = texts.gameLibraryDesc;
-            document.getElementById('noResult').textContent = texts.noResult;
             
             const cookieTextEl = document.getElementById('cookieText');
             if (cookieTextEl) cookieTextEl.textContent = texts.cookieText;
@@ -611,10 +789,7 @@
             if (footerConsentBtn) footerConsentBtn.textContent = texts.footerConsentBtn;
             
             filterLinks();
-            
-            if (saveToCookie && getCookie('cookie_consent') === 'accepted') {
-                setCookie('lang', lang, 30);
-            }
+            updateLoginUI();
         }
 
         document.querySelectorAll('.lang-btn').forEach(btn => {
@@ -623,7 +798,7 @@
                 if (!lang) return;
                 document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active'));
                 btn.classList.add('active');
-                switchLanguage(lang, true);
+                switchLanguage(lang);
             });
         });
 
@@ -639,6 +814,9 @@
             }
         });
 
+        // ============================================================
+        // PCL 弹窗
+        // ============================================================
         function createPCLModal() {
             const textToCopy = 'https://raw.githubusercontent.com/hong-a-debug/w/main/Custom.xaml';
             const modalOverlay = document.createElement('div');
@@ -742,6 +920,9 @@
             });
         }
 
+        // ============================================================
+        // QQ 弹窗
+        // ============================================================
         function createQQModal() {
             const textToCopy = '301595234';
             const modalOverlay = document.createElement('div');
@@ -837,6 +1018,9 @@
         document.getElementById('pclHomeBtn').addEventListener('click', createPCLModal);
         document.getElementById('qqBtn').addEventListener('click', createQQModal);
 
+        // ============================================================
+        // Cookie 同意逻辑
+        // ============================================================
         function initCookieBanner() {
             const cookieConsent = getCookie('cookie_consent');
             const banner = document.getElementById('cookieBanner');
@@ -855,7 +1039,7 @@
                             btn.classList.remove('active');
                         }
                     });
-                    switchLanguage(savedLang, false);
+                    switchLanguage(savedLang);
                 }
             } else if (cookieConsent === 'declined') {
                 banner.style.display = 'none';
@@ -887,7 +1071,148 @@
             document.getElementById('footerConsentSection').style.display = 'none';
         });
 
+        // ============================================================
+        // Supabase 登录/登出功能
+        // ============================================================
+
+        // 显示登录弹窗
+        function showLoginModal() {
+            const modal = document.createElement('div');
+            modal.className = 'login-modal';
+            modal.innerHTML = `
+                <div class="login-modal-content">
+                    <h3 id="modalTitle">🔐 登录</h3>
+                    <input type="email" id="loginEmail" placeholder="邮箱">
+                    <input type="password" id="loginPassword" placeholder="密码">
+                    <button id="submitLogin">登录</button>
+                    <div class="login-error" id="loginError">邮箱或密码错误</div>
+                    <div class="login-switch">
+                        <a id="switchToSignup">没有账号？立即注册</a>
+                    </div>
+                </div>
+            `;
+            document.body.appendChild(modal);
+
+            let isLogin = true;
+
+            function updateModal() {
+                const titleEl = document.getElementById('modalTitle');
+                const submitBtn = document.getElementById('submitLogin');
+                const switchLink = document.getElementById('switchToSignup');
+                if (isLogin) {
+                    titleEl.innerText = currentLang === 'zh' ? '🔐 登录' : '🔐 Login';
+                    submitBtn.innerText = currentLang === 'zh' ? '登录' : 'Login';
+                    switchLink.innerText = currentLang === 'zh' ? '没有账号？立即注册' : 'No account? Sign up';
+                } else {
+                    titleEl.innerText = currentLang === 'zh' ? '📝 注册' : '📝 Sign Up';
+                    submitBtn.innerText = currentLang === 'zh' ? '注册' : 'Sign Up';
+                    switchLink.innerText = currentLang === 'zh' ? '已有账号？去登录' : 'Already have an account? Login';
+                }
+            }
+
+            updateModal();
+
+            document.getElementById('switchToSignup').addEventListener('click', (e) => {
+                e.preventDefault();
+                isLogin = !isLogin;
+                updateModal();
+                document.getElementById('loginError').style.display = 'none';
+            });
+
+            document.getElementById('submitLogin').addEventListener('click', async () => {
+                const email = document.getElementById('loginEmail').value;
+                const password = document.getElementById('loginPassword').value;
+                const errorDiv = document.getElementById('loginError');
+                const submitBtn = document.getElementById('submitLogin');
+
+                if (!email || !password) {
+                    errorDiv.innerText = currentLang === 'zh' ? '请填写邮箱和密码' : 'Please enter email and password';
+                    errorDiv.style.display = 'block';
+                    return;
+                }
+
+                submitBtn.disabled = true;
+                submitBtn.innerText = currentLang === 'zh' ? '处理中...' : 'Processing...';
+
+                let result;
+                if (isLogin) {
+                    result = await supabase.auth.signInWithPassword({ email, password });
+                } else {
+                    result = await supabase.auth.signUp({ email, password });
+                }
+
+                submitBtn.disabled = false;
+                submitBtn.innerText = isLogin ? (currentLang === 'zh' ? '登录' : 'Login') : (currentLang === 'zh' ? '注册' : 'Sign Up');
+
+                if (result.error) {
+                    errorDiv.innerText = result.error.message;
+                    errorDiv.style.display = 'block';
+                } else {
+                    if (!isLogin && result.data.user?.identities?.length === 0) {
+                        errorDiv.innerText = currentLang === 'zh' ? '该邮箱已注册' : 'Email already registered';
+                        errorDiv.style.display = 'block';
+                    } else {
+                        document.body.removeChild(modal);
+                        updateLoginUI();
+                    }
+                }
+            });
+
+            modal.addEventListener('click', (e) => {
+                if (e.target === modal) {
+                    document.body.removeChild(modal);
+                }
+            });
+        }
+
+        // 退出登录
+        async function logout() {
+            await supabase.auth.signOut();
+            updateLoginUI();
+        }
+
+        // 更新左上角登录状态 UI
+        async function updateLoginUI() {
+            const loginArea = document.getElementById('loginArea');
+            const { data: { session } } = await supabase.auth.getSession();
+            
+            if (session?.user) {
+                const email = session.user.email;
+                const displayName = email ? email.split('@')[0] : 'User';
+                loginArea.innerHTML = `
+                    <div class="user-status">
+                        👤 ${displayName}
+                        <button class="logout-btn" id="logoutBtn">${currentLang === 'zh' ? '退出' : 'Logout'}</button>
+                    </div>
+                `;
+                document.getElementById('logoutBtn')?.addEventListener('click', logout);
+            } else {
+                loginArea.innerHTML = `<button class="login-btn" id="loginBtn">${currentLang === 'zh' ? '🔐 登录' : '🔐 Login'}</button>`;
+                document.getElementById('loginBtn')?.addEventListener('click', showLoginModal);
+            }
+        }
+
+        // 监听语言切换，更新登录按钮文字
+        const originalSwitchLanguage = switchLanguage;
+        window.switchLanguage = function(lang) {
+            originalSwitchLanguage(lang);
+            updateLoginUI();
+        };
+        switchLanguage = function(lang) {
+            originalSwitchLanguage(lang);
+            updateLoginUI();
+        };
+
+        // 初始化
         initCookieBanner();
+        updateLoginUI();
+        
+        // 监听 Supabase 认证状态变化
+        supabase.auth.onAuthStateChange((event, session) => {
+            if (event === 'SIGNED_IN' || event === 'SIGNED_OUT') {
+                updateLoginUI();
+            }
+        });
     </script>
 </body>
 </html>
