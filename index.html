@@ -305,6 +305,15 @@
             transform: translateY(-1px);
         }
 
+        .cookie-notice {
+            text-align: center;
+            font-size: 10px;
+            color: #AAAAAA;
+            margin-top: 16px;
+            padding-top: 12px;
+            border-top: 1px solid #F0E0D0;
+        }
+
         @media (max-width: 560px) {
             body {
                 padding: 20px 16px;
@@ -420,6 +429,8 @@
             </a>
         </div>
         <div class="no-result" id="noResult">😢 没有找到相关链接</div>
+
+        <div class="cookie-notice" id="cookieNotice">⚡ 如果你没有同意 Cookie，语言选项不会被保存</div>
     </div>
 
     <div id="cookieBanner" class="cookie-banner" style="display: none;">
@@ -452,7 +463,8 @@
                 noResult: "😢 没有找到相关链接",
                 cookieText: "🍪 本网站使用 Cookie 来记住您的语言偏好，提升浏览体验。",
                 acceptBtn: "接受",
-                declineBtn: "不接受"
+                declineBtn: "不接受",
+                cookieNotice: "⚡ 如果你没有同意 Cookie，语言选项不会被保存"
             },
             en: {
                 bilibiliBtn: "📁 Hongguai's Bilibili",
@@ -474,7 +486,8 @@
                 noResult: "😢 No matching links found",
                 cookieText: "🍪 This site uses cookies to remember your language preferences and improve your browsing experience.",
                 acceptBtn: "Accept",
-                declineBtn: "Decline"
+                declineBtn: "Decline",
+                cookieNotice: "⚡ If you do not consent to cookies, your language preference will not be saved"
             }
         };
 
@@ -517,7 +530,7 @@
             }
         }
 
-        function switchLanguage(lang) {
+        function switchLanguage(lang, saveToCookie = true) {
             currentLang = lang;
             const texts = translations[lang];
             
@@ -548,9 +561,12 @@
             const declineBtn = document.getElementById('declineCookie');
             if (declineBtn) declineBtn.textContent = texts.declineBtn;
             
+            const cookieNotice = document.getElementById('cookieNotice');
+            if (cookieNotice) cookieNotice.textContent = texts.cookieNotice;
+            
             filterLinks();
             
-            if (getCookie('cookie_consent') === 'accepted') {
+            if (saveToCookie && getCookie('cookie_consent') === 'accepted') {
                 setCookie('lang', lang, 30);
             }
         }
@@ -561,7 +577,7 @@
                 if (!lang) return;
                 document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active'));
                 btn.classList.add('active');
-                switchLanguage(lang);
+                switchLanguage(lang, true);
             });
         });
 
@@ -792,7 +808,7 @@
                                 btn.classList.remove('active');
                             }
                         });
-                        switchLanguage(savedLang);
+                        switchLanguage(savedLang, false);
                     }
                 }
             } else {
