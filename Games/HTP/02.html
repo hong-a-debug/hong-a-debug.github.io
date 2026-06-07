@@ -127,6 +127,24 @@
             color: #FF8C42;
         }
 
+        .cookie-notice {
+            text-align: center;
+            font-size: 10px;
+            color: #AAAAAA;
+            margin-top: 20px;
+            padding-top: 12px;
+            border-top: 1px solid #F0E0D0;
+        }
+
+        .cookie-notice a {
+            color: #FF8C42;
+            text-decoration: none;
+        }
+
+        .cookie-notice a:hover {
+            text-decoration: underline;
+        }
+
         @media (max-width: 560px) {
             body {
                 padding: 20px 16px;
@@ -182,6 +200,10 @@
         </div>
 
         <a href="/Games/List/02.html" class="back-link" id="backLink">← 返回 FRS</a>
+
+        <div class="cookie-notice" id="cookieNotice">
+            ⚡ 如果你没有同意 Cookie，语言选项不会被保存，点击 <a href="https://hong-a-debug.github.io/">这里</a> 同意 cookie
+        </div>
     </div>
 
     <script>
@@ -191,14 +213,16 @@
                 pageTitle: "🎮 玩法",
                 desc1: "FRS 是一个非常开放的游戏，玩家可以自创玩法！",
                 desc2: "游戏本身没有固定规则，你可以发挥想象力，创造属于自己的游戏方式。",
-                backLink: "← 返回 FRS"
+                backLink: "← 返回 FRS",
+                cookieNotice: "⚡ 如果你没有同意 Cookie，语言选项不会被保存，点击 <a href=\"https://hong-a-debug.github.io/\">这里</a> 同意 cookie"
             },
             en: {
                 topTitle: "How to Play",
                 pageTitle: "🎮 How to Play",
                 desc1: "FRS is a very open game where players can create their own gameplay!",
                 desc2: "The game has no fixed rules. Use your imagination to create your own way to play.",
-                backLink: "← Back to FRS"
+                backLink: "← Back to FRS",
+                cookieNotice: "⚡ If you do not consent to cookies, your language preference will not be saved, <a href=\"https://hong-a-debug.github.io/\">click here</a> to agree"
             }
         };
 
@@ -217,6 +241,10 @@
             document.cookie = name + "=" + value + "; expires=" + date.toUTCString() + "; path=/";
         }
 
+        function deleteCookie(name) {
+            document.cookie = name + "=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+        }
+
         function switchLanguage(lang) {
             currentLang = lang;
             const texts = translations[lang];
@@ -227,7 +255,8 @@
             document.getElementById('desc2').textContent = texts.desc2;
             document.getElementById('backLink').textContent = texts.backLink;
             
-            setCookie('lang', lang, 30);
+            const cookieNotice = document.getElementById('cookieNotice');
+            if (cookieNotice) cookieNotice.innerHTML = texts.cookieNotice;
         }
 
         document.querySelectorAll('.lang-btn').forEach(btn => {
@@ -237,20 +266,30 @@
                 document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active'));
                 btn.classList.add('active');
                 switchLanguage(lang);
+                
+                if (getCookie('cookie_consent') === 'accepted') {
+                    setCookie('lang', lang, 30);
+                }
             });
         });
 
-        const savedLang = getCookie('lang');
-        if (savedLang && (savedLang === 'zh' || savedLang === 'en')) {
-            document.querySelectorAll('.lang-btn').forEach(btn => {
-                const lang = btn.getAttribute('data-lang');
-                if (lang === savedLang) {
-                    btn.classList.add('active');
-                } else {
-                    btn.classList.remove('active');
-                }
-            });
-            switchLanguage(savedLang);
+        const cookieConsent = getCookie('cookie_consent');
+        
+        if (cookieConsent === 'accepted') {
+            const savedLang = getCookie('lang');
+            if (savedLang && (savedLang === 'zh' || savedLang === 'en')) {
+                document.querySelectorAll('.lang-btn').forEach(btn => {
+                    const lang = btn.getAttribute('data-lang');
+                    if (lang === savedLang) {
+                        btn.classList.add('active');
+                    } else {
+                        btn.classList.remove('active');
+                    }
+                });
+                switchLanguage(savedLang);
+            }
+        } else {
+            deleteCookie('lang');
         }
     </script>
 </body>
