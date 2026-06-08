@@ -1,0 +1,630 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title id="pageTitle">小鸡头像在线工具 · 网页版</title>
+    <link rel="icon" type="image/png" href="/icon/icon.png">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background-color: #FFF5E6;
+            font-family: '微软雅黑', 'Segoe UI', system-ui, -apple-system, sans-serif;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 40px 20px;
+            position: relative;
+        }
+
+        .language-selector {
+            position: fixed;
+            top: 20px;
+            right: 24px;
+            z-index: 200;
+            background-color: #FFFFFF;
+            border: 1px solid #F0E0D0;
+            border-radius: 40px;
+            padding: 6px 12px;
+            display: flex;
+            gap: 8px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+        }
+
+        .lang-btn {
+            background: none;
+            border: none;
+            font-size: 13px;
+            font-weight: 500;
+            cursor: pointer;
+            padding: 4px 10px;
+            border-radius: 30px;
+            transition: all 0.2s;
+            color: #888888;
+            font-family: inherit;
+        }
+
+        .lang-btn.active {
+            background-color: #FF8C42;
+            color: white;
+        }
+
+        .lang-btn:not(.active):hover {
+            background-color: #FFF0E5;
+            color: #E67A30;
+        }
+
+        .card {
+            background-color: #FFFFFF;
+            border: 1px solid #F0E0D0;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.05);
+            width: 560px;
+            max-width: 100%;
+            padding: 0 28px 36px 28px;
+        }
+
+        .top-bar {
+            background-color: #FF8C42;
+            height: 6px;
+            width: calc(100% + 56px);
+            margin: 0 -28px 0 -28px;
+        }
+
+        .card-inner {
+            padding: 30px 0 20px 0;
+        }
+
+        .title {
+            font-size: 22px;
+            font-weight: 700;
+            color: #2D2D2D;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .big-btn {
+            background-color: #FF8C42;
+            color: white;
+            font-size: 16px;
+            font-weight: bold;
+            padding: 14px 20px;
+            width: 100%;
+            border: none;
+            cursor: pointer;
+            text-align: center;
+            transition: all 0.2s;
+            letter-spacing: 2px;
+            border-radius: 4px;
+            font-family: inherit;
+        }
+
+        .big-btn:hover {
+            background-color: #E67A30;
+            transform: translateY(-1px);
+        }
+
+        .big-btn:disabled {
+            background-color: #CCCCCC;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .hint-text {
+            color: #888888;
+            font-size: 11px;
+            text-align: center;
+            margin: 12px 0 20px 0;
+        }
+
+        .divider {
+            height: 1px;
+            background-color: #F0E0D0;
+            margin: 20px 0;
+            width: 100%;
+        }
+
+        .features {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 12px;
+            margin: 16px 0 8px;
+        }
+
+        .feature-item {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 12px;
+            color: #888888;
+            background: #FAFAFA;
+            padding: 6px 14px;
+            border-radius: 20px;
+        }
+
+        .preview-area {
+            margin: 20px 0;
+            text-align: center;
+            display: none;
+        }
+
+        .preview-title {
+            font-size: 13px;
+            color: #888888;
+            margin-bottom: 12px;
+            font-weight: 500;
+        }
+
+        .preview-container {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+
+        .preview-box {
+            text-align: center;
+            flex: 1;
+            min-width: 120px;
+        }
+
+        .preview-box p {
+            font-size: 11px;
+            color: #AAAAAA;
+            margin-top: 8px;
+        }
+
+        .preview-img {
+            width: 140px;
+            height: 140px;
+            background-color: #FFF5E6;
+            border: 1px solid #F0E0D0;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            margin: 0 auto;
+        }
+
+        .preview-img img {
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: contain;
+        }
+
+        .preview-placeholder {
+            color: #CCCCCC;
+            font-size: 12px;
+        }
+
+        .download-btn {
+            background-color: #4ECB71;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 40px;
+            font-size: 14px;
+            font-weight: bold;
+            cursor: pointer;
+            margin-top: 20px;
+            transition: all 0.2s;
+        }
+
+        .download-btn:hover {
+            background-color: #3DAF5E;
+            transform: translateY(-1px);
+        }
+
+        .download-btn:disabled {
+            background-color: #CCCCCC;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .back-link {
+            display: inline-block;
+            margin-top: 20px;
+            padding: 8px 16px;
+            background-color: #F5F5F5;
+            border-radius: 30px;
+            text-decoration: none;
+            font-size: 13px;
+            color: #888888;
+            transition: all 0.2s;
+        }
+
+        .back-link:hover {
+            background-color: #FFF0E5;
+            color: #FF8C42;
+        }
+
+        .error-message {
+            background-color: #FFEEEE;
+            color: #FF0000;
+            padding: 10px;
+            border-radius: 8px;
+            font-size: 12px;
+            margin: 10px 0;
+            display: none;
+        }
+
+        .loading-indicator {
+            text-align: center;
+            padding: 20px;
+            color: #FF8C42;
+            font-size: 13px;
+            display: none;
+        }
+
+        /* 底部 Cookie 提示 */
+        .cookie-notice {
+            text-align: center;
+            font-size: 10px;
+            color: #AAAAAA;
+            margin-top: 16px;
+            padding-top: 12px;
+            border-top: 1px solid #F0E0D0;
+        }
+
+        .cookie-notice a {
+            color: #FF8C42;
+            text-decoration: none;
+        }
+
+        .cookie-notice a:hover {
+            text-decoration: underline;
+        }
+
+        @media (max-width: 560px) {
+            body {
+                padding: 20px 16px;
+            }
+            .card {
+                padding: 0 20px 28px 20px;
+            }
+            .top-bar {
+                width: calc(100% + 40px);
+                margin: 0 -20px 0 -20px;
+            }
+            .preview-img {
+                width: 110px;
+                height: 110px;
+            }
+            .feature-item {
+                font-size: 10px;
+                padding: 4px 10px;
+            }
+            .language-selector {
+                top: 12px;
+                right: 16px;
+                padding: 4px 8px;
+            }
+            .lang-btn {
+                font-size: 11px;
+                padding: 2px 8px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="language-selector">
+        <button class="lang-btn active" data-lang="zh">中文</button>
+        <button class="lang-btn" data-lang="en">English</button>
+    </div>
+
+    <div class="card">
+        <div class="top-bar"></div>
+        <div class="card-inner">
+            <div class="title" id="pageTitleText">🐤 小鸡头像在线工具</div>
+
+            <input type="file" id="imageInput" accept="image/*" style="display: none;">
+            <button id="selectBtn" class="big-btn">📁 选择头像图片</button>
+            <div class="hint-text" id="hintText">点击上方按钮，一键生成专属小鸡头像</div>
+
+            <div class="divider"></div>
+
+            <div class="features">
+                <div class="feature-item"><span>📷</span> <span id="feature1">选择头像图片</span></div>
+                <div class="feature-item"><span>✨</span> <span id="feature2">自动调至 1000×1000</span></div>
+                <div class="feature-item"><span>🐤</span> <span id="feature3">贴上小鸡图案</span></div>
+                <div class="feature-item"><span>📁</span> <span id="feature4">一键保存输出</span></div>
+            </div>
+
+            <div class="loading-indicator" id="loadingIndicator">⏳ 加载小鸡素材中...</div>
+
+            <div id="previewArea" class="preview-area">
+                <div class="preview-title" id="previewTitle">预览效果</div>
+                <div class="preview-container">
+                    <div class="preview-box">
+                        <p id="originalLabel">原图</p>
+                        <div class="preview-img" id="originalPreview">
+                            <span class="preview-placeholder" id="notSelected">未选择</span>
+                        </div>
+                    </div>
+                    <div class="preview-box">
+                        <p id="resultLabel">效果图</p>
+                        <div class="preview-img" id="resultPreview">
+                            <span class="preview-placeholder" id="waiting">等待生成</span>
+                        </div>
+                    </div>
+                </div>
+                <button id="downloadBtn" class="download-btn" disabled>💾 保存图片</button>
+            </div>
+
+            <a href="/" class="back-link" id="backLink">← 返回主页</a>
+
+            <div class="cookie-notice" id="cookieNotice">
+                ⚡ 如果你没有同意 Cookie，语言选项不会被保存，点击 <a href="https://hong-a-debug.github.io/">这里</a> 同意 cookie
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 翻译数据
+        const translations = {
+            zh: {
+                pageTitle: "小鸡头像在线工具 · 网页版",
+                pageTitleText: "🐤 小鸡头像在线工具",
+                selectBtn: "📁 选择头像图片",
+                hintText: "点击上方按钮，一键生成专属小鸡头像",
+                feature1: "选择头像图片",
+                feature2: "自动调至 1000×1000",
+                feature3: "贴上小鸡图案",
+                feature4: "一键保存输出",
+                previewTitle: "预览效果",
+                originalLabel: "原图",
+                resultLabel: "效果图",
+                notSelected: "未选择",
+                waiting: "等待生成",
+                downloadBtn: "💾 保存图片",
+                backLink: "← 返回主页",
+                loading: "⏳ 加载小鸡素材中...",
+                cookieNotice: "⚡ 如果你没有同意 Cookie，语言选项不会被保存，点击 <a href=\"https://hong-a-debug.github.io/\">这里</a> 同意 cookie",
+                selectImage: "请选择图片文件！",
+                processFailed: "处理图片失败："
+            },
+            en: {
+                pageTitle: "Chick Avatar Online Tool",
+                pageTitleText: "🐤 Chick Avatar Online Tool",
+                selectBtn: "📁 Select Avatar Image",
+                hintText: "Click the button above to generate your chick avatar",
+                feature1: "Select avatar image",
+                feature2: "Auto resize to 1000×1000",
+                feature3: "Paste chick pattern",
+                feature4: "One-click save output",
+                previewTitle: "Preview",
+                originalLabel: "Original",
+                resultLabel: "Result",
+                notSelected: "Not selected",
+                waiting: "Waiting",
+                downloadBtn: "💾 Save Image",
+                backLink: "← Back to Home",
+                loading: "⏳ Loading chick material...",
+                cookieNotice: "⚡ If you do not consent to cookies, your language preference will not be saved, <a href=\"https://hong-a-debug.github.io/\">click here</a> to agree",
+                selectImage: "Please select an image file!",
+                processFailed: "Image processing failed: "
+            }
+        };
+
+        let currentLang = 'zh';
+        let chickImage = null;
+        let isChickLoaded = false;
+        let currentResultBlob = null;
+        let originalImageUrl = null;
+        let resultImageUrl = null;
+
+        // 小鸡素材链接（已更新）
+        const CHICK_URL = 'https://raw.githubusercontent.com/hong-a-debug/hong-a-debug.github.io/main/chick.png';
+
+        function getCookie(name) {
+            const value = `; ${document.cookie}`;
+            const parts = value.split(`; ${name}=`);
+            if (parts.length === 2) return parts.pop().split(';').shift();
+            return null;
+        }
+
+        function switchLanguage(lang) {
+            currentLang = lang;
+            const texts = translations[lang];
+            
+            document.title = texts.pageTitle;
+            document.getElementById('pageTitleText').textContent = texts.pageTitleText;
+            document.getElementById('selectBtn').textContent = texts.selectBtn;
+            document.getElementById('hintText').textContent = texts.hintText;
+            document.getElementById('feature1').textContent = texts.feature1;
+            document.getElementById('feature2').textContent = texts.feature2;
+            document.getElementById('feature3').textContent = texts.feature3;
+            document.getElementById('feature4').textContent = texts.feature4;
+            document.getElementById('previewTitle').textContent = texts.previewTitle;
+            document.getElementById('originalLabel').textContent = texts.originalLabel;
+            document.getElementById('resultLabel').textContent = texts.resultLabel;
+            document.getElementById('notSelected').textContent = texts.notSelected;
+            document.getElementById('waiting').textContent = texts.waiting;
+            document.getElementById('downloadBtn').textContent = texts.downloadBtn;
+            document.getElementById('backLink').textContent = texts.backLink;
+            
+            const loadingEl = document.getElementById('loadingIndicator');
+            if (loadingEl && !isChickLoaded) {
+                loadingEl.textContent = texts.loading;
+            }
+            
+            const cookieNotice = document.getElementById('cookieNotice');
+            if (cookieNotice) cookieNotice.innerHTML = texts.cookieNotice;
+        }
+
+        document.querySelectorAll('.lang-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                const lang = btn.getAttribute('data-lang');
+                if (!lang) return;
+                document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                switchLanguage(lang);
+            });
+        });
+
+        function showError(msg) {
+            let errorDiv = document.getElementById('errorMessage');
+            if (!errorDiv) {
+                errorDiv = document.createElement('div');
+                errorDiv.id = 'errorMessage';
+                errorDiv.className = 'error-message';
+                const previewArea = document.getElementById('previewArea');
+                if (previewArea) {
+                    document.querySelector('.card-inner').insertBefore(errorDiv, previewArea);
+                } else {
+                    document.querySelector('.card-inner').appendChild(errorDiv);
+                }
+            }
+            errorDiv.textContent = msg;
+            errorDiv.style.display = 'block';
+            setTimeout(() => {
+                errorDiv.style.display = 'none';
+            }, 5000);
+        }
+
+        function loadChickImage() {
+            return new Promise((resolve, reject) => {
+                if (isChickLoaded && chickImage) {
+                    resolve(chickImage);
+                    return;
+                }
+                
+                const loadingEl = document.getElementById('loadingIndicator');
+                loadingEl.style.display = 'block';
+                
+                const img = new Image();
+                img.crossOrigin = 'Anonymous';
+                img.onload = () => {
+                    chickImage = img;
+                    isChickLoaded = true;
+                    loadingEl.style.display = 'none';
+                    resolve(img);
+                };
+                img.onerror = () => {
+                    loadingEl.style.display = 'none';
+                    reject(new Error('小鸡素材加载失败，请检查网络后刷新重试'));
+                };
+                img.src = CHICK_URL + '?t=' + Date.now();
+            });
+        }
+
+        async function processImage(file) {
+            const chick = await loadChickImage();
+            
+            return new Promise((resolve, reject) => {
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    const img = new Image();
+                    img.onload = () => {
+                        try {
+                            const canvas = document.createElement('canvas');
+                            canvas.width = 1000;
+                            canvas.height = 1000;
+                            const ctx = canvas.getContext('2d');
+                            ctx.drawImage(img, 0, 0, 1000, 1000);
+                            const x = (1000 - chick.width) / 2;
+                            const y = (1000 - chick.height) / 2;
+                            ctx.drawImage(chick, x, y);
+                            canvas.toBlob((blob) => {
+                                resolve(blob);
+                            }, 'image/png');
+                        } catch (err) {
+                            reject(err);
+                        }
+                    };
+                    img.onerror = () => reject(new Error('图片加载失败'));
+                    img.src = e.target.result;
+                };
+                reader.onerror = () => reject(new Error('文件读取失败'));
+                reader.readAsDataURL(file);
+            });
+        }
+
+        function showPreview(originalFile, resultBlob) {
+            if (originalImageUrl) URL.revokeObjectURL(originalImageUrl);
+            if (resultImageUrl) URL.revokeObjectURL(resultImageUrl);
+            
+            originalImageUrl = URL.createObjectURL(originalFile);
+            document.getElementById('originalPreview').innerHTML = `<img src="${originalImageUrl}" alt="原图">`;
+            
+            resultImageUrl = URL.createObjectURL(resultBlob);
+            document.getElementById('resultPreview').innerHTML = `<img src="${resultImageUrl}" alt="效果图">`;
+            
+            currentResultBlob = resultBlob;
+            const downloadBtn = document.getElementById('downloadBtn');
+            downloadBtn.disabled = false;
+            document.getElementById('previewArea').style.display = 'block';
+        }
+
+        const selectBtn = document.getElementById('selectBtn');
+        const imageInput = document.getElementById('imageInput');
+        
+        selectBtn.addEventListener('click', () => {
+            imageInput.click();
+        });
+        
+        imageInput.addEventListener('change', async (e) => {
+            const file = e.target.files[0];
+            if (!file) return;
+            
+            if (!file.type.startsWith('image/')) {
+                showError(translations[currentLang].selectImage);
+                return;
+            }
+            
+            const downloadBtn = document.getElementById('downloadBtn');
+            downloadBtn.disabled = true;
+            document.getElementById('previewArea').style.display = 'none';
+            selectBtn.disabled = true;
+            selectBtn.textContent = '⏳ ' + (currentLang === 'zh' ? '处理中...' : 'Processing...');
+            
+            try {
+                const resultBlob = await processImage(file);
+                showPreview(file, resultBlob);
+            } catch (err) {
+                console.error(err);
+                showError(translations[currentLang].processFailed + err.message);
+            } finally {
+                selectBtn.disabled = false;
+                selectBtn.textContent = translations[currentLang].selectBtn;
+            }
+        });
+        
+        document.getElementById('downloadBtn').addEventListener('click', () => {
+            if (!currentResultBlob) return;
+            const link = document.createElement('a');
+            const url = URL.createObjectURL(currentResultBlob);
+            link.href = url;
+            link.download = `chick_avatar_${Date.now()}.png`;
+            link.click();
+            URL.revokeObjectURL(url);
+        });
+
+        // 预加载小鸡素材
+        loadChickImage().catch(() => {
+            console.log('小鸡素材预加载失败');
+        });
+
+        // 读取保存的语言
+        const savedLang = getCookie('lang');
+        if (savedLang && (savedLang === 'zh' || savedLang === 'en')) {
+            document.querySelectorAll('.lang-btn').forEach(btn => {
+                const lang = btn.getAttribute('data-lang');
+                if (lang === savedLang) {
+                    btn.classList.add('active');
+                } else {
+                    btn.classList.remove('active');
+                }
+            });
+            switchLanguage(savedLang);
+        }
+    </script>
+</body>
+</html>
