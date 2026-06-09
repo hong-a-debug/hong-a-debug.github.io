@@ -305,24 +305,6 @@
             transform: translateY(-1px);
         }
 
-        .cookie-notice {
-            text-align: center;
-            font-size: 10px;
-            color: #AAAAAA;
-            margin-top: 16px;
-            padding-top: 12px;
-            border-top: 1px solid #F0E0D0;
-        }
-
-        .cookie-notice a {
-            color: #FF8C42;
-            text-decoration: none;
-        }
-
-        .cookie-notice a:hover {
-            text-decoration: underline;
-        }
-
         .footer-consent-section {
             margin-top: 16px;
             padding-top: 12px;
@@ -394,7 +376,7 @@
 </head>
 <body>
     <div class="language-selector">
-        <button class="lang-btn" data-lang="zh">中文</button>
+        <button class="lang-btn active" data-lang="zh">中文</button>
         <button class="lang-btn" data-lang="en">English</button>
     </div>
 
@@ -433,7 +415,6 @@
                     <div class="link-desc" id="githubDesc">杂七杂八的东西</div>
                 </div>
             </a>
-            <!-- 下载版 -->
             <a href="https://wwbkg.lanzouu.com/iu9qA3qmj4rc" target="_blank" class="link-card" data-name="小鸡头像自动工具" data-desc="密码: discord社区、QQ | 蓝奏云下载 18.3M">
                 <div class="link-icon">⬇️</div>
                 <div class="link-info">
@@ -441,7 +422,6 @@
                     <div class="link-desc" id="toolDesc">下载版 | 密码: discord社区、QQ | 蓝奏云 18.3M</div>
                 </div>
             </a>
-            <!-- 在线工具版 -->
             <a href="/chick_tool.html" target="_blank" class="link-card" data-name="小鸡头像在线工具" data-desc="在线生成 | 无需下载，浏览器直接使用">
                 <div class="link-icon">🐤</div>
                 <div class="link-info">
@@ -463,11 +443,12 @@
                     <div class="link-desc" id="qqDesc">点击复制QQ号</div>
                 </div>
             </div>
-            <a href="/GameList.html" class="link-card" data-name="游戏库" data-desc="这是给同学们看的，无关的人请不要看">
-                <div class="link-icon">🎮</div>
+            <!-- 许可协议卡片（替换了原来的游戏库） -->
+            <a href="/license.html" class="link-card" data-name="许可协议" data-desc="CC BY-NC-SA 4.0 国际许可证">
+                <div class="link-icon">📜</div>
                 <div class="link-info">
-                    <div class="link-name" id="gameLibraryName">游戏库</div>
-                    <div class="link-desc" id="gameLibraryDesc">这是给同学们看的，无关的人请不要看</div>
+                    <div class="link-name" id="licenseName">许可协议</div>
+                    <div class="link-desc" id="licenseDesc">CC BY-NC-SA 4.0 国际许可证</div>
                 </div>
             </a>
         </div>
@@ -507,8 +488,8 @@
                 pclDesc: "点击弹窗复制内容",
                 qqName: "QQ社区",
                 qqDesc: "点击复制QQ号",
-                gameLibraryName: "游戏库",
-                gameLibraryDesc: "这是给同学们看的，无关的人请不要看",
+                licenseName: "许可协议",
+                licenseDesc: "CC BY-NC-SA 4.0 国际许可证",
                 noResult: "😢 没有找到相关链接",
                 cookieText: "🍪 本网站使用 Cookie 来记住您的语言偏好，提升浏览体验。",
                 acceptBtn: "同意",
@@ -534,8 +515,8 @@
                 pclDesc: "Click to copy",
                 qqName: "QQ Community",
                 qqDesc: "Click to copy QQ number",
-                gameLibraryName: "Game Library",
-                gameLibraryDesc: "This is for classmates only, please do not watch if you are not",
+                licenseName: "License",
+                licenseDesc: "CC BY-NC-SA 4.0 International",
                 noResult: "😢 No matching links found",
                 cookieText: "🍪 This site uses cookies to remember your language preferences and improve your browsing experience.",
                 acceptBtn: "Agree",
@@ -609,8 +590,8 @@
             document.getElementById('pclDesc').textContent = texts.pclDesc;
             document.getElementById('qqName').textContent = texts.qqName;
             document.getElementById('qqDesc').textContent = texts.qqDesc;
-            document.getElementById('gameLibraryName').textContent = texts.gameLibraryName;
-            document.getElementById('gameLibraryDesc').textContent = texts.gameLibraryDesc;
+            document.getElementById('licenseName').textContent = texts.licenseName;
+            document.getElementById('licenseDesc').textContent = texts.licenseDesc;
             document.getElementById('noResult').textContent = texts.noResult;
             
             const cookieTextEl = document.getElementById('cookieText');
