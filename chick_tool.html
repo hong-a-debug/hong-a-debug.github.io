@@ -263,7 +263,6 @@
             display: none;
         }
 
-        /* 底部 Cookie 提示 */
         .cookie-notice {
             text-align: center;
             font-size: 10px;
@@ -367,7 +366,6 @@
     </div>
 
     <script>
-        // 翻译数据
         const translations = {
             zh: {
                 pageTitle: "小鸡头像在线工具 · 网页版",
@@ -420,8 +418,7 @@
         let originalImageUrl = null;
         let resultImageUrl = null;
 
-        // 小鸡素材链接（已更新）
-        const CHICK_URL = 'https://raw.githubusercontent.com/hong-a-debug/hong-a-debug.github.io/main/chick.png';
+        const CHICK_URL = '/chick.png';
 
         function getCookie(name) {
             const value = `; ${document.cookie}`;
@@ -607,12 +604,10 @@
             URL.revokeObjectURL(url);
         });
 
-        // 预加载小鸡素材
         loadChickImage().catch(() => {
             console.log('小鸡素材预加载失败');
         });
 
-        // 读取保存的语言
         const savedLang = getCookie('lang');
         if (savedLang && (savedLang === 'zh' || savedLang === 'en')) {
             document.querySelectorAll('.lang-btn').forEach(btn => {
