@@ -12,7 +12,6 @@
             box-sizing: border-box;
         }
 
-        /* 浅色主题（默认） */
         :root {
             --bg-color: #FFF5E6;
             --card-bg: #FFFFFF;
@@ -28,7 +27,6 @@
             --cookie-text: #FFFFFF;
         }
 
-        /* 深色主题 - 纯黑背景 */
         body.dark {
             --bg-color: #000000;
             --card-bg: #1a1a1a;
@@ -56,7 +54,6 @@
             transition: background-color 0.3s, color 0.3s;
         }
 
-        /* 左上角按钮区域 */
         .top-left-buttons {
             position: fixed;
             top: 20px;
@@ -323,7 +320,6 @@
             display: block;
         }
 
-        /* Cookie 弹窗样式 */
         .cookie-modal {
             position: fixed;
             top: 0;
@@ -454,7 +450,6 @@
             .top-left-buttons {
                 top: 12px;
                 left: 16px;
-                gap: 8px;
             }
             .theme-btn {
                 padding: 6px 12px;
@@ -482,7 +477,6 @@
     </style>
 </head>
 <body>
-    <!-- 左上角按钮区域 -->
     <div class="top-left-buttons">
         <button id="themeToggle" class="theme-btn">🌙</button>
     </div>
@@ -534,7 +528,7 @@
                     <div class="link-desc" id="toolDesc">下载版 | 密码: discord社区、QQ | 蓝奏云 18.3M</div>
                 </div>
             </a>
-            <a href="/chick_tool.html" target="_blank" class="link-card" data-name="小鸡头像在线工具" data-desc="在线生成 | 无需下载，浏览器直接使用">
+            <a href="/chick_tool.html" class="link-card" data-name="小鸡头像在线工具" data-desc="在线生成 | 无需下载，浏览器直接使用">
                 <div class="link-icon">🐤</div>
                 <div class="link-info">
                     <div class="link-name" id="onlineToolName">小鸡头像在线工具</div>
@@ -647,40 +641,6 @@
             document.cookie = name + "=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
         }
 
-        // 深浅色模式切换
-        function initTheme() {
-            const savedTheme = getCookie('theme');
-            if (savedTheme === 'dark') {
-                document.body.classList.add('dark');
-                updateThemeButton('dark');
-            } else {
-                document.body.classList.remove('dark');
-                updateThemeButton('light');
-            }
-        }
-
-        function updateThemeButton(theme) {
-            const btn = document.getElementById('themeToggle');
-            if (!btn) return;
-            if (theme === 'dark') {
-                btn.innerHTML = '☀️';
-            } else {
-                btn.innerHTML = '🌙';
-            }
-        }
-
-        function toggleTheme() {
-            if (document.body.classList.contains('dark')) {
-                document.body.classList.remove('dark');
-                setCookie('theme', 'light', 30);
-                updateThemeButton('light');
-            } else {
-                document.body.classList.add('dark');
-                setCookie('theme', 'dark', 30);
-                updateThemeButton('dark');
-            }
-        }
-
         function filterLinks() {
             const keyword = document.getElementById('searchInput').value.trim().toLowerCase();
             const links = document.querySelectorAll('#linksGrid .link-card');
@@ -731,6 +691,15 @@
             document.getElementById('licenseDesc').textContent = texts.licenseDesc;
             document.getElementById('noResult').textContent = texts.noResult;
             
+            const cookieTextEl = document.getElementById('cookieText');
+            if (cookieTextEl) cookieTextEl.textContent = texts.cookieMessage;
+            
+            const acceptBtn = document.getElementById('acceptCookie');
+            if (acceptBtn) acceptBtn.textContent = texts.acceptBtn;
+            
+            const declineBtn = document.getElementById('declineCookie');
+            if (declineBtn) declineBtn.textContent = texts.declineBtn;
+            
             const footerConsentBtn = document.getElementById('footerConsentBtn');
             if (footerConsentBtn) footerConsentBtn.textContent = texts.footerConsentBtn;
             
@@ -763,8 +732,6 @@
             }
         });
 
-        document.getElementById('themeToggle').addEventListener('click', toggleTheme);
-
         function createPCLModal() {
             const textToCopy = 'https://raw.githubusercontent.com/hong-a-debug/w/main/Custom.xaml';
             const modalOverlay = document.createElement('div');
@@ -778,6 +745,7 @@
             modalOverlay.style.justifyContent = 'center';
             modalOverlay.style.alignItems = 'center';
             modalOverlay.style.zIndex = '1000';
+            document.body.style.overflow = 'hidden';
             
             const modalContent = document.createElement('div');
             modalContent.style.backgroundColor = 'var(--card-bg)';
@@ -861,6 +829,7 @@
             
             const closeModal = () => {
                 document.body.removeChild(modalOverlay);
+                document.body.style.overflow = '';
             };
             closeBtn.addEventListener('click', closeModal);
             modalOverlay.addEventListener('click', (e) => {
@@ -881,6 +850,7 @@
             modalOverlay.style.justifyContent = 'center';
             modalOverlay.style.alignItems = 'center';
             modalOverlay.style.zIndex = '1000';
+            document.body.style.overflow = 'hidden';
             
             const modalContent = document.createElement('div');
             modalContent.style.backgroundColor = 'var(--card-bg)';
@@ -953,6 +923,7 @@
             
             const closeModal = () => {
                 document.body.removeChild(modalOverlay);
+                document.body.style.overflow = '';
             };
             closeBtn.addEventListener('click', closeModal);
             modalOverlay.addEventListener('click', (e) => {
@@ -960,6 +931,36 @@
             });
         }
 
+        function initTheme() {
+            const savedTheme = getCookie('theme');
+            if (savedTheme === 'dark') {
+                document.body.classList.add('dark');
+                updateThemeButton('dark');
+            } else {
+                document.body.classList.remove('dark');
+                updateThemeButton('light');
+            }
+        }
+
+        function updateThemeButton(theme) {
+            const btn = document.getElementById('themeToggle');
+            if (!btn) return;
+            btn.innerHTML = theme === 'dark' ? '☀️' : '🌙';
+        }
+
+        function toggleTheme() {
+            if (document.body.classList.contains('dark')) {
+                document.body.classList.remove('dark');
+                setCookie('theme', 'light', 30);
+                updateThemeButton('light');
+            } else {
+                document.body.classList.add('dark');
+                setCookie('theme', 'dark', 30);
+                updateThemeButton('dark');
+            }
+        }
+
+        document.getElementById('themeToggle')?.addEventListener('click', toggleTheme);
         document.getElementById('pclHomeBtn').addEventListener('click', createPCLModal);
         document.getElementById('qqBtn').addEventListener('click', createQQModal);
 
@@ -977,11 +978,13 @@
                 </div>
             `;
             document.body.appendChild(modal);
+            document.body.style.overflow = 'hidden';
 
             document.getElementById('cookieAccept').addEventListener('click', () => {
                 setCookie('cookie_consent', 'accepted', 30);
                 setCookie('lang', currentLang, 30);
                 document.body.removeChild(modal);
+                document.body.style.overflow = '';
                 document.getElementById('footerConsentSection').style.display = 'none';
             });
 
@@ -989,6 +992,7 @@
                 setCookie('cookie_consent', 'declined', 30);
                 deleteCookie('lang');
                 document.body.removeChild(modal);
+                document.body.style.overflow = '';
                 document.getElementById('footerConsentSection').style.display = 'block';
             });
         }
