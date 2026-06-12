@@ -12,8 +12,34 @@
             box-sizing: border-box;
         }
 
+        /* 浅色主题（默认） */
+        :root {
+            --bg-color: #FFF5E6;
+            --card-bg: #FFFFFF;
+            --card-border: #F0E0D0;
+            --text-primary: #2D2D2D;
+            --text-secondary: #888888;
+            --text-link: #AAAAAA;
+            --accent: #FF8C42;
+            --accent-hover: #E67A30;
+            --icon-bg: #FFF0E5;
+        }
+
+        /* 深色主题 */
+        body.dark {
+            --bg-color: #000000;
+            --card-bg: #1a1a1a;
+            --card-border: #333333;
+            --text-primary: #eeeeee;
+            --text-secondary: #aaaaaa;
+            --text-link: #888888;
+            --accent: #27ae60;
+            --accent-hover: #2ecc71;
+            --icon-bg: #2a2a2a;
+        }
+
         body {
-            background-color: #FFF5E6;
+            background-color: var(--bg-color);
             font-family: '微软雅黑', 'Segoe UI', system-ui, -apple-system, sans-serif;
             min-height: 100vh;
             display: flex;
@@ -21,6 +47,41 @@
             align-items: center;
             padding: 40px 20px;
             position: relative;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        /* 左上角按钮区域 */
+        .top-left-buttons {
+            position: fixed;
+            top: 20px;
+            left: 24px;
+            z-index: 200;
+            display: flex;
+            gap: 12px;
+            align-items: center;
+        }
+
+        .theme-btn {
+            background-color: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: 40px;
+            padding: 8px 14px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.2s;
+            color: var(--text-primary);
+            font-family: inherit;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .theme-btn:hover {
+            background-color: var(--accent);
+            color: white;
+            border-color: var(--accent);
+            transform: translateY(-1px);
         }
 
         .language-selector {
@@ -28,8 +89,8 @@
             top: 20px;
             right: 24px;
             z-index: 200;
-            background-color: #FFFFFF;
-            border: 1px solid #F0E0D0;
+            background-color: var(--card-bg);
+            border: 1px solid var(--card-border);
             border-radius: 40px;
             padding: 6px 12px;
             display: flex;
@@ -46,49 +107,51 @@
             padding: 4px 10px;
             border-radius: 30px;
             transition: all 0.2s;
-            color: #888888;
+            color: var(--text-secondary);
             font-family: inherit;
         }
 
         .lang-btn.active {
-            background-color: #FF8C42;
+            background-color: var(--accent);
             color: white;
         }
 
         .lang-btn:not(.active):hover {
-            background-color: #FFF0E5;
-            color: #E67A30;
+            background-color: var(--icon-bg);
+            color: var(--accent);
         }
 
         .card {
-            background-color: #FFFFFF;
-            border: 1px solid #F0E0D0;
+            background-color: var(--card-bg);
+            border: 1px solid var(--card-border);
             box-shadow: 0 8px 20px rgba(0, 0, 0, 0.05);
             width: 900px;
             max-width: 100%;
             padding: 0 28px 36px 28px;
+            transition: background-color 0.3s, border-color 0.3s;
         }
 
         .top-orange-strip {
             width: calc(100% + 56px);
             margin: 0 -28px 0 -28px;
             height: 6px;
-            background-color: #FF8C42;
+            background-color: var(--accent);
         }
 
         .top-white-bar {
             width: calc(100% + 56px);
             margin: 0 -28px 0 -28px;
-            background-color: #FFFFFF;
+            background-color: var(--card-bg);
             padding: 12px 28px;
-            border-bottom: 1px solid #F0E0D0;
+            border-bottom: 1px solid var(--card-border);
             font-size: 16px;
             font-weight: 600;
-            color: #2D2D2D;
+            color: var(--text-primary);
             display: flex;
             justify-content: flex-start;
             align-items: center;
             box-sizing: border-box;
+            transition: background-color 0.3s;
         }
 
         .top-white-bar span::before {
@@ -104,50 +167,50 @@
         .license-title h1 {
             font-size: 24px;
             font-weight: 700;
-            color: #2D2D2D;
+            color: var(--text-primary);
             margin-bottom: 8px;
         }
 
         .license-title p {
             font-size: 14px;
-            color: #FF8C42;
+            color: var(--accent);
         }
 
         .license-badge {
             text-align: center;
             margin: 20px 0;
             padding: 15px;
-            background-color: #FFF5E6;
+            background-color: var(--icon-bg);
             border-radius: 12px;
-            border: 1px solid #F0E0D0;
+            border: 1px solid var(--card-border);
         }
 
         .license-badge .badge-text {
             font-size: 16px;
             font-weight: 600;
-            color: #FF8C42;
+            color: var(--accent);
             margin-top: 10px;
         }
 
         .license-badge .badge-desc {
             font-size: 12px;
-            color: #888888;
+            color: var(--text-secondary);
             margin-top: 5px;
         }
 
         .license-content {
             font-size: 13px;
             line-height: 1.6;
-            color: #2D2D2D;
+            color: var(--text-primary);
             margin: 20px 0;
-            background-color: #FAFAFA;
+            background-color: var(--icon-bg);
             padding: 20px;
             border-radius: 12px;
-            border: 1px solid #F0E0D0;
+            border: 1px solid var(--card-border);
             font-family: 'Consolas', 'Monaco', monospace;
             white-space: pre-wrap;
             word-break: break-word;
-            max-height: 600px;
+            max-height: 500px;
             overflow-y: auto;
         }
 
@@ -155,30 +218,31 @@
             display: inline-block;
             margin-top: 20px;
             padding: 8px 16px;
-            background-color: #F5F5F5;
+            background-color: var(--card-bg);
+            border: 1px solid var(--card-border);
             border-radius: 30px;
             text-decoration: none;
             font-size: 13px;
-            color: #888888;
+            color: var(--text-secondary);
             transition: all 0.2s;
         }
 
         .back-link:hover {
-            background-color: #FFF0E5;
-            color: #FF8C42;
+            background-color: var(--icon-bg);
+            color: var(--accent);
         }
 
         .cookie-notice {
             text-align: center;
             font-size: 10px;
-            color: #AAAAAA;
+            color: var(--text-link);
             margin-top: 16px;
             padding-top: 12px;
-            border-top: 1px solid #F0E0D0;
+            border-top: 1px solid var(--card-border);
         }
 
         .cookie-notice a {
-            color: #FF8C42;
+            color: var(--accent);
             text-decoration: none;
         }
 
@@ -211,6 +275,14 @@
                 font-size: 11px;
                 padding: 2px 8px;
             }
+            .top-left-buttons {
+                top: 12px;
+                left: 16px;
+            }
+            .theme-btn {
+                padding: 6px 12px;
+                font-size: 14px;
+            }
             .license-title h1 {
                 font-size: 20px;
             }
@@ -223,6 +295,10 @@
     </style>
 </head>
 <body>
+    <div class="top-left-buttons">
+        <button id="themeToggle" class="theme-btn">🌙</button>
+    </div>
+
     <div class="language-selector">
         <button class="lang-btn active" data-lang="zh">中文</button>
         <button class="lang-btn" data-lang="en">English</button>
@@ -721,6 +797,35 @@ public licenses.</p>
             document.cookie = name + "=" + value + "; expires=" + date.toUTCString() + "; path=/";
         }
 
+        function initTheme() {
+            const savedTheme = getCookie('theme');
+            if (savedTheme === 'dark') {
+                document.body.classList.add('dark');
+                updateThemeButton('dark');
+            } else {
+                document.body.classList.remove('dark');
+                updateThemeButton('light');
+            }
+        }
+
+        function updateThemeButton(theme) {
+            const btn = document.getElementById('themeToggle');
+            if (!btn) return;
+            btn.innerHTML = theme === 'dark' ? '☀️' : '🌙';
+        }
+
+        function toggleTheme() {
+            if (document.body.classList.contains('dark')) {
+                document.body.classList.remove('dark');
+                setCookie('theme', 'light', 30);
+                updateThemeButton('light');
+            } else {
+                document.body.classList.add('dark');
+                setCookie('theme', 'dark', 30);
+                updateThemeButton('dark');
+            }
+        }
+
         function switchLanguage(lang) {
             currentLang = lang;
             const texts = translations[lang];
@@ -740,6 +845,8 @@ public licenses.</p>
                 setCookie('lang', lang, 30);
             }
         }
+
+        document.getElementById('themeToggle')?.addEventListener('click', toggleTheme);
 
         document.querySelectorAll('.lang-btn').forEach(btn => {
             btn.addEventListener('click', () => {
@@ -763,6 +870,8 @@ public licenses.</p>
             });
             switchLanguage(savedLang);
         }
+
+        initTheme();
     </script>
 </body>
 </html>
