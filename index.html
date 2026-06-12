@@ -12,8 +12,40 @@
             box-sizing: border-box;
         }
 
+        /* 浅色主题（默认） */
+        :root {
+            --bg-color: #FFF5E6;
+            --card-bg: #FFFFFF;
+            --card-border: #F0E0D0;
+            --text-primary: #2D2D2D;
+            --text-secondary: #888888;
+            --text-link: #AAAAAA;
+            --accent: #FF8C42;
+            --accent-hover: #E67A30;
+            --search-bg: #FFFFFF;
+            --icon-bg: #FFF0E5;
+            --cookie-bg: #2D2D2D;
+            --cookie-text: #FFFFFF;
+        }
+
+        /* 深色主题 - 纯黑背景 */
+        body.dark {
+            --bg-color: #000000;
+            --card-bg: #1a1a1a;
+            --card-border: #333333;
+            --text-primary: #eeeeee;
+            --text-secondary: #aaaaaa;
+            --text-link: #888888;
+            --accent: #27ae60;
+            --accent-hover: #2ecc71;
+            --search-bg: #2a2a2a;
+            --icon-bg: #2a2a2a;
+            --cookie-bg: #1a1a1a;
+            --cookie-text: #eeeeee;
+        }
+
         body {
-            background-color: #FFF5E6;
+            background-color: var(--bg-color);
             font-family: '微软雅黑', 'Segoe UI', system-ui, -apple-system, sans-serif;
             min-height: 100vh;
             display: flex;
@@ -21,6 +53,41 @@
             align-items: center;
             padding: 40px 20px;
             position: relative;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        /* 左上角按钮区域 */
+        .top-left-buttons {
+            position: fixed;
+            top: 20px;
+            left: 24px;
+            z-index: 200;
+            display: flex;
+            gap: 12px;
+            align-items: center;
+        }
+
+        .theme-btn {
+            background-color: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: 40px;
+            padding: 8px 14px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.2s;
+            color: var(--text-primary);
+            font-family: inherit;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .theme-btn:hover {
+            background-color: var(--accent);
+            color: white;
+            border-color: var(--accent);
+            transform: translateY(-1px);
         }
 
         .language-selector {
@@ -28,8 +95,8 @@
             top: 20px;
             right: 24px;
             z-index: 200;
-            background-color: #FFFFFF;
-            border: 1px solid #F0E0D0;
+            background-color: var(--card-bg);
+            border: 1px solid var(--card-border);
             border-radius: 40px;
             padding: 6px 12px;
             display: flex;
@@ -46,49 +113,51 @@
             padding: 4px 10px;
             border-radius: 30px;
             transition: all 0.2s;
-            color: #888888;
+            color: var(--text-secondary);
             font-family: inherit;
         }
 
         .lang-btn.active {
-            background-color: #FF8C42;
+            background-color: var(--accent);
             color: white;
         }
 
         .lang-btn:not(.active):hover {
-            background-color: #FFF0E5;
-            color: #E67A30;
+            background-color: var(--icon-bg);
+            color: var(--accent);
         }
 
         .card {
-            background-color: #FFFFFF;
-            border: 1px solid #F0E0D0;
+            background-color: var(--card-bg);
+            border: 1px solid var(--card-border);
             box-shadow: 0 8px 20px rgba(0, 0, 0, 0.05);
             width: 540px;
             max-width: 100%;
             padding: 0 28px 36px 28px;
+            transition: background-color 0.3s, border-color 0.3s;
         }
 
         .top-orange-strip {
             width: calc(100% + 56px);
             margin: 0 -28px 0 -28px;
             height: 6px;
-            background-color: #FF8C42;
+            background-color: var(--accent);
         }
 
         .top-white-bar {
             width: calc(100% + 56px);
             margin: 0 -28px 0 -28px;
-            background-color: #FFFFFF;
+            background-color: var(--card-bg);
             padding: 12px 28px;
-            border-bottom: 1px solid #F0E0D0;
+            border-bottom: 1px solid var(--card-border);
             font-size: 16px;
             font-weight: 600;
-            color: #2D2D2D;
+            color: var(--text-primary);
             display: flex;
             justify-content: flex-start;
             align-items: center;
             box-sizing: border-box;
+            transition: background-color 0.3s;
         }
 
         .top-white-bar span::before {
@@ -97,7 +166,7 @@
         }
 
         .big-btn {
-            background-color: #FF8C42;
+            background-color: var(--accent);
             color: white;
             font-size: 16px;
             font-weight: bold;
@@ -116,12 +185,12 @@
         }
 
         .big-btn:hover {
-            background-color: #E67A30;
+            background-color: var(--accent-hover);
             transform: translateY(-1px);
         }
 
         .hint-text {
-            color: #888888;
+            color: var(--text-secondary);
             font-size: 11px;
             text-align: center;
             margin-bottom: 24px;
@@ -129,7 +198,7 @@
 
         .divider {
             height: 1px;
-            background-color: #F0E0D0;
+            background-color: var(--card-border);
             margin: 20px 0;
             width: 100%;
         }
@@ -147,22 +216,27 @@
         .search-input {
             flex: 1;
             padding: 10px 14px;
-            border: 1px solid #F0E0D0;
+            border: 1px solid var(--card-border);
             border-radius: 40px;
             font-size: 14px;
             font-family: inherit;
-            background-color: #FFFFFF;
+            background-color: var(--search-bg);
+            color: var(--text-primary);
             transition: all 0.2s;
             outline: none;
         }
 
         .search-input:focus {
-            border-color: #FF8C42;
-            box-shadow: 0 0 0 2px rgba(255, 140, 66, 0.2);
+            border-color: var(--accent);
+            box-shadow: 0 0 0 2px rgba(39, 174, 96, 0.2);
+        }
+
+        .search-input::placeholder {
+            color: var(--text-secondary);
         }
 
         .search-btn {
-            background-color: #FF8C42;
+            background-color: var(--accent);
             color: white;
             border: none;
             padding: 10px 18px;
@@ -175,7 +249,7 @@
         }
 
         .search-btn:hover {
-            background-color: #E67A30;
+            background-color: var(--accent-hover);
             transform: translateY(-1px);
         }
 
@@ -190,18 +264,18 @@
             display: flex;
             align-items: center;
             gap: 14px;
-            background: #FFFFFF;
-            border: 1px solid #F0E0D0;
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
             padding: 12px 16px;
             text-decoration: none;
-            color: #2D2D2D;
+            color: var(--text-primary);
             transition: all 0.2s;
             cursor: pointer;
         }
 
         .link-card:hover {
-            background-color: #FFF5E6;
-            border-color: #FF8C42;
+            background-color: var(--icon-bg);
+            border-color: var(--accent);
             transform: translateX(4px);
         }
 
@@ -212,13 +286,14 @@
         .link-icon {
             width: 40px;
             height: 40px;
-            background: #FFF0E5;
+            background: var(--icon-bg);
             display: flex;
             align-items: center;
             justify-content: center;
             font-size: 1.2rem;
-            color: #FF8C42;
+            color: var(--accent);
             border-radius: 8px;
+            transition: background 0.3s;
         }
 
         .link-info {
@@ -233,14 +308,13 @@
 
         .link-desc {
             font-size: 11px;
-            color: #AAAAAA;
-            word-break: break-all;
+            color: var(--text-link);
         }
 
         .no-result {
             text-align: center;
             padding: 20px;
-            color: #AAAAAA;
+            color: var(--text-link);
             font-size: 13px;
             display: none;
         }
@@ -249,72 +323,94 @@
             display: block;
         }
 
-        .cookie-banner {
+        /* Cookie 弹窗样式 */
+        .cookie-modal {
             position: fixed;
-            bottom: 0;
+            top: 0;
             left: 0;
-            right: 0;
-            background-color: #2D2D2D;
-            color: #FFFFFF;
-            padding: 16px 24px;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
             display: flex;
-            flex-wrap: wrap;
             justify-content: center;
             align-items: center;
-            gap: 16px;
-            z-index: 1000;
-            font-size: 13px;
-            box-shadow: 0 -4px 12px rgba(0, 0, 0, 0.15);
+            z-index: 1001;
         }
 
-        .cookie-banner p {
-            margin: 0;
+        .cookie-modal-content {
+            background-color: var(--card-bg);
+            border-radius: 16px;
+            padding: 28px 24px;
+            width: 380px;
+            max-width: 90%;
+            text-align: center;
+            border: 1px solid var(--card-border);
+            box-shadow: 0 20px 35px -12px rgba(0, 0, 0, 0.3);
         }
 
-        .cookie-btn {
-            background-color: #FF8C42;
-            color: white;
+        .cookie-modal-content p {
+            font-size: 14px;
+            line-height: 1.6;
+            color: var(--text-primary);
+            margin-bottom: 24px;
+        }
+
+        .cookie-modal-buttons {
+            display: flex;
+            gap: 12px;
+            justify-content: center;
+        }
+
+        .cookie-modal-buttons button {
             border: none;
-            padding: 8px 20px;
+            padding: 8px 24px;
             border-radius: 40px;
-            font-size: 13px;
+            font-size: 14px;
             font-weight: 500;
             cursor: pointer;
             transition: all 0.2s;
+            font-family: inherit;
         }
 
-        .cookie-btn:hover {
-            background-color: #E67A30;
-            transform: translateY(-1px);
-        }
-
-        .cookie-btn-decline {
-            background-color: #888888;
+        .cookie-accept {
+            background-color: var(--accent);
             color: white;
-            border: none;
-            padding: 8px 20px;
-            border-radius: 40px;
-            font-size: 13px;
-            font-weight: 500;
-            cursor: pointer;
-            transition: all 0.2s;
         }
 
-        .cookie-btn-decline:hover {
-            background-color: #666666;
+        .cookie-accept:hover {
+            background-color: var(--accent-hover);
             transform: translateY(-1px);
+        }
+
+        .cookie-decline {
+            background-color: #EAEAEA;
+            color: #555;
+        }
+
+        body.dark .cookie-decline {
+            background-color: #333333;
+            color: #aaaaaa;
+        }
+
+        .cookie-decline:hover {
+            background-color: #D0D0D0;
+            transform: translateY(-1px);
+        }
+
+        body.dark .cookie-decline:hover {
+            background-color: #444444;
         }
 
         .footer-consent-section {
             margin-top: 16px;
             padding-top: 12px;
-            border-top: 1px solid #F0E0D0;
+            border-top: 1px solid var(--card-border);
             text-align: center;
             display: none;
         }
 
         .footer-consent-btn {
-            background-color: #FF8C42;
+            background-color: var(--accent);
             color: white;
             border: none;
             padding: 8px 24px;
@@ -326,7 +422,7 @@
         }
 
         .footer-consent-btn:hover {
-            background-color: #E67A30;
+            background-color: var(--accent-hover);
             transform: translateY(-1px);
         }
 
@@ -355,6 +451,15 @@
                 font-size: 11px;
                 padding: 2px 8px;
             }
+            .top-left-buttons {
+                top: 12px;
+                left: 16px;
+                gap: 8px;
+            }
+            .theme-btn {
+                padding: 6px 12px;
+                font-size: 14px;
+            }
             .search-container {
                 gap: 6px;
             }
@@ -366,15 +471,22 @@
                 padding: 8px 14px;
                 font-size: 13px;
             }
-            .cookie-banner {
-                padding: 12px 16px;
-                flex-direction: column;
-                text-align: center;
+            .cookie-modal-content {
+                width: 320px;
+                padding: 24px 20px;
+            }
+            .cookie-modal-content p {
+                font-size: 13px;
             }
         }
     </style>
 </head>
 <body>
+    <!-- 左上角按钮区域 -->
+    <div class="top-left-buttons">
+        <button id="themeToggle" class="theme-btn">🌙</button>
+    </div>
+
     <div class="language-selector">
         <button class="lang-btn active" data-lang="zh">中文</button>
         <button class="lang-btn" data-lang="en">English</button>
@@ -443,7 +555,6 @@
                     <div class="link-desc" id="qqDesc">点击复制QQ号</div>
                 </div>
             </div>
-            <!-- 许可协议卡片（替换了原来的游戏库） -->
             <a href="/license.html" class="link-card" data-name="许可协议" data-desc="CC BY-NC-SA 4.0 国际许可证">
                 <div class="link-icon">📜</div>
                 <div class="link-info">
@@ -456,14 +567,6 @@
 
         <div class="footer-consent-section" id="footerConsentSection">
             <button id="footerConsentBtn" class="footer-consent-btn">🍪 同意 COOKIE</button>
-        </div>
-    </div>
-
-    <div id="cookieBanner" class="cookie-banner" style="display: none;">
-        <p id="cookieText">🍪 本网站使用 Cookie 来记住您的语言偏好，提升浏览体验。</p>
-        <div style="display: flex; gap: 12px;">
-            <button id="acceptCookie" class="cookie-btn">同意</button>
-            <button id="declineCookie" class="cookie-btn-decline">不同意</button>
         </div>
     </div>
 
@@ -491,7 +594,7 @@
                 licenseName: "许可协议",
                 licenseDesc: "CC BY-NC-SA 4.0 国际许可证",
                 noResult: "😢 没有找到相关链接",
-                cookieText: "🍪 本网站使用 Cookie 来记住您的语言偏好，提升浏览体验。",
+                cookieMessage: "🍪 本网站使用 Cookie 保存您的语言选项。如果您不同意，我们仅保存重要的 Cookie。",
                 acceptBtn: "同意",
                 declineBtn: "不同意",
                 footerConsentBtn: "🍪 同意 COOKIE"
@@ -518,7 +621,7 @@
                 licenseName: "License",
                 licenseDesc: "CC BY-NC-SA 4.0 International",
                 noResult: "😢 No matching links found",
-                cookieText: "🍪 This site uses cookies to remember your language preferences and improve your browsing experience.",
+                cookieMessage: "🍪 This website uses cookies to save your language preference. If you disagree, we will only save essential cookies.",
                 acceptBtn: "Agree",
                 declineBtn: "Disagree",
                 footerConsentBtn: "🍪 Agree to COOKIE"
@@ -542,6 +645,40 @@
 
         function deleteCookie(name) {
             document.cookie = name + "=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+        }
+
+        // 深浅色模式切换
+        function initTheme() {
+            const savedTheme = getCookie('theme');
+            if (savedTheme === 'dark') {
+                document.body.classList.add('dark');
+                updateThemeButton('dark');
+            } else {
+                document.body.classList.remove('dark');
+                updateThemeButton('light');
+            }
+        }
+
+        function updateThemeButton(theme) {
+            const btn = document.getElementById('themeToggle');
+            if (!btn) return;
+            if (theme === 'dark') {
+                btn.innerHTML = '☀️';
+            } else {
+                btn.innerHTML = '🌙';
+            }
+        }
+
+        function toggleTheme() {
+            if (document.body.classList.contains('dark')) {
+                document.body.classList.remove('dark');
+                setCookie('theme', 'light', 30);
+                updateThemeButton('light');
+            } else {
+                document.body.classList.add('dark');
+                setCookie('theme', 'dark', 30);
+                updateThemeButton('dark');
+            }
         }
 
         function filterLinks() {
@@ -594,15 +731,6 @@
             document.getElementById('licenseDesc').textContent = texts.licenseDesc;
             document.getElementById('noResult').textContent = texts.noResult;
             
-            const cookieTextEl = document.getElementById('cookieText');
-            if (cookieTextEl) cookieTextEl.textContent = texts.cookieText;
-            
-            const acceptBtn = document.getElementById('acceptCookie');
-            if (acceptBtn) acceptBtn.textContent = texts.acceptBtn;
-            
-            const declineBtn = document.getElementById('declineCookie');
-            if (declineBtn) declineBtn.textContent = texts.declineBtn;
-            
             const footerConsentBtn = document.getElementById('footerConsentBtn');
             if (footerConsentBtn) footerConsentBtn.textContent = texts.footerConsentBtn;
             
@@ -635,6 +763,8 @@
             }
         });
 
+        document.getElementById('themeToggle').addEventListener('click', toggleTheme);
+
         function createPCLModal() {
             const textToCopy = 'https://raw.githubusercontent.com/hong-a-debug/w/main/Custom.xaml';
             const modalOverlay = document.createElement('div');
@@ -650,45 +780,45 @@
             modalOverlay.style.zIndex = '1000';
             
             const modalContent = document.createElement('div');
-            modalContent.style.backgroundColor = '#fff';
+            modalContent.style.backgroundColor = 'var(--card-bg)';
             modalContent.style.padding = '24px';
             modalContent.style.borderRadius = '16px';
             modalContent.style.width = '320px';
             modalContent.style.maxWidth = '90%';
             modalContent.style.boxShadow = '0 20px 35px -12px rgba(0,0,0,0.3)';
-            modalContent.style.border = '1px solid #F0E0D0';
+            modalContent.style.border = '1px solid var(--card-border)';
             modalContent.style.textAlign = 'center';
             
             const title = document.createElement('h3');
             title.innerText = currentLang === 'zh' ? '📋 复制内容' : '📋 Copy Text';
             title.style.marginBottom = '16px';
             title.style.fontSize = '18px';
-            title.style.color = '#2D2D2D';
+            title.style.color = 'var(--text-primary)';
             
             const tipText = document.createElement('div');
             tipText.innerText = currentLang === 'zh' ? '复制到设置→个性化→主页→联网更新→下载地址' : 'Copy to Settings → Personalization → Home → Online Update → Download URL';
-            tipText.style.backgroundColor = '#FFF0E5';
+            tipText.style.backgroundColor = 'var(--icon-bg)';
             tipText.style.padding = '8px';
             tipText.style.borderRadius = '8px';
             tipText.style.marginBottom = '16px';
             tipText.style.fontSize = '12px';
-            tipText.style.color = '#E67A30';
+            tipText.style.color = 'var(--accent)';
             tipText.style.textAlign = 'center';
             
             const textContainer = document.createElement('div');
-            textContainer.style.backgroundColor = '#FFF5E6';
+            textContainer.style.backgroundColor = 'var(--icon-bg)';
             textContainer.style.padding = '12px';
             textContainer.style.borderRadius = '8px';
             textContainer.style.marginBottom = '20px';
             textContainer.style.wordBreak = 'break-all';
             textContainer.style.fontSize = '12px';
             textContainer.style.fontFamily = 'monospace';
-            textContainer.style.color = '#E67A30';
+            textContainer.style.color = 'var(--accent)';
             textContainer.innerText = textToCopy;
             
             const copyBtn = document.createElement('button');
             copyBtn.innerText = currentLang === 'zh' ? '复制文本' : 'Copy';
-            copyBtn.style.backgroundColor = '#FF8C42';
+            copyBtn.style.backgroundColor = 'var(--accent)';
             copyBtn.style.color = 'white';
             copyBtn.style.border = 'none';
             copyBtn.style.padding = '8px 20px';
@@ -753,35 +883,35 @@
             modalOverlay.style.zIndex = '1000';
             
             const modalContent = document.createElement('div');
-            modalContent.style.backgroundColor = '#fff';
+            modalContent.style.backgroundColor = 'var(--card-bg)';
             modalContent.style.padding = '24px';
             modalContent.style.borderRadius = '16px';
             modalContent.style.width = '320px';
             modalContent.style.maxWidth = '90%';
             modalContent.style.boxShadow = '0 20px 35px -12px rgba(0,0,0,0.3)';
-            modalContent.style.border = '1px solid #F0E0D0';
+            modalContent.style.border = '1px solid var(--card-border)';
             modalContent.style.textAlign = 'center';
             
             const title = document.createElement('h3');
             title.innerText = currentLang === 'zh' ? '📋 QQ社区' : '📋 QQ Community';
             title.style.marginBottom = '16px';
             title.style.fontSize = '18px';
-            title.style.color = '#2D2D2D';
+            title.style.color = 'var(--text-primary)';
             
             const textContainer = document.createElement('div');
-            textContainer.style.backgroundColor = '#FFF5E6';
+            textContainer.style.backgroundColor = 'var(--icon-bg)';
             textContainer.style.padding = '12px';
             textContainer.style.borderRadius = '8px';
             textContainer.style.marginBottom = '20px';
             textContainer.style.wordBreak = 'break-all';
             textContainer.style.fontSize = '14px';
             textContainer.style.fontFamily = 'monospace';
-            textContainer.style.color = '#E67A30';
+            textContainer.style.color = 'var(--accent)';
             textContainer.innerText = textToCopy;
             
             const copyBtn = document.createElement('button');
             copyBtn.innerText = currentLang === 'zh' ? '复制文本' : 'Copy';
-            copyBtn.style.backgroundColor = '#FF8C42';
+            copyBtn.style.backgroundColor = 'var(--accent)';
             copyBtn.style.color = 'white';
             copyBtn.style.border = 'none';
             copyBtn.style.padding = '8px 20px';
@@ -833,14 +963,44 @@
         document.getElementById('pclHomeBtn').addEventListener('click', createPCLModal);
         document.getElementById('qqBtn').addEventListener('click', createQQModal);
 
-        function initCookieBanner() {
-            const cookieConsent = getCookie('cookie_consent');
-            const banner = document.getElementById('cookieBanner');
-            const footerSection = document.getElementById('footerConsentSection');
-            
-            if (cookieConsent === 'accepted') {
-                banner.style.display = 'none';
-                footerSection.style.display = 'none';
+        function showCookieModal() {
+            const modal = document.createElement('div');
+            modal.className = 'cookie-modal';
+            const texts = translations[currentLang];
+            modal.innerHTML = `
+                <div class="cookie-modal-content">
+                    <p>${texts.cookieMessage}</p>
+                    <div class="cookie-modal-buttons">
+                        <button id="cookieAccept" class="cookie-accept">${texts.acceptBtn}</button>
+                        <button id="cookieDecline" class="cookie-decline">${texts.declineBtn}</button>
+                    </div>
+                </div>
+            `;
+            document.body.appendChild(modal);
+
+            document.getElementById('cookieAccept').addEventListener('click', () => {
+                setCookie('cookie_consent', 'accepted', 30);
+                setCookie('lang', currentLang, 30);
+                document.body.removeChild(modal);
+                document.getElementById('footerConsentSection').style.display = 'none';
+            });
+
+            document.getElementById('cookieDecline').addEventListener('click', () => {
+                setCookie('cookie_consent', 'declined', 30);
+                deleteCookie('lang');
+                document.body.removeChild(modal);
+                document.getElementById('footerConsentSection').style.display = 'block';
+            });
+        }
+
+        function initCookieConsent() {
+            const consent = getCookie('cookie_consent');
+            if (!consent) {
+                showCookieModal();
+            } else if (consent === 'declined') {
+                document.getElementById('footerConsentSection').style.display = 'block';
+                deleteCookie('lang');
+            } else if (consent === 'accepted') {
                 const savedLang = getCookie('lang');
                 if (savedLang && (savedLang === 'zh' || savedLang === 'en')) {
                     document.querySelectorAll('.lang-btn').forEach(btn => {
@@ -853,29 +1013,8 @@
                     });
                     switchLanguage(savedLang, false);
                 }
-            } else if (cookieConsent === 'declined') {
-                banner.style.display = 'none';
-                footerSection.style.display = 'block';
-                deleteCookie('lang');
-            } else {
-                banner.style.display = 'flex';
-                footerSection.style.display = 'none';
             }
         }
-
-        document.getElementById('acceptCookie').addEventListener('click', () => {
-            setCookie('cookie_consent', 'accepted', 30);
-            setCookie('lang', currentLang, 30);
-            document.getElementById('cookieBanner').style.display = 'none';
-            document.getElementById('footerConsentSection').style.display = 'none';
-        });
-
-        document.getElementById('declineCookie').addEventListener('click', () => {
-            setCookie('cookie_consent', 'declined', 30);
-            deleteCookie('lang');
-            document.getElementById('cookieBanner').style.display = 'none';
-            document.getElementById('footerConsentSection').style.display = 'block';
-        });
 
         document.getElementById('footerConsentBtn').addEventListener('click', () => {
             setCookie('cookie_consent', 'accepted', 30);
@@ -883,7 +1022,8 @@
             document.getElementById('footerConsentSection').style.display = 'none';
         });
 
-        initCookieBanner();
+        initTheme();
+        initCookieConsent();
     </script>
 </body>
 </html>
