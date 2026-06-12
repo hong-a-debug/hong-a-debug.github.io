@@ -12,8 +12,40 @@
             box-sizing: border-box;
         }
 
+        /* 浅色主题（默认） */
+        :root {
+            --bg-color: #FFF5E6;
+            --card-bg: #FFFFFF;
+            --card-border: #F0E0D0;
+            --text-primary: #2D2D2D;
+            --text-secondary: #888888;
+            --text-link: #AAAAAA;
+            --accent: #FF8C42;
+            --accent-hover: #E67A30;
+            --search-bg: #FFFFFF;
+            --icon-bg: #FFF0E5;
+            --cookie-bg: #2D2D2D;
+            --cookie-text: #FFFFFF;
+        }
+
+        /* 深色主题 - 纯黑背景 */
+        body.dark {
+            --bg-color: #000000;
+            --card-bg: #1a1a1a;
+            --card-border: #333333;
+            --text-primary: #eeeeee;
+            --text-secondary: #aaaaaa;
+            --text-link: #888888;
+            --accent: #27ae60;
+            --accent-hover: #2ecc71;
+            --search-bg: #2a2a2a;
+            --icon-bg: #2a2a2a;
+            --cookie-bg: #1a1a1a;
+            --cookie-text: #eeeeee;
+        }
+
         body {
-            background-color: #FFF5E6;
+            background-color: var(--bg-color);
             font-family: '微软雅黑', 'Segoe UI', system-ui, -apple-system, sans-serif;
             min-height: 100vh;
             display: flex;
@@ -21,6 +53,7 @@
             align-items: center;
             padding: 40px 20px;
             position: relative;
+            transition: background-color 0.3s, color 0.3s;
         }
 
         .language-selector {
@@ -28,8 +61,8 @@
             top: 20px;
             right: 24px;
             z-index: 200;
-            background-color: #FFFFFF;
-            border: 1px solid #F0E0D0;
+            background-color: var(--card-bg);
+            border: 1px solid var(--card-border);
             border-radius: 40px;
             padding: 6px 12px;
             display: flex;
@@ -46,31 +79,66 @@
             padding: 4px 10px;
             border-radius: 30px;
             transition: all 0.2s;
-            color: #888888;
+            color: var(--text-secondary);
             font-family: inherit;
         }
 
         .lang-btn.active {
-            background-color: #FF8C42;
+            background-color: var(--accent);
             color: white;
         }
 
         .lang-btn:not(.active):hover {
-            background-color: #FFF0E5;
-            color: #E67A30;
+            background-color: var(--icon-bg);
+            color: var(--accent);
+        }
+
+        /* 左上角深浅色按钮 */
+        .top-left-buttons {
+            position: fixed;
+            top: 20px;
+            left: 24px;
+            z-index: 200;
+            display: flex;
+            gap: 12px;
+            align-items: center;
+        }
+
+        .theme-btn {
+            background-color: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: 40px;
+            padding: 8px 14px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.2s;
+            color: var(--text-primary);
+            font-family: inherit;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .theme-btn:hover {
+            background-color: var(--accent);
+            color: white;
+            border-color: var(--accent);
+            transform: translateY(-1px);
         }
 
         .card {
-            background-color: #FFFFFF;
-            border: 1px solid #F0E0D0;
+            background-color: var(--card-bg);
+            border: 1px solid var(--card-border);
             box-shadow: 0 8px 20px rgba(0, 0, 0, 0.05);
             width: 560px;
             max-width: 100%;
             padding: 0 28px 36px 28px;
+            transition: background-color 0.3s, border-color 0.3s;
         }
 
         .top-bar {
-            background-color: #FF8C42;
+            background-color: var(--accent);
             height: 6px;
             width: calc(100% + 56px);
             margin: 0 -28px 0 -28px;
@@ -83,13 +151,13 @@
         .title {
             font-size: 22px;
             font-weight: 700;
-            color: #2D2D2D;
+            color: var(--text-primary);
             text-align: center;
             margin-bottom: 20px;
         }
 
         .big-btn {
-            background-color: #FF8C42;
+            background-color: var(--accent);
             color: white;
             font-size: 16px;
             font-weight: bold;
@@ -105,7 +173,7 @@
         }
 
         .big-btn:hover {
-            background-color: #E67A30;
+            background-color: var(--accent-hover);
             transform: translateY(-1px);
         }
 
@@ -116,7 +184,7 @@
         }
 
         .hint-text {
-            color: #888888;
+            color: var(--text-secondary);
             font-size: 11px;
             text-align: center;
             margin: 12px 0 20px 0;
@@ -124,7 +192,7 @@
 
         .divider {
             height: 1px;
-            background-color: #F0E0D0;
+            background-color: var(--card-border);
             margin: 20px 0;
             width: 100%;
         }
@@ -142,8 +210,8 @@
             align-items: center;
             gap: 6px;
             font-size: 12px;
-            color: #888888;
-            background: #FAFAFA;
+            color: var(--text-secondary);
+            background: var(--icon-bg);
             padding: 6px 14px;
             border-radius: 20px;
         }
@@ -156,7 +224,7 @@
 
         .preview-title {
             font-size: 13px;
-            color: #888888;
+            color: var(--text-secondary);
             margin-bottom: 12px;
             font-weight: 500;
         }
@@ -176,15 +244,15 @@
 
         .preview-box p {
             font-size: 11px;
-            color: #AAAAAA;
+            color: var(--text-link);
             margin-top: 8px;
         }
 
         .preview-img {
             width: 140px;
             height: 140px;
-            background-color: #FFF5E6;
-            border: 1px solid #F0E0D0;
+            background-color: var(--icon-bg);
+            border: 1px solid var(--card-border);
             border-radius: 12px;
             display: flex;
             align-items: center;
@@ -200,7 +268,7 @@
         }
 
         .preview-placeholder {
-            color: #CCCCCC;
+            color: var(--text-link);
             font-size: 12px;
         }
 
@@ -232,17 +300,18 @@
             display: inline-block;
             margin-top: 20px;
             padding: 8px 16px;
-            background-color: #F5F5F5;
+            background-color: var(--card-bg);
+            border: 1px solid var(--card-border);
             border-radius: 30px;
             text-decoration: none;
             font-size: 13px;
-            color: #888888;
+            color: var(--text-secondary);
             transition: all 0.2s;
         }
 
         .back-link:hover {
-            background-color: #FFF0E5;
-            color: #FF8C42;
+            background-color: var(--icon-bg);
+            color: var(--accent);
         }
 
         .error-message {
@@ -258,7 +327,7 @@
         .loading-indicator {
             text-align: center;
             padding: 20px;
-            color: #FF8C42;
+            color: var(--accent);
             font-size: 13px;
             display: none;
         }
@@ -266,14 +335,14 @@
         .cookie-notice {
             text-align: center;
             font-size: 10px;
-            color: #AAAAAA;
+            color: var(--text-link);
             margin-top: 16px;
             padding-top: 12px;
-            border-top: 1px solid #F0E0D0;
+            border-top: 1px solid var(--card-border);
         }
 
         .cookie-notice a {
-            color: #FF8C42;
+            color: var(--accent);
             text-decoration: none;
         }
 
@@ -309,10 +378,22 @@
                 font-size: 11px;
                 padding: 2px 8px;
             }
+            .top-left-buttons {
+                top: 12px;
+                left: 16px;
+            }
+            .theme-btn {
+                padding: 6px 12px;
+                font-size: 14px;
+            }
         }
     </style>
 </head>
 <body>
+    <div class="top-left-buttons">
+        <button id="themeToggle" class="theme-btn">🌙</button>
+    </div>
+
     <div class="language-selector">
         <button class="lang-btn active" data-lang="zh">中文</button>
         <button class="lang-btn" data-lang="en">English</button>
@@ -427,6 +508,41 @@
             return null;
         }
 
+        function setCookie(name, value, days) {
+            const date = new Date();
+            date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
+            document.cookie = name + "=" + value + "; expires=" + date.toUTCString() + "; path=/";
+        }
+
+        function initTheme() {
+            const savedTheme = getCookie('theme');
+            if (savedTheme === 'dark') {
+                document.body.classList.add('dark');
+                updateThemeButton('dark');
+            } else {
+                document.body.classList.remove('dark');
+                updateThemeButton('light');
+            }
+        }
+
+        function updateThemeButton(theme) {
+            const btn = document.getElementById('themeToggle');
+            if (!btn) return;
+            btn.innerHTML = theme === 'dark' ? '☀️' : '🌙';
+        }
+
+        function toggleTheme() {
+            if (document.body.classList.contains('dark')) {
+                document.body.classList.remove('dark');
+                setCookie('theme', 'light', 30);
+                updateThemeButton('light');
+            } else {
+                document.body.classList.add('dark');
+                setCookie('theme', 'dark', 30);
+                updateThemeButton('dark');
+            }
+        }
+
         function switchLanguage(lang) {
             currentLang = lang;
             const texts = translations[lang];
@@ -454,7 +570,13 @@
             
             const cookieNotice = document.getElementById('cookieNotice');
             if (cookieNotice) cookieNotice.innerHTML = texts.cookieNotice;
+            
+            if (getCookie('cookie_consent') === 'accepted') {
+                setCookie('lang', lang, 30);
+            }
         }
+
+        document.getElementById('themeToggle')?.addEventListener('click', toggleTheme);
 
         document.querySelectorAll('.lang-btn').forEach(btn => {
             btn.addEventListener('click', () => {
@@ -620,6 +742,8 @@
             });
             switchLanguage(savedLang);
         }
+
+        initTheme();
     </script>
 </body>
 </html>
