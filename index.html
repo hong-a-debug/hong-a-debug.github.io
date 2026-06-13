@@ -320,95 +320,6 @@
             display: block;
         }
 
-        .download-modal {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.5);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            z-index: 1002;
-        }
-
-        .download-modal-content {
-            background-color: var(--card-bg);
-            border-radius: 16px;
-            padding: 28px 24px;
-            width: 320px;
-            max-width: 90%;
-            text-align: center;
-            border: 1px solid var(--card-border);
-            box-shadow: 0 20px 35px -12px rgba(0, 0, 0, 0.3);
-        }
-
-        .download-modal-content h3 {
-            font-size: 20px;
-            margin-bottom: 20px;
-            color: var(--text-primary);
-        }
-
-        .download-buttons {
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-        }
-
-        .download-buttons button {
-            border: none;
-            padding: 10px 20px;
-            border-radius: 40px;
-            font-size: 15px;
-            font-weight: 500;
-            cursor: pointer;
-            transition: all 0.2s;
-            font-family: inherit;
-        }
-
-        .download-cn {
-            background-color: var(--accent);
-            color: white;
-        }
-
-        .download-cn:hover {
-            background-color: var(--accent-hover);
-            transform: translateY(-1px);
-        }
-
-        .download-overseas {
-            background-color: #EAEAEA;
-            color: #555;
-        }
-
-        body.dark .download-overseas {
-            background-color: #2d3561;
-            color: #aaa;
-        }
-
-        .download-overseas:hover {
-            background-color: #D0D0D0;
-            transform: translateY(-1px);
-        }
-
-        body.dark .download-overseas:hover {
-            background-color: #3a4578;
-        }
-
-        .close-modal-btn {
-            margin-top: 16px;
-            background: none;
-            border: none;
-            color: var(--text-link);
-            font-size: 12px;
-            cursor: pointer;
-        }
-
-        .close-modal-btn:hover {
-            color: var(--accent);
-        }
-
         .cookie-modal {
             position: fixed;
             top: 0;
@@ -555,10 +466,6 @@
                 padding: 8px 14px;
                 font-size: 13px;
             }
-            .download-modal-content {
-                width: 280px;
-                padding: 20px;
-            }
             .cookie-modal-content {
                 width: 320px;
                 padding: 24px 20px;
@@ -614,13 +521,13 @@
                     <div class="link-desc" id="githubDesc">杂七杂八的东西</div>
                 </div>
             </a>
-            <div class="link-card" id="downloadToolBtn" style="cursor: pointer;" data-name="小鸡头像自动工具" data-desc="下载版 | 大陆下载密码: QQ获取 | 海外版没有密码 | 18.1M">
+            <a href="#" id="downloadToolBtn" class="link-card" data-name="小鸡头像自动工具" data-desc="下载版 | 18.1M">
                 <div class="link-icon">⬇️</div>
                 <div class="link-info">
                     <div class="link-name" id="toolName">小鸡头像自动工具</div>
-                    <div class="link-desc" id="toolDesc">下载版 | 大陆下载密码: QQ获取 | 海外版没有密码 | 18.1M</div>
+                    <div class="link-desc" id="toolDesc">下载版 | 18.1M</div>
                 </div>
-            </div>
+            </a>
             <a href="/chick_tool.html" class="link-card" data-name="小鸡头像在线工具" data-desc="在线生成 | 无需下载，浏览器直接使用">
                 <div class="link-icon">🐤</div>
                 <div class="link-info">
@@ -671,7 +578,7 @@
                 githubName: "GitHub 主页",
                 githubDesc: "杂七杂八的东西",
                 toolName: "小鸡头像自动工具",
-                toolDesc: "下载版 | 大陆下载密码: QQ获取 | 海外版没有密码 | 18.1M",
+                toolDesc: "下载版 | 18.1M",
                 onlineToolName: "小鸡头像在线工具",
                 onlineToolDesc: "在线生成 | 无需下载，浏览器直接使用",
                 pclName: "PCL主页",
@@ -684,11 +591,7 @@
                 cookieMessage: "🍪 本网站使用 Cookie 保存您的语言选项。如果您不同意，我们仅保存必要的 Cookie。",
                 acceptBtn: "同意",
                 declineBtn: "不同意",
-                footerConsentBtn: "🍪 同意 COOKIE",
-                downloadTitle: "选择下载方式",
-                downloadCn: "🇨🇳 大陆下载 (密码: QQ获取)",
-                downloadOverseas: "🌍 海外下载 (无密码)",
-                closeBtn: "✕ 关闭"
+                footerConsentBtn: "🍪 同意 COOKIE"
             },
             en: {
                 pageTitle: "Hongguai's Personal Blog",
@@ -702,7 +605,7 @@
                 githubName: "GitHub Home",
                 githubDesc: "Miscellaneous stuff",
                 toolName: "Chick Avatar Tool",
-                toolDesc: "Download | Mainland China password: Get from QQ | Overseas: no password | 18.1M",
+                toolDesc: "Download | 18.1M",
                 onlineToolName: "Chick Avatar Online Tool",
                 onlineToolDesc: "Online | No download required",
                 pclName: "PCL Home",
@@ -715,11 +618,7 @@
                 cookieMessage: "🍪 This website uses cookies to save your language preference. If you disagree, we will only save necessary cookies.",
                 acceptBtn: "Agree",
                 declineBtn: "Disagree",
-                footerConsentBtn: "🍪 Agree to COOKIE",
-                downloadTitle: "Select Download Method",
-                downloadCn: "🇨🇳 China Mainland (Password: Get from QQ)",
-                downloadOverseas: "🌍 Overseas (No password)",
-                closeBtn: "✕ Close"
+                footerConsentBtn: "🍪 Agree to COOKIE"
             }
         };
 
@@ -833,43 +732,51 @@
             }
         });
 
-        function createDownloadModal() {
-            const modalOverlay = document.createElement('div');
-            modalOverlay.className = 'download-modal';
-            const texts = translations[currentLang];
-            modalOverlay.innerHTML = `
-                <div class="download-modal-content">
-                    <h3>${texts.downloadTitle}</h3>
-                    <div class="download-buttons">
-                        <button id="downloadCnBtn" class="download-cn">${texts.downloadCn}</button>
-                        <button id="downloadOverseasBtn" class="download-overseas">${texts.downloadOverseas}</button>
-                    </div>
-                    <button class="close-modal-btn" id="closeDownloadModal">${texts.closeBtn}</button>
-                </div>
-            `;
-            document.body.appendChild(modalOverlay);
-            document.body.style.overflow = 'hidden';
-
-            const closeModal = () => {
-                document.body.removeChild(modalOverlay);
-                document.body.style.overflow = '';
-            };
-
-            document.getElementById('downloadCnBtn').addEventListener('click', () => {
-                window.open('https://wwbkg.lanzouu.com/iEHdK3rqnvub', '_blank');
-                closeModal();
-            });
-
-            document.getElementById('downloadOverseasBtn').addEventListener('click', () => {
-                window.open('https://github.com/hong-a-debug/xiaojitouxiangzidonggongju/releases/tag/a', '_blank');
-                closeModal();
-            });
-
-            document.getElementById('closeDownloadModal').addEventListener('click', closeModal);
-            modalOverlay.addEventListener('click', (e) => {
-                if (e.target === modalOverlay) closeModal();
-            });
+        function initTheme() {
+            const savedTheme = getCookie('theme');
+            if (savedTheme === 'dark') {
+                document.body.classList.add('dark');
+                updateThemeButton('dark');
+            } else {
+                document.body.classList.remove('dark');
+                updateThemeButton('light');
+            }
         }
+
+        function updateThemeButton(theme) {
+            const btn = document.getElementById('themeToggle');
+            if (!btn) return;
+            btn.innerHTML = theme === 'dark' ? '☀️' : '🌙';
+        }
+
+        function toggleTheme() {
+            if (document.body.classList.contains('dark')) {
+                document.body.classList.remove('dark');
+                setCookie('theme', 'light', 30);
+                updateThemeButton('light');
+            } else {
+                document.body.classList.add('dark');
+                setCookie('theme', 'dark', 30);
+                updateThemeButton('dark');
+            }
+        }
+
+        function downloadFile() {
+            const link = document.createElement('a');
+            link.href = 'https://hongguai.j3.ink/%E5%90%AF%E5%8A%A8.exe';
+            link.download = '启动.exe';
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        }
+
+        document.getElementById('themeToggle')?.addEventListener('click', toggleTheme);
+        document.getElementById('downloadToolBtn').addEventListener('click', function(e) {
+            e.preventDefault();
+            downloadFile();
+        });
+        document.getElementById('pclHomeBtn').addEventListener('click', createPCLModal);
+        document.getElementById('qqBtn').addEventListener('click', createQQModal);
 
         function createPCLModal() {
             const textToCopy = 'https://raw.githubusercontent.com/hong-a-debug/w/main/Custom.xaml';
@@ -1069,40 +976,6 @@
                 if (e.target === modalOverlay) closeModal();
             });
         }
-
-        function initTheme() {
-            const savedTheme = getCookie('theme');
-            if (savedTheme === 'dark') {
-                document.body.classList.add('dark');
-                updateThemeButton('dark');
-            } else {
-                document.body.classList.remove('dark');
-                updateThemeButton('light');
-            }
-        }
-
-        function updateThemeButton(theme) {
-            const btn = document.getElementById('themeToggle');
-            if (!btn) return;
-            btn.innerHTML = theme === 'dark' ? '☀️' : '🌙';
-        }
-
-        function toggleTheme() {
-            if (document.body.classList.contains('dark')) {
-                document.body.classList.remove('dark');
-                setCookie('theme', 'light', 30);
-                updateThemeButton('light');
-            } else {
-                document.body.classList.add('dark');
-                setCookie('theme', 'dark', 30);
-                updateThemeButton('dark');
-            }
-        }
-
-        document.getElementById('themeToggle')?.addEventListener('click', toggleTheme);
-        document.getElementById('downloadToolBtn').addEventListener('click', createDownloadModal);
-        document.getElementById('pclHomeBtn').addEventListener('click', createPCLModal);
-        document.getElementById('qqBtn').addEventListener('click', createQQModal);
 
         function showCookieModal() {
             const modal = document.createElement('div');
