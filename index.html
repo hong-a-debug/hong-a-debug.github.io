@@ -687,7 +687,8 @@
                 footerConsentBtn: "🍪 同意 COOKIE",
                 downloadTitle: "选择下载方式",
                 downloadCn: "🇨🇳 大陆下载 (密码: QQ获取)",
-                downloadOverseas: "🌍 海外下载 (无密码)"
+                downloadOverseas: "🌍 海外下载 (无密码)",
+                closeBtn: "✕ 关闭"
             },
             en: {
                 pageTitle: "Hongguai's Personal Blog",
@@ -717,7 +718,8 @@
                 footerConsentBtn: "🍪 Agree to COOKIE",
                 downloadTitle: "Select Download Method",
                 downloadCn: "🇨🇳 China Mainland (Password: Get from QQ)",
-                downloadOverseas: "🌍 Overseas (No password)"
+                downloadOverseas: "🌍 Overseas (No password)",
+                closeBtn: "✕ Close"
             }
         };
 
@@ -842,7 +844,7 @@
                         <button id="downloadCnBtn" class="download-cn">${texts.downloadCn}</button>
                         <button id="downloadOverseasBtn" class="download-overseas">${texts.downloadOverseas}</button>
                     </div>
-                    <button class="close-modal-btn" id="closeDownloadModal">✕ 关闭</button>
+                    <button class="close-modal-btn" id="closeDownloadModal">${texts.closeBtn}</button>
                 </div>
             `;
             document.body.appendChild(modalOverlay);
