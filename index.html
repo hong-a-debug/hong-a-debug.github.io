@@ -521,6 +521,13 @@
                     <div class="link-desc" id="githubDesc">杂七杂八的东西</div>
                 </div>
             </a>
+            <a href="https://modrinth.com/user/HongGuai" target="_blank" class="link-card" data-name="Modrinth 主页" data-desc="红怪的Modrinth主页，主要是一些Minecraft相关的东西">
+                <div class="link-icon">🎮</div>
+                <div class="link-info">
+                    <div class="link-name" id="modrinthName">红怪的Modrinth主页</div>
+                    <div class="link-desc" id="modrinthDesc">红怪在Modrinth的主页，主要是一些Minecraft相关的东西</div>
+                </div>
+            </a>
             <a href="#" id="downloadToolBtn" class="link-card" data-name="小鸡头像自动工具" data-desc="下载版 | 18.1M">
                 <div class="link-icon">⬇️</div>
                 <div class="link-info">
@@ -577,6 +584,8 @@
                 discordDesc: "红怪的 Discord 邀请链接",
                 githubName: "GitHub 主页",
                 githubDesc: "杂七杂八的东西",
+                modrinthName: "红怪的Modrinth主页",
+                modrinthDesc: "红怪在Modrinth的主页，主要是一些Minecraft相关的东西",
                 toolName: "小鸡头像自动工具",
                 toolDesc: "下载版 | 18.1M",
                 onlineToolName: "小鸡头像在线工具",
@@ -604,6 +613,8 @@
                 discordDesc: "Hongguai's Discord invite",
                 githubName: "GitHub Home",
                 githubDesc: "Miscellaneous stuff",
+                modrinthName: "Hongguai's Modrinth Home",
+                modrinthDesc: "Hongguai's Modrinth profile, mainly Minecraft related stuff",
                 toolName: "Chick Avatar Tool",
                 toolDesc: "Download | 18.1M",
                 onlineToolName: "Chick Avatar Online Tool",
@@ -679,6 +690,18 @@
             document.getElementById('discordDesc').textContent = texts.discordDesc;
             document.getElementById('githubName').textContent = texts.githubName;
             document.getElementById('githubDesc').textContent = texts.githubDesc;
+            // Modrinth 元素更新
+            const modrinthNameEl = document.getElementById('modrinthName');
+            const modrinthDescEl = document.getElementById('modrinthDesc');
+            if (modrinthNameEl) modrinthNameEl.textContent = texts.modrinthName;
+            if (modrinthDescEl) modrinthDescEl.textContent = texts.modrinthDesc;
+            // 同时更新对应的data属性，用于搜索
+            const modrinthLink = document.querySelector('a.link-card[href="https://modrinth.com/user/HongGuai"]');
+            if (modrinthLink) {
+                modrinthLink.setAttribute('data-name', texts.modrinthName);
+                modrinthLink.setAttribute('data-desc', texts.modrinthDesc);
+            }
+            
             document.getElementById('toolName').textContent = texts.toolName;
             document.getElementById('toolDesc').textContent = texts.toolDesc;
             document.getElementById('onlineToolName').textContent = texts.onlineToolName;
