@@ -25,6 +25,8 @@
             --icon-bg: #FFF0E5;
             --cookie-bg: #2D2D2D;
             --cookie-text: #FFFFFF;
+            --tip-bg: #f0f8f0;
+            --tip-border: #4CAF50;
         }
 
         body.dark {
@@ -40,6 +42,8 @@
             --icon-bg: #2a2a2a;
             --cookie-bg: #1a1a1a;
             --cookie-text: #eeeeee;
+            --tip-bg: #1a2a1a;
+            --tip-border: #2ecc71;
         }
 
         body {
@@ -422,6 +426,97 @@
             transform: translateY(-1px);
         }
 
+        .pcl-modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+        .pcl-modal-box {
+            background-color: var(--card-bg);
+            border-radius: 16px;
+            padding: 28px 24px;
+            width: 380px;
+            max-width: 90%;
+            box-shadow: 0 20px 35px -12px rgba(0,0,0,0.3);
+            border: 1px solid var(--card-border);
+            text-align: center;
+        }
+        .pcl-modal-box h3 {
+            font-size: 18px;
+            margin-bottom: 12px;
+            color: var(--text-primary);
+        }
+        .pcl-modal-box .tip-text {
+            background-color: var(--icon-bg);
+            padding: 8px 12px;
+            border-radius: 8px;
+            margin-bottom: 16px;
+            font-size: 12px;
+            color: var(--accent);
+            text-align: left;
+        }
+        .pcl-modal-box .content-box {
+            background-color: var(--icon-bg);
+            padding: 12px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            word-break: break-all;
+            font-size: 12px;
+            font-family: monospace;
+            color: var(--accent);
+        }
+        .pcl-modal-box .btn-group {
+            display: flex;
+            gap: 12px;
+            justify-content: center;
+        }
+        .pcl-modal-box .btn-group button {
+            border: none;
+            padding: 8px 24px;
+            border-radius: 40px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-family: inherit;
+        }
+        .btn-confirm {
+            background-color: #4CAF50;
+            color: white;
+        }
+        .btn-confirm:hover {
+            background-color: #43a047;
+            transform: translateY(-1px);
+        }
+        body.dark .btn-confirm {
+            background-color: #2e7d32;
+        }
+        body.dark .btn-confirm:hover {
+            background-color: #388e3c;
+        }
+        .btn-close-modal {
+            background-color: #EAEAEA;
+            color: #555;
+        }
+        body.dark .btn-close-modal {
+            background-color: #333333;
+            color: #aaaaaa;
+        }
+        .btn-close-modal:hover {
+            background-color: #D0D0D0;
+            transform: translateY(-1px);
+        }
+        body.dark .btn-close-modal:hover {
+            background-color: #444444;
+        }
+
         @media (max-width: 560px) {
             body {
                 padding: 20px 16px;
@@ -470,8 +565,9 @@
                 width: 320px;
                 padding: 24px 20px;
             }
-            .cookie-modal-content p {
-                font-size: 13px;
+            .pcl-modal-box {
+                width: 320px;
+                padding: 24px 20px;
             }
         }
     </style>
@@ -528,13 +624,13 @@
                     <div class="link-desc" id="modrinthDesc">红怪在Modrinth的主页，主要是一些Minecraft相关的东西</div>
                 </div>
             </a>
-            <a href="#" id="downloadToolBtn" class="link-card" data-name="小鸡头像自动工具" data-desc="下载版 | 18.1M">
+            <div id="downloadToolBtn" class="link-card" style="cursor: pointer;" data-name="小鸡头像自动工具" data-desc="下载版 | 18.1M">
                 <div class="link-icon">⬇️</div>
                 <div class="link-info">
                     <div class="link-name" id="toolName">小鸡头像自动工具</div>
                     <div class="link-desc" id="toolDesc">下载版 | 18.1M</div>
                 </div>
-            </a>
+            </div>
             <a href="/chick_tool.html" class="link-card" data-name="小鸡头像在线工具" data-desc="在线生成 | 无需下载，浏览器直接使用">
                 <div class="link-icon">🐤</div>
                 <div class="link-info">
@@ -600,7 +696,21 @@
                 cookieMessage: "🍪 本网站使用 Cookie 保存您的语言选项。如果您不同意，我们仅保存必要的 Cookie。",
                 acceptBtn: "同意",
                 declineBtn: "不同意",
-                footerConsentBtn: "🍪 同意 COOKIE"
+                footerConsentBtn: "🍪 同意 COOKIE",
+                pclModalTitle: "📋 复制内容",
+                pclModalTip: "复制到设置→个性化→主页→联网更新→下载地址",
+                pclModalCopy: "复制",
+                pclModalClose: "关闭",
+                pclModalCopied: "✅ 已复制",
+                qqModalTitle: "📋 QQ社区",
+                qqModalCopy: "复制",
+                qqModalClose: "关闭",
+                qqModalCopied: "✅ 已复制",
+                downloadModalTitle: "📥 下载确认",
+                downloadModalTip: "该工具下载后如被 Windows 提示\"不安全\"，这是微软的误报机制，与 Fabric、(Neo)Forge 等知名模组加载器遇到的情况完全相同。请放心点击\"保留\"或\"仍然保留\"继续使用。",
+                downloadModalInfo: "📥 小鸡头像自动工具 (18.1M)",
+                downloadModalConfirm: "下载",
+                downloadModalCancel: "取消"
             },
             en: {
                 pageTitle: "Hongguai's Personal Blog",
@@ -629,7 +739,21 @@
                 cookieMessage: "🍪 This website uses cookies to save your language preference. If you disagree, we will only save necessary cookies.",
                 acceptBtn: "Agree",
                 declineBtn: "Disagree",
-                footerConsentBtn: "🍪 Agree to COOKIE"
+                footerConsentBtn: "🍪 Agree to COOKIE",
+                pclModalTitle: "📋 Copy Text",
+                pclModalTip: "Copy to Settings → Personalization → Home → Online Update → Download URL",
+                pclModalCopy: "Copy",
+                pclModalClose: "Close",
+                pclModalCopied: "✅ Copied",
+                qqModalTitle: "📋 QQ Community",
+                qqModalCopy: "Copy",
+                qqModalClose: "Close",
+                qqModalCopied: "✅ Copied",
+                downloadModalTitle: "📥 Download Confirm",
+                downloadModalTip: "If Windows marks this tool as 'unsafe' after download, this is a false positive from Microsoft's security system — exactly the same situation as Fabric, (Neo)Forge and other well-known mod loaders. Please feel free to click 'Keep' or 'Keep Anyway' to continue.",
+                downloadModalInfo: "📥 Chick Avatar Tool (18.1M)",
+                downloadModalConfirm: "Download",
+                downloadModalCancel: "Cancel"
             }
         };
 
@@ -656,7 +780,6 @@
             const keyword = document.getElementById('searchInput').value.trim().toLowerCase();
             const links = document.querySelectorAll('#linksGrid .link-card');
             let hasVisible = false;
-            
             links.forEach(link => {
                 const name = link.getAttribute('data-name') || '';
                 const desc = link.getAttribute('data-desc') || '';
@@ -667,7 +790,6 @@
                     link.classList.add('hidden');
                 }
             });
-            
             const noResult = document.getElementById('noResult');
             if (hasVisible || keyword === '') {
                 noResult.classList.remove('show');
@@ -679,7 +801,6 @@
         function switchLanguage(lang, saveToCookie = true) {
             currentLang = lang;
             const texts = translations[lang];
-            
             document.title = texts.pageTitle;
             document.getElementById('siteName').textContent = texts.siteName;
             document.getElementById('bilibiliBtn').innerHTML = texts.bilibiliBtn;
@@ -690,18 +811,15 @@
             document.getElementById('discordDesc').textContent = texts.discordDesc;
             document.getElementById('githubName').textContent = texts.githubName;
             document.getElementById('githubDesc').textContent = texts.githubDesc;
-            // Modrinth 元素更新
             const modrinthNameEl = document.getElementById('modrinthName');
             const modrinthDescEl = document.getElementById('modrinthDesc');
             if (modrinthNameEl) modrinthNameEl.textContent = texts.modrinthName;
             if (modrinthDescEl) modrinthDescEl.textContent = texts.modrinthDesc;
-            // 同时更新对应的data属性，用于搜索
             const modrinthLink = document.querySelector('a.link-card[href="https://modrinth.com/user/HongGuai"]');
             if (modrinthLink) {
                 modrinthLink.setAttribute('data-name', texts.modrinthName);
                 modrinthLink.setAttribute('data-desc', texts.modrinthDesc);
             }
-            
             document.getElementById('toolName').textContent = texts.toolName;
             document.getElementById('toolDesc').textContent = texts.toolDesc;
             document.getElementById('onlineToolName').textContent = texts.onlineToolName;
@@ -713,21 +831,15 @@
             document.getElementById('licenseName').textContent = texts.licenseName;
             document.getElementById('licenseDesc').textContent = texts.licenseDesc;
             document.getElementById('noResult').textContent = texts.noResult;
-            
             const cookieTextEl = document.getElementById('cookieText');
             if (cookieTextEl) cookieTextEl.textContent = texts.cookieMessage;
-            
             const acceptBtn = document.getElementById('acceptCookie');
             if (acceptBtn) acceptBtn.textContent = texts.acceptBtn;
-            
             const declineBtn = document.getElementById('declineCookie');
             if (declineBtn) declineBtn.textContent = texts.declineBtn;
-            
             const footerConsentBtn = document.getElementById('footerConsentBtn');
             if (footerConsentBtn) footerConsentBtn.textContent = texts.footerConsentBtn;
-            
             filterLinks();
-            
             if (saveToCookie && getCookie('cookie_consent') === 'accepted') {
                 setCookie('lang', lang, 30);
             }
@@ -794,209 +906,130 @@
         }
 
         document.getElementById('themeToggle')?.addEventListener('click', toggleTheme);
+
         document.getElementById('downloadToolBtn').addEventListener('click', function(e) {
             e.preventDefault();
-            downloadFile();
+            showDownloadModal();
         });
+
+        function showDownloadModal() {
+            const texts = translations[currentLang];
+            const overlay = document.createElement('div');
+            overlay.className = 'pcl-modal-overlay';
+            overlay.innerHTML = `
+                <div class="pcl-modal-box">
+                    <h3>${texts.downloadModalTitle}</h3>
+                    <div class="tip-text">${texts.downloadModalTip}</div>
+                    <div class="content-box">${texts.downloadModalInfo}</div>
+                    <div class="btn-group">
+                        <button class="btn-confirm" id="modalConfirmBtn">${texts.downloadModalConfirm}</button>
+                        <button class="btn-close-modal" id="modalCloseBtn">${texts.downloadModalCancel}</button>
+                    </div>
+                </div>
+            `;
+            document.body.appendChild(overlay);
+            document.body.style.overflow = 'hidden';
+
+            document.getElementById('modalConfirmBtn').addEventListener('click', function() {
+                downloadFile();
+                document.body.removeChild(overlay);
+                document.body.style.overflow = '';
+            });
+            document.getElementById('modalCloseBtn').addEventListener('click', function() {
+                document.body.removeChild(overlay);
+                document.body.style.overflow = '';
+            });
+            overlay.addEventListener('click', function(e) {
+                if (e.target === overlay) {
+                    document.body.removeChild(overlay);
+                    document.body.style.overflow = '';
+                }
+            });
+        }
+
         document.getElementById('pclHomeBtn').addEventListener('click', createPCLModal);
         document.getElementById('qqBtn').addEventListener('click', createQQModal);
 
         function createPCLModal() {
             const textToCopy = 'https://raw.githubusercontent.com/hong-a-debug/w/main/Custom.xaml';
-            const modalOverlay = document.createElement('div');
-            modalOverlay.style.position = 'fixed';
-            modalOverlay.style.top = '0';
-            modalOverlay.style.left = '0';
-            modalOverlay.style.width = '100%';
-            modalOverlay.style.height = '100%';
-            modalOverlay.style.backgroundColor = 'rgba(0,0,0,0.5)';
-            modalOverlay.style.display = 'flex';
-            modalOverlay.style.justifyContent = 'center';
-            modalOverlay.style.alignItems = 'center';
-            modalOverlay.style.zIndex = '1000';
+            const texts = translations[currentLang];
+            const overlay = document.createElement('div');
+            overlay.className = 'pcl-modal-overlay';
+            overlay.innerHTML = `
+                <div class="pcl-modal-box">
+                    <h3>${texts.pclModalTitle}</h3>
+                    <div class="tip-text">${texts.pclModalTip}</div>
+                    <div class="content-box">${textToCopy}</div>
+                    <div class="btn-group">
+                        <button class="btn-confirm" id="pclCopyBtn">${texts.pclModalCopy}</button>
+                        <button class="btn-close-modal" id="pclCloseBtn">${texts.pclModalClose}</button>
+                    </div>
+                </div>
+            `;
+            document.body.appendChild(overlay);
             document.body.style.overflow = 'hidden';
-            
-            const modalContent = document.createElement('div');
-            modalContent.style.backgroundColor = 'var(--card-bg)';
-            modalContent.style.padding = '24px';
-            modalContent.style.borderRadius = '16px';
-            modalContent.style.width = '320px';
-            modalContent.style.maxWidth = '90%';
-            modalContent.style.boxShadow = '0 20px 35px -12px rgba(0,0,0,0.3)';
-            modalContent.style.border = '1px solid var(--card-border)';
-            modalContent.style.textAlign = 'center';
-            
-            const title = document.createElement('h3');
-            title.innerText = currentLang === 'zh' ? '📋 复制内容' : '📋 Copy Text';
-            title.style.marginBottom = '16px';
-            title.style.fontSize = '18px';
-            title.style.color = 'var(--text-primary)';
-            
-            const tipText = document.createElement('div');
-            tipText.innerText = currentLang === 'zh' ? '复制到设置→个性化→主页→联网更新→下载地址' : 'Copy to Settings → Personalization → Home → Online Update → Download URL';
-            tipText.style.backgroundColor = 'var(--icon-bg)';
-            tipText.style.padding = '8px';
-            tipText.style.borderRadius = '8px';
-            tipText.style.marginBottom = '16px';
-            tipText.style.fontSize = '12px';
-            tipText.style.color = 'var(--accent)';
-            tipText.style.textAlign = 'center';
-            
-            const textContainer = document.createElement('div');
-            textContainer.style.backgroundColor = 'var(--icon-bg)';
-            textContainer.style.padding = '12px';
-            textContainer.style.borderRadius = '8px';
-            textContainer.style.marginBottom = '20px';
-            textContainer.style.wordBreak = 'break-all';
-            textContainer.style.fontSize = '12px';
-            textContainer.style.fontFamily = 'monospace';
-            textContainer.style.color = 'var(--accent)';
-            textContainer.innerText = textToCopy;
-            
-            const copyBtn = document.createElement('button');
-            copyBtn.innerText = currentLang === 'zh' ? '复制文本' : 'Copy';
-            copyBtn.style.backgroundColor = 'var(--accent)';
-            copyBtn.style.color = 'white';
-            copyBtn.style.border = 'none';
-            copyBtn.style.padding = '8px 20px';
-            copyBtn.style.borderRadius = '40px';
-            copyBtn.style.fontSize = '14px';
-            copyBtn.style.cursor = 'pointer';
-            copyBtn.style.marginRight = '12px';
-            
-            const closeBtn = document.createElement('button');
-            closeBtn.innerText = currentLang === 'zh' ? '关闭' : 'Close';
-            closeBtn.style.backgroundColor = '#EAEAEA';
-            closeBtn.style.color = '#555';
-            closeBtn.style.border = 'none';
-            closeBtn.style.padding = '8px 20px';
-            closeBtn.style.borderRadius = '40px';
-            closeBtn.style.fontSize = '14px';
-            closeBtn.style.cursor = 'pointer';
-            
-            const btnWrapper = document.createElement('div');
-            btnWrapper.appendChild(copyBtn);
-            btnWrapper.appendChild(closeBtn);
-            
-            modalContent.appendChild(title);
-            modalContent.appendChild(tipText);
-            modalContent.appendChild(textContainer);
-            modalContent.appendChild(btnWrapper);
-            modalOverlay.appendChild(modalContent);
-            document.body.appendChild(modalOverlay);
-            
+
+            const copyBtn = document.getElementById('pclCopyBtn');
             copyBtn.addEventListener('click', () => {
                 navigator.clipboard.writeText(textToCopy).then(() => {
-                    copyBtn.innerText = currentLang === 'zh' ? '✅ 已复制' : '✅ Copied';
+                    copyBtn.textContent = texts.pclModalCopied;
                     setTimeout(() => {
-                        copyBtn.innerText = currentLang === 'zh' ? '复制文本' : 'Copy';
+                        copyBtn.textContent = texts.pclModalCopy;
                     }, 1500);
                 }).catch(() => {
                     alert(currentLang === 'zh' ? '复制失败，请手动选择文本' : 'Copy failed, please select manually');
                 });
             });
-            
-            const closeModal = () => {
-                document.body.removeChild(modalOverlay);
+            document.getElementById('pclCloseBtn').addEventListener('click', () => {
+                document.body.removeChild(overlay);
                 document.body.style.overflow = '';
-            };
-            closeBtn.addEventListener('click', closeModal);
-            modalOverlay.addEventListener('click', (e) => {
-                if (e.target === modalOverlay) closeModal();
+            });
+            overlay.addEventListener('click', (e) => {
+                if (e.target === overlay) {
+                    document.body.removeChild(overlay);
+                    document.body.style.overflow = '';
+                }
             });
         }
 
         function createQQModal() {
             const textToCopy = '301595234';
-            const modalOverlay = document.createElement('div');
-            modalOverlay.style.position = 'fixed';
-            modalOverlay.style.top = '0';
-            modalOverlay.style.left = '0';
-            modalOverlay.style.width = '100%';
-            modalOverlay.style.height = '100%';
-            modalOverlay.style.backgroundColor = 'rgba(0,0,0,0.5)';
-            modalOverlay.style.display = 'flex';
-            modalOverlay.style.justifyContent = 'center';
-            modalOverlay.style.alignItems = 'center';
-            modalOverlay.style.zIndex = '1000';
+            const texts = translations[currentLang];
+            const overlay = document.createElement('div');
+            overlay.className = 'pcl-modal-overlay';
+            overlay.innerHTML = `
+                <div class="pcl-modal-box">
+                    <h3>${texts.qqModalTitle}</h3>
+                    <div class="content-box">${textToCopy}</div>
+                    <div class="btn-group">
+                        <button class="btn-confirm" id="qqCopyBtn">${texts.qqModalCopy}</button>
+                        <button class="btn-close-modal" id="qqCloseBtn">${texts.qqModalClose}</button>
+                    </div>
+                </div>
+            `;
+            document.body.appendChild(overlay);
             document.body.style.overflow = 'hidden';
-            
-            const modalContent = document.createElement('div');
-            modalContent.style.backgroundColor = 'var(--card-bg)';
-            modalContent.style.padding = '24px';
-            modalContent.style.borderRadius = '16px';
-            modalContent.style.width = '320px';
-            modalContent.style.maxWidth = '90%';
-            modalContent.style.boxShadow = '0 20px 35px -12px rgba(0,0,0,0.3)';
-            modalContent.style.border = '1px solid var(--card-border)';
-            modalContent.style.textAlign = 'center';
-            
-            const title = document.createElement('h3');
-            title.innerText = currentLang === 'zh' ? '📋 QQ社区' : '📋 QQ Community';
-            title.style.marginBottom = '16px';
-            title.style.fontSize = '18px';
-            title.style.color = 'var(--text-primary)';
-            
-            const textContainer = document.createElement('div');
-            textContainer.style.backgroundColor = 'var(--icon-bg)';
-            textContainer.style.padding = '12px';
-            textContainer.style.borderRadius = '8px';
-            textContainer.style.marginBottom = '20px';
-            textContainer.style.wordBreak = 'break-all';
-            textContainer.style.fontSize = '14px';
-            textContainer.style.fontFamily = 'monospace';
-            textContainer.style.color = 'var(--accent)';
-            textContainer.innerText = textToCopy;
-            
-            const copyBtn = document.createElement('button');
-            copyBtn.innerText = currentLang === 'zh' ? '复制文本' : 'Copy';
-            copyBtn.style.backgroundColor = 'var(--accent)';
-            copyBtn.style.color = 'white';
-            copyBtn.style.border = 'none';
-            copyBtn.style.padding = '8px 20px';
-            copyBtn.style.borderRadius = '40px';
-            copyBtn.style.fontSize = '14px';
-            copyBtn.style.cursor = 'pointer';
-            copyBtn.style.marginRight = '12px';
-            
-            const closeBtn = document.createElement('button');
-            closeBtn.innerText = currentLang === 'zh' ? '关闭' : 'Close';
-            closeBtn.style.backgroundColor = '#EAEAEA';
-            closeBtn.style.color = '#555';
-            closeBtn.style.border = 'none';
-            closeBtn.style.padding = '8px 20px';
-            closeBtn.style.borderRadius = '40px';
-            closeBtn.style.fontSize = '14px';
-            closeBtn.style.cursor = 'pointer';
-            
-            const btnWrapper = document.createElement('div');
-            btnWrapper.appendChild(copyBtn);
-            btnWrapper.appendChild(closeBtn);
-            
-            modalContent.appendChild(title);
-            modalContent.appendChild(textContainer);
-            modalContent.appendChild(btnWrapper);
-            modalOverlay.appendChild(modalContent);
-            document.body.appendChild(modalOverlay);
-            
+
+            const copyBtn = document.getElementById('qqCopyBtn');
             copyBtn.addEventListener('click', () => {
                 navigator.clipboard.writeText(textToCopy).then(() => {
-                    copyBtn.innerText = currentLang === 'zh' ? '✅ 已复制' : '✅ Copied';
+                    copyBtn.textContent = texts.qqModalCopied;
                     setTimeout(() => {
-                        copyBtn.innerText = currentLang === 'zh' ? '复制文本' : 'Copy';
+                        copyBtn.textContent = texts.qqModalCopy;
                     }, 1500);
                 }).catch(() => {
                     alert(currentLang === 'zh' ? '复制失败，请手动选择文本' : 'Copy failed, please select manually');
                 });
             });
-            
-            const closeModal = () => {
-                document.body.removeChild(modalOverlay);
+            document.getElementById('qqCloseBtn').addEventListener('click', () => {
+                document.body.removeChild(overlay);
                 document.body.style.overflow = '';
-            };
-            closeBtn.addEventListener('click', closeModal);
-            modalOverlay.addEventListener('click', (e) => {
-                if (e.target === modalOverlay) closeModal();
+            });
+            overlay.addEventListener('click', (e) => {
+                if (e.target === overlay) {
+                    document.body.removeChild(overlay);
+                    document.body.style.overflow = '';
+                }
             });
         }
 
