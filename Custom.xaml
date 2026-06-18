@@ -11,7 +11,7 @@
             <Border Grid.Column="0" Width="40" Height="40" CornerRadius="20" 
                     Background="White" Margin="0,0,12,0">
                 <local:MyImage Width="36" Height="36" 
-                               Source="https://hongguai.j3.ink/icon/icon.png" 
+                               Source="https://hgb.j3.ink/icon/icon.png" 
                                ToolTip="我的主页"/>
             </Border>
             
@@ -107,7 +107,7 @@
                         Margin="5,5,5,5" Padding="8,5,8,5">
                     <StackPanel Orientation="Horizontal" Margin="5,5,5,5">
                         <local:MyImage Width="24" Height="24" 
-                                       Source="https://hongguai.j3.ink/icon/icon.png" Margin="0,0,10,0"/>
+                                       Source="https://hgb.j3.ink/icon/icon.png" Margin="0,0,10,0"/>
                         <local:MyButton Width="150" Height="32" Padding="8,0,8,0"
                                         Text="方块前线" EventType="打开网页" EventData="https://www.blockfrontmc.com/" />
                     </StackPanel>
@@ -197,6 +197,8 @@
             <local:MyTextButton Text="⭐ GitHub 仓库" EventType="打开网页" EventData="https://github.com/hong-a-debug/hong-a-debug.github.io" />
             <TextBlock Text=" · " Foreground="{DynamicResource ColorBrush5}" Margin="5,0,5,0"/>
             <local:MyTextButton Text="💬 反馈建议" EventType="打开网页" EventData="https://github.com/hong-a-debug/hong-a-debug.github.io/issues" />
+            <TextBlock Text=" · " Foreground="{DynamicResource ColorBrush5}" Margin="5,0,5,0"/>
+            <local:MyTextButton Text="🌐 我的博客" EventType="打开网页" EventData="https://hgb.j3.ink/" />
         </StackPanel>
     </StackPanel>
 
