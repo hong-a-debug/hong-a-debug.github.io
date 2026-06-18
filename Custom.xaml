@@ -1,3 +1,80 @@
+<StackPanel>
+
+    <Border CornerRadius="12" Margin="10,10,10,15" Padding="15,12,15,12"
+            Background="{DynamicResource ColorBrush3}">
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            
+            <Border Grid.Column="0" Width="56" Height="56" CornerRadius="28" 
+                    Background="White" Margin="0,0,12,0">
+                <local:MyImage Width="48" Height="48" 
+                               Source="https://hgb.j3.ink/icon/icon.png" 
+                               Stretch="Uniform"
+                               ToolTip="我的主页"/>
+            </Border>
+            
+            <StackPanel Grid.Column="1">
+                <TextBlock Text="✨ 欢迎来到我的世界启动器" 
+                           FontSize="16" FontWeight="Bold" Foreground="White"
+                           HorizontalAlignment="Center"/>
+                <TextBlock Text="点击下方按钮，快速访问常用网站" 
+                           FontSize="11" Foreground="#E0E0E0" 
+                           HorizontalAlignment="Center" Margin="0,5,0,0"/>
+            </StackPanel>
+        </Grid>
+    </Border>
+
+    <Border CornerRadius="12" Margin="10,0,10,15" Padding="15,12,15,12"
+            Background="{DynamicResource ColorBrush8}">
+        <StackPanel>
+            <TextBlock Text="🔍 快速搜索" FontSize="12" Foreground="{DynamicResource ColorBrush3}" Margin="0,0,0,8"/>
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+                <Border Grid.Column="0" CornerRadius="20" Background="{DynamicResource ColorBrush7}" Padding="5,0,5,0">
+                    <local:MyButton Width="auto" Height="32" 
+                                    Text="🔍 百度一下" ColorType="Highlight"
+                                    EventType="打开网页" EventData="https://www.baidu.com/" />
+                </Border>
+                <Border Grid.Column="1" CornerRadius="20" Background="{DynamicResource ColorBrush7}" Margin="10,0,0,0" Padding="5,0,5,0">
+                    <local:MyButton Width="80" Height="32" 
+                                    Text="Google" EventType="打开网页" EventData="https://www.google.com/" />
+                </Border>
+            </Grid>
+        </StackPanel>
+    </Border>
+
+    <local:MyCard Title="🎮 Minecraft 相关" CanSwap="True" Margin="0,0,0,15" IsSwaped="True">
+        <StackPanel Margin="25,35,23,15">
+            
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="1*"/>
+                    <ColumnDefinition Width="1*"/>
+                </Grid.ColumnDefinitions>
+
+                <Border Grid.Row="0" Grid.Column="0" CornerRadius="8" Background="{DynamicResource ColorBrush8}" 
+                        Margin="5,5,5,5" Padding="8,5,8,5">
+                    <StackPanel Orientation="Horizontal" Margin="5,5,5,5">
+                        <local:MyImage Width="32" Height="32" 
+                                       Source="https://hgb.j3.ink/Wiki.png" 
+                                       Stretch="Uniform" Margin="0,0,10,0"/>
+                        <local:MyButton Width="150" Height="32" Padding="8,0,8,0" ColorType="Highlight"
+                                        Text="中文Wiki" EventType="打开网页" EventData="https://zh.minecraft.wiki/" />
+                    </StackPanel>
+                </Border>
+
                 <Border Grid.Row="0" Grid.Column="1" CornerRadius="8" Background="{DynamicResource ColorBrush8}" 
                         Margin="5,5,5,5" Padding="8,5,8,5">
                     <StackPanel Orientation="Horizontal" Margin="5,5,5,5">
@@ -8,3 +85,134 @@
                                         Text="Minecraft官网" EventType="打开网页" EventData="https://www.minecraft.net/zh-hans" />
                     </StackPanel>
                 </Border>
+
+                <Border Grid.Row="1" Grid.Column="0" CornerRadius="8" Background="{DynamicResource ColorBrush8}" 
+                        Margin="5,5,5,5" Padding="8,5,8,5">
+                    <StackPanel Orientation="Horizontal" Margin="5,5,5,5">
+                        <local:MyImage Width="32" Height="32" 
+                                       Source="https://hgb.j3.ink/MTR.png" 
+                                       Stretch="Uniform" Margin="0,0,10,0"/>
+                        <local:MyButton Width="150" Height="32" Padding="8,0,8,0"
+                                        Text="MTRBBS" EventType="打开网页" EventData="https://www.mtrbbs.top/" />
+                    </StackPanel>
+                </Border>
+
+                <Border Grid.Row="1" Grid.Column="1" CornerRadius="8" Background="{DynamicResource ColorBrush8}" 
+                        Margin="5,5,5,5" Padding="8,5,8,5">
+                    <StackPanel Orientation="Horizontal" Margin="5,5,5,5">
+                        <local:MyImage Width="32" Height="32" 
+                                       Source="https://hgb.j3.ink/JavaID.png" 
+                                       Stretch="Uniform" Margin="0,0,10,0"/>
+                        <local:MyButton Width="150" Height="32" Padding="8,0,8,0"
+                                        Text="Java版ID表" EventType="打开网页" EventData="https://mcid.lingningyu.cn/" />
+                    </StackPanel>
+                </Border>
+
+                <Border Grid.Row="2" Grid.Column="0" CornerRadius="8" Background="{DynamicResource ColorBrush8}" 
+                        Margin="5,5,5,5" Padding="8,5,8,5">
+                    <StackPanel Orientation="Horizontal" Margin="5,5,5,5">
+                        <local:MyImage Width="32" Height="32" 
+                                       Source="https://hgb.j3.ink/blockfront.png" 
+                                       Stretch="Uniform" Margin="0,0,10,0"/>
+                        <local:MyButton Width="150" Height="32" Padding="8,0,8,0"
+                                        Text="方块前线" EventType="打开网页" EventData="https://www.blockfrontmc.com/" />
+                    </StackPanel>
+                </Border>
+
+                <Border Grid.Row="2" Grid.Column="1" CornerRadius="8" Background="{DynamicResource ColorBrush8}" 
+                        Margin="5,5,5,5" Padding="8,5,8,5">
+                    <StackPanel Orientation="Horizontal" Margin="5,5,5,5">
+                        <local:MyImage Width="32" Height="32" 
+                                       Source="https://hgb.j3.ink/SIMMC.png" 
+                                       Stretch="Uniform" Margin="0,0,10,0"/>
+                        <local:MyButton Width="150" Height="32" Padding="8,0,8,0"
+                                        Text="SIMMC Wiki" EventType="打开网页" EventData="https://simmc.huijiwiki.com/wiki/%E9%A6%96%E9%A1%B5" />
+                    </StackPanel>
+                </Border>
+
+                <Border Grid.Row="3" Grid.Column="0" CornerRadius="8" Background="{DynamicResource ColorBrush8}" 
+                        Margin="5,5,5,5" Padding="8,5,8,5">
+                    <StackPanel Orientation="Horizontal" Margin="5,5,5,5">
+                        <local:MyImage Width="32" Height="32" 
+                                       Source="https://hgb.j3.ink/MTRmap.png" 
+                                       Stretch="Uniform" Margin="0,0,10,0"/>
+                        <local:MyButton Width="150" Height="32" Padding="8,0,8,0"
+                                        Text="MTR地图" EventType="打开网页" EventData="https://map.lpsguide.cn/" />
+                    </StackPanel>
+                </Border>
+
+            </Grid>
+
+        </StackPanel>
+    </local:MyCard>
+
+    <local:MyCard Title="📺 视频网站" CanSwap="True" Margin="0,0,0,15" IsSwaped="True">
+        <StackPanel Margin="25,35,23,15">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="1*"/>
+                    <ColumnDefinition Width="1*"/>
+                </Grid.ColumnDefinitions>
+
+                <Border Grid.Row="0" Grid.Column="0" CornerRadius="8" Background="{DynamicResource ColorBrush8}" 
+                        Margin="5,5,5,5" Padding="8,5,8,5">
+                    <StackPanel Orientation="Horizontal" Margin="5,5,5,5">
+                        <local:MyImage Width="32" Height="32" 
+                                       Source="https://favicon.yandex.net/favicon/bilibili.com" 
+                                       Stretch="Uniform" Margin="0,0,10,0"/>
+                        <local:MyButton Width="150" Height="32" Padding="8,0,8,0" ColorType="Highlight"
+                                        Text="哔哩哔哩" EventType="打开网页" EventData="https://www.bilibili.com/" />
+                    </StackPanel>
+                </Border>
+
+                <Border Grid.Row="0" Grid.Column="1" CornerRadius="8" Background="{DynamicResource ColorBrush8}" 
+                        Margin="5,5,5,5" Padding="8,5,8,5">
+                    <StackPanel Orientation="Horizontal" Margin="5,5,5,5">
+                        <local:MyImage Width="32" Height="32" 
+                                       Source="https://favicon.yandex.net/favicon/bilibili.com" 
+                                       Stretch="Uniform" Margin="0,0,10,0"/>
+                        <local:MyButton Width="150" Height="32" Padding="8,0,8,0" ColorType="Red"
+                                        Text="🎬 我的视频主页" 
+                                        ToolTip="点击进入我的B站空间"
+                                        EventType="打开网页" 
+                                        EventData="https://space.bilibili.com/394466602" />
+                    </StackPanel>
+                </Border>
+
+                <Border Grid.Row="1" Grid.Column="0" CornerRadius="8" Background="{DynamicResource ColorBrush8}" 
+                        Margin="5,5,5,5" Padding="8,5,8,5">
+                    <StackPanel Orientation="Horizontal" Margin="5,5,5,5">
+                        <local:MyImage Width="32" Height="32" 
+                                       Source="https://hgb.j3.ink/youtube.png" 
+                                       Stretch="Uniform" Margin="0,0,10,0"/>
+                        <local:MyButton Width="150" Height="32" Padding="8,0,8,0"
+                                        Text="YouTube" EventType="打开网页" EventData="https://www.youtube.com/" />
+                    </StackPanel>
+                </Border>
+
+            </Grid>
+        </StackPanel>
+    </local:MyCard>
+
+    <StackPanel Margin="0,10,10,20">
+        <Border Height="1" Background="{DynamicResource ColorBrush5}" Margin="10,0,10,10" CornerRadius="1"/>
+        
+        <TextBlock Text="✨ 联网自动更新 | 共 10 个快捷链接" 
+                   FontSize="11" Foreground="{DynamicResource ColorBrush5}"
+                   HorizontalAlignment="Center"/>
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,8,0,0">
+            <local:MyTextButton Text="⭐ GitHub 仓库" EventType="打开网页" EventData="https://github.com/hong-a-debug/hong-a-debug.github.io" />
+            <TextBlock Text=" · " Foreground="{DynamicResource ColorBrush5}" Margin="5,0,5,0"/>
+            <local:MyTextButton Text="💬 反馈建议" EventType="打开网页" EventData="https://github.com/hong-a-debug/hong-a-debug.github.io/issues" />
+        </StackPanel>
+
+        <TextBlock Text="📅 v2026-06-18 17:25" 
+                   FontSize="10" Foreground="{DynamicResource ColorBrush6}"
+                   HorizontalAlignment="Center" Margin="0,12,0,0"/>
+    </StackPanel>
+
+</StackPanel>
