@@ -1,5 +1,5 @@
 <!-- PCL2 自定义主页 - 美化版 -->
-<!-- 自动更新地址：https://raw.githubusercontent.com/hong-a-debug/w/main/Custom.xaml -->
+<!-- 自动更新地址：https://hongguai.j3.ink/Custom.xaml -->
 
 <StackPanel>
 
@@ -16,7 +16,7 @@
             <Border Grid.Column="0" Width="40" Height="40" CornerRadius="20" 
                     Background="White" Margin="0,0,12,0">
                 <local:MyImage Width="36" Height="36" 
-                               Source="https://raw.githubusercontent.com/hong-a-debug/w/main/avatar.png" 
+                               Source="https://hongguai.j3.ink/avatar.png" 
                                ToolTip="我的主页"/>
             </Border>
             
@@ -120,7 +120,7 @@
                         Margin="5,5,5,5" Padding="8,5,8,5">
                     <StackPanel Orientation="Horizontal" Margin="5,5,5,5">
                         <local:MyImage Width="24" Height="24" 
-                                       Source="https://raw.githubusercontent.com/hong-a-debug/w/main/blockfront.png" Margin="0,0,10,0"/>
+                                       Source="https://hongguai.j3.ink/blockfront.png" Margin="0,0,10,0"/>
                         <local:MyButton Width="150" Height="32" Padding="8,0,8,0"
                                         Text="方块前线" EventType="打开网页" EventData="https://www.blockfrontmc.com/" />
                     </StackPanel>
@@ -209,6 +209,7 @@
     <!-- ==================== 页脚 ==================== -->
     <StackPanel Margin="0,10,10,20">
         <Border Height="1" Background="{DynamicResource ColorBrush5}" Margin="10,0,10,10" CornerRadius="1"/>
+        
         <TextBlock Text="✨ 联网自动更新 | 共 10 个快捷链接" 
                    FontSize="11" Foreground="{DynamicResource ColorBrush5}"
                    HorizontalAlignment="Center"/>
