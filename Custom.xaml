@@ -1,9 +1,5 @@
-<!-- PCL2 自定义主页 - 美化版 -->
-<!-- 自动更新地址：https://hongguai.j3.ink/Custom.xaml -->
-
 <StackPanel>
 
-    <!-- ==================== 顶部横幅（含个人标志） ==================== -->
     <Border CornerRadius="12" Margin="10,10,10,15" Padding="15,12,15,12"
             Background="{DynamicResource ColorBrush3}">
         <Grid>
@@ -12,15 +8,13 @@
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
             
-            <!-- 左侧：个人标志 -->
             <Border Grid.Column="0" Width="40" Height="40" CornerRadius="20" 
                     Background="White" Margin="0,0,12,0">
                 <local:MyImage Width="36" Height="36" 
-                               Source="https://hongguai.j3.ink/avatar.png" 
+                               Source="https://hongguai.j3.ink/icon/icon.png" 
                                ToolTip="我的主页"/>
             </Border>
             
-            <!-- 右侧：欢迎文字 -->
             <StackPanel Grid.Column="1">
                 <TextBlock Text="✨ 欢迎来到我的世界启动器" 
                            FontSize="16" FontWeight="Bold" Foreground="White"
@@ -32,7 +26,6 @@
         </Grid>
     </Border>
 
-    <!-- ==================== 搜索栏 ==================== -->
     <Border CornerRadius="12" Margin="10,0,10,15" Padding="15,12,15,12"
             Background="{DynamicResource ColorBrush8}">
         <StackPanel>
@@ -55,7 +48,6 @@
         </StackPanel>
     </Border>
 
-    <!-- ==================== Minecraft 相关卡片 ==================== -->
     <local:MyCard Title="🎮 Minecraft 相关" CanSwap="True" Margin="0,0,0,15" IsSwaped="True">
         <StackPanel Margin="25,35,23,15">
             
@@ -71,7 +63,6 @@
                     <ColumnDefinition Width="1*"/>
                 </Grid.ColumnDefinitions>
 
-                <!-- 中文 Wiki -->
                 <Border Grid.Row="0" Grid.Column="0" CornerRadius="8" Background="{DynamicResource ColorBrush8}" 
                         Margin="5,5,5,5" Padding="8,5,8,5">
                     <StackPanel Orientation="Horizontal" Margin="5,5,5,5">
@@ -82,7 +73,6 @@
                     </StackPanel>
                 </Border>
 
-                <!-- Minecraft 官网 -->
                 <Border Grid.Row="0" Grid.Column="1" CornerRadius="8" Background="{DynamicResource ColorBrush8}" 
                         Margin="5,5,5,5" Padding="8,5,8,5">
                     <StackPanel Orientation="Horizontal" Margin="5,5,5,5">
@@ -93,7 +83,6 @@
                     </StackPanel>
                 </Border>
 
-                <!-- MTRBBS -->
                 <Border Grid.Row="1" Grid.Column="0" CornerRadius="8" Background="{DynamicResource ColorBrush8}" 
                         Margin="5,5,5,5" Padding="8,5,8,5">
                     <StackPanel Orientation="Horizontal" Margin="5,5,5,5">
@@ -104,7 +93,6 @@
                     </StackPanel>
                 </Border>
 
-                <!-- Java版ID表 -->
                 <Border Grid.Row="1" Grid.Column="1" CornerRadius="8" Background="{DynamicResource ColorBrush8}" 
                         Margin="5,5,5,5" Padding="8,5,8,5">
                     <StackPanel Orientation="Horizontal" Margin="5,5,5,5">
@@ -115,18 +103,16 @@
                     </StackPanel>
                 </Border>
 
-                <!-- 方块前线 -->
                 <Border Grid.Row="2" Grid.Column="0" CornerRadius="8" Background="{DynamicResource ColorBrush8}" 
                         Margin="5,5,5,5" Padding="8,5,8,5">
                     <StackPanel Orientation="Horizontal" Margin="5,5,5,5">
                         <local:MyImage Width="24" Height="24" 
-                                       Source="https://hongguai.j3.ink/blockfront.png" Margin="0,0,10,0"/>
+                                       Source="https://hongguai.j3.ink/icon/icon.png" Margin="0,0,10,0"/>
                         <local:MyButton Width="150" Height="32" Padding="8,0,8,0"
                                         Text="方块前线" EventType="打开网页" EventData="https://www.blockfrontmc.com/" />
                     </StackPanel>
                 </Border>
 
-                <!-- SIMMC Wiki -->
                 <Border Grid.Row="2" Grid.Column="1" CornerRadius="8" Background="{DynamicResource ColorBrush8}" 
                         Margin="5,5,5,5" Padding="8,5,8,5">
                     <StackPanel Orientation="Horizontal" Margin="5,5,5,5">
@@ -137,7 +123,6 @@
                     </StackPanel>
                 </Border>
 
-                <!-- MTR官方地图 -->
                 <Border Grid.Row="3" Grid.Column="0" CornerRadius="8" Background="{DynamicResource ColorBrush8}" 
                         Margin="5,5,5,5" Padding="8,5,8,5">
                     <StackPanel Orientation="Horizontal" Margin="5,5,5,5">
@@ -153,7 +138,6 @@
         </StackPanel>
     </local:MyCard>
 
-    <!-- ==================== 视频网站卡片（含个人空间） ==================== -->
     <local:MyCard Title="📺 视频网站" CanSwap="True" Margin="0,0,0,15" IsSwaped="True">
         <StackPanel Margin="25,35,23,15">
             <Grid>
@@ -166,7 +150,6 @@
                     <ColumnDefinition Width="1*"/>
                 </Grid.ColumnDefinitions>
 
-                <!-- 哔哩哔哩主站 -->
                 <Border Grid.Row="0" Grid.Column="0" CornerRadius="8" Background="{DynamicResource ColorBrush8}" 
                         Margin="5,5,5,5" Padding="8,5,8,5">
                     <StackPanel Orientation="Horizontal" Margin="5,5,5,5">
@@ -177,7 +160,6 @@
                     </StackPanel>
                 </Border>
 
-                <!-- 个人视频主页 -->
                 <Border Grid.Row="0" Grid.Column="1" CornerRadius="8" Background="{DynamicResource ColorBrush8}" 
                         Margin="5,5,5,5" Padding="8,5,8,5">
                     <StackPanel Orientation="Horizontal" Margin="5,5,5,5">
@@ -191,7 +173,6 @@
                     </StackPanel>
                 </Border>
 
-                <!-- YouTube -->
                 <Border Grid.Row="1" Grid.Column="0" CornerRadius="8" Background="{DynamicResource ColorBrush8}" 
                         Margin="5,5,5,5" Padding="8,5,8,5">
                     <StackPanel Orientation="Horizontal" Margin="5,5,5,5">
@@ -206,7 +187,6 @@
         </StackPanel>
     </local:MyCard>
 
-    <!-- ==================== 页脚 ==================== -->
     <StackPanel Margin="0,10,10,20">
         <Border Height="1" Background="{DynamicResource ColorBrush5}" Margin="10,0,10,10" CornerRadius="1"/>
         
