@@ -209,6 +209,10 @@
             <TextBlock Text=" · " Foreground="{DynamicResource ColorBrush5}" Margin="5,0,5,0"/>
             <local:MyTextButton Text="💬 反馈建议" EventType="打开网页" EventData="https://github.com/hong-a-debug/hong-a-debug.github.io/issues" />
         </StackPanel>
+
+        <TextBlock Text="📅 v2026-06-18 17:25" 
+                   FontSize="10" Foreground="{DynamicResource ColorBrush6}"
+                   HorizontalAlignment="Center" Margin="0,12,0,0"/>
     </StackPanel>
 
 </StackPanel>
