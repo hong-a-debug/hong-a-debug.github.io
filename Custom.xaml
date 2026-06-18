@@ -194,9 +194,9 @@
                    FontSize="11" Foreground="{DynamicResource ColorBrush5}"
                    HorizontalAlignment="Center"/>
         <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,8,0,0">
-            <local:MyTextButton Text="⭐ GitHub 仓库" EventType="打开网页" EventData="https://github.com/hong-a-debug/w" />
+            <local:MyTextButton Text="⭐ GitHub 仓库" EventType="打开网页" EventData="https://github.com/hong-a-debug/hong-a-debug.github.io" />
             <TextBlock Text=" · " Foreground="{DynamicResource ColorBrush5}" Margin="5,0,5,0"/>
-            <local:MyTextButton Text="💬 反馈建议" EventType="打开网页" EventData="https://github.com/hong-a-debug/w/issues" />
+            <local:MyTextButton Text="💬 反馈建议" EventType="打开网页" EventData="https://github.com/hong-a-debug/hong-a-debug.github.io/issues" />
         </StackPanel>
     </StackPanel>
 
