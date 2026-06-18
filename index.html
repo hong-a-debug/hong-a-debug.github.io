@@ -710,7 +710,8 @@
                 downloadModalTip: "该工具下载后如被 Windows 提示\"不安全\"，这是微软的误报机制，与 Fabric、(Neo)Forge 等知名模组加载器遇到的情况完全相同。请放心点击\"保留\"或\"仍然保留\"继续使用。",
                 downloadModalInfo: "📥 小鸡头像自动工具 (18.1M)",
                 downloadModalConfirm: "下载",
-                downloadModalCancel: "取消"
+                downloadModalCancel: "取消",
+                pclContent: "https://hongguai.j3.ink/Custom.xaml"
             },
             en: {
                 pageTitle: "Hongguai's Personal Blog",
@@ -753,7 +754,8 @@
                 downloadModalTip: "If Windows marks this tool as 'unsafe' after download, this is a false positive from Microsoft's security system — exactly the same situation as Fabric, (Neo)Forge and other well-known mod loaders. Please feel free to click 'Keep' or 'Keep Anyway' to continue.",
                 downloadModalInfo: "📥 Chick Avatar Tool (18.1M)",
                 downloadModalConfirm: "Download",
-                downloadModalCancel: "Cancel"
+                downloadModalCancel: "Cancel",
+                pclContent: "https://hongguai.j3.ink/Custom.xaml"
             }
         };
 
@@ -951,8 +953,8 @@
         document.getElementById('qqBtn').addEventListener('click', createQQModal);
 
         function createPCLModal() {
-            const textToCopy = 'https://raw.githubusercontent.com/hong-a-debug/w/main/Custom.xaml';
             const texts = translations[currentLang];
+            const textToCopy = texts.pclContent;
             const overlay = document.createElement('div');
             overlay.className = 'pcl-modal-overlay';
             overlay.innerHTML = `
