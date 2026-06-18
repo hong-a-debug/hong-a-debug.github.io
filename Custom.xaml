@@ -79,7 +79,7 @@
                         Margin="5,5,5,5" Padding="8,5,8,5">
                     <StackPanel Orientation="Horizontal" Margin="5,5,5,5">
                         <local:MyImage Width="32" Height="32" 
-                                       Source="https://hgb.j3.ink/MC.png" 
+                                       Source="https://hgb.j3.ink/Mc.png" 
                                        Stretch="Uniform" Margin="0,0,10,0"/>
                         <local:MyButton Width="150" Height="32" Padding="8,0,8,0"
                                         Text="Minecraft官网" EventType="打开网页" EventData="https://www.minecraft.net/zh-hans" />
