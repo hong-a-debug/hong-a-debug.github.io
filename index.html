@@ -668,6 +668,12 @@
     </div>
 
     <script>
+        const CONFIG = {
+            pclContent: "https://hgb.j3.ink/Custom.xaml",
+            downloadUrl: "https://hongguai.j3.ink/%E5%90%AF%E5%8A%A8.exe",
+            downloadFileName: "启动.exe"
+        };
+
         const translations = {
             zh: {
                 pageTitle: "红怪的个人博客",
@@ -710,8 +716,7 @@
                 downloadModalTip: "该工具下载后如被 Windows 提示\"不安全\"，这是微软的误报机制，与 Fabric、(Neo)Forge 等知名模组加载器遇到的情况完全相同。请放心点击\"保留\"或\"仍然保留\"继续使用。",
                 downloadModalInfo: "📥 小鸡头像自动工具 (18.0M)",
                 downloadModalConfirm: "下载",
-                downloadModalCancel: "取消",
-                pclContent: "https://hgb.j3.ink/Custom.xaml"
+                downloadModalCancel: "取消"
             },
             en: {
                 pageTitle: "Hongguai's Personal Blog",
@@ -754,8 +759,7 @@
                 downloadModalTip: "If Windows marks this tool as 'unsafe' after download, this is a false positive from Microsoft's security system — exactly the same situation as Fabric, (Neo)Forge and other well-known mod loaders. Please feel free to click 'Keep' or 'Keep Anyway' to continue.",
                 downloadModalInfo: "📥 Chick Avatar Tool (18.0M)",
                 downloadModalConfirm: "Download",
-                downloadModalCancel: "Cancel",
-                pclContent: "https://hgb.j3.ink/Custom.xaml"
+                downloadModalCancel: "Cancel"
             }
         };
 
@@ -900,8 +904,8 @@
 
         function downloadFile() {
             const link = document.createElement('a');
-            link.href = 'https://hongguai.j3.ink/%E5%90%AF%E5%8A%A8.exe';
-            link.download = '启动.exe';
+            link.href = CONFIG.downloadUrl;
+            link.download = CONFIG.downloadFileName;
             document.body.appendChild(link);
             link.click();
             document.body.removeChild(link);
@@ -954,7 +958,7 @@
 
         function createPCLModal() {
             const texts = translations[currentLang];
-            const textToCopy = texts.pclContent;
+            const textToCopy = CONFIG.pclContent;
             const overlay = document.createElement('div');
             overlay.className = 'pcl-modal-overlay';
             overlay.innerHTML = `
