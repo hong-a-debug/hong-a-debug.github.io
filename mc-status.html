@@ -413,6 +413,17 @@
             color: var(--accent);
         }
 
+        .refresh-indicator {
+            text-align: center;
+            font-size: 11px;
+            color: var(--text-link);
+            margin-top: 8px;
+            display: none;
+        }
+        .refresh-indicator.show {
+            display: block;
+        }
+
         @media (max-width: 560px) {
             body { padding: 20px 16px; }
             .card { padding: 0 20px 28px; }
@@ -472,6 +483,7 @@
                 </div>
                 <div id="resultDetails"></div>
             </div>
+            <div class="refresh-indicator" id="refreshIndicator">🔄 每 60 秒自动刷新</div>
         </div>
 
         <div class="history-section">
@@ -515,7 +527,8 @@ const translations = {
         historyTitle: "最近查询",
         backLink: "← 返回主页",
         cookieNotice: '如果你没有同意 Cookie，自定义选项不会被保存，点击 <a href="/">这里</a> 同意 cookie',
-        enterAddress: "请输入一个域名或IP地址"
+        enterAddress: "请输入一个域名或IP地址",
+        autoRefresh: "🔄 每 60 秒自动刷新"
     },
     en: {
         pageTitle: "Server Query",
@@ -543,12 +556,16 @@ const translations = {
         historyTitle: "Recent Queries",
         backLink: "← Back to Home",
         cookieNotice: 'If you do not consent to cookies, your custom preferences will not be saved, <a href="/">click here</a> to agree',
-        enterAddress: "Please enter a domain or IP address"
+        enterAddress: "Please enter a domain or IP address",
+        autoRefresh: "🔄 Auto-refresh every 60s"
     }
 };
 
 let currentLang = 'zh';
 let queryHistory = JSON.parse(localStorage.getItem('mcQueryHistory') || '[]');
+let refreshTimer = null;
+let currentAddress = null;
+let cachedData = null;
 
 function getCookie(name) {
     const v = `; ${document.cookie}`;
@@ -605,9 +622,16 @@ function switchLanguage(lang) {
     document.getElementById('backLink').textContent = t.backLink;
     document.getElementById('loadingIndicator').textContent = t.loading;
     document.getElementById('cookieNotice').innerHTML = t.cookieNotice;
+    document.getElementById('refreshIndicator').textContent = t.autoRefresh;
 
     if (getCookie('cookie_consent') === 'accepted') {
         setCookie('lang', lang, 30);
+    }
+
+    // 如果有缓存的查询结果，用新语言重新渲染
+    const address = document.getElementById('resultAddress').textContent;
+    if (address && address !== '—' && cachedData) {
+        displayResult(address, cachedData);
     }
 }
 
@@ -668,14 +692,33 @@ function formatMOTD(text) {
     return chunks.join('<br>');
 }
 
-async function queryServer(address) {
+function stopRefresh() {
+    if (refreshTimer) {
+        clearInterval(refreshTimer);
+        refreshTimer = null;
+    }
+    document.getElementById('refreshIndicator').classList.remove('show');
+}
+
+function startRefresh(address) {
+    stopRefresh();
+    document.getElementById('refreshIndicator').classList.add('show');
+    refreshTimer = setInterval(() => {
+        queryServer(address, true);
+    }, 60000);
+}
+
+async function queryServer(address, silent = false) {
     const loading = document.getElementById('loadingIndicator');
     const area = document.getElementById('previewArea');
     const btn = document.getElementById('queryBtn');
 
-    loading.style.display = 'block';
-    area.classList.remove('show');
-    btn.disabled = true;
+    if (!silent) {
+        loading.style.display = 'block';
+        area.classList.remove('show');
+        btn.disabled = true;
+        stopRefresh();
+    }
 
     try {
         const parsed = parseAddress(address);
@@ -689,20 +732,31 @@ async function queryServer(address) {
         const resp = await fetch(url);
         const data = await resp.json();
 
-        loading.style.display = 'none';
-        btn.disabled = false;
+        if (!silent) {
+            loading.style.display = 'none';
+            btn.disabled = false;
+        }
         area.classList.add('show');
 
-        saveHistory(address);
+        if (!silent) {
+            saveHistory(address);
+        }
+        currentAddress = address;
+        cachedData = data;
         displayResult(address, data);
+
     } catch (e) {
-        loading.style.display = 'none';
-        btn.disabled = false;
+        if (!silent) {
+            loading.style.display = 'none';
+            btn.disabled = false;
+        }
         area.classList.add('show');
         const t = translations[currentLang];
         document.getElementById('resultAddress').textContent = address;
         document.getElementById('statusBadge').innerHTML = `<span class="status-badge status-unknown">${t.unknown}</span>`;
         document.getElementById('resultDetails').innerHTML = `<div style="color:var(--text-secondary);text-align:center;padding:10px;">${t.fetchFailed}</div>`;
+        stopRefresh();
+        cachedData = null;
     }
 }
 
@@ -742,6 +796,9 @@ function displayResult(address, data) {
         </div>`;
 
         document.getElementById('resultDetails').innerHTML = html;
+
+        startRefresh(address);
+
     } else {
         document.getElementById('statusBadge').innerHTML = `<span class="status-badge status-offline">${t.offline}</span>`;
 
@@ -752,6 +809,7 @@ function displayResult(address, data) {
         </div>`;
 
         document.getElementById('resultDetails').innerHTML = html;
+        stopRefresh();
     }
 }
 
@@ -778,7 +836,8 @@ function renderHistory() {
         tag.addEventListener('click', function() {
             const addr = this.dataset.address;
             document.getElementById('serverInput').value = addr;
-            queryServer(addr);
+            stopRefresh();
+            queryServer(addr, false);
         });
     });
 }
@@ -789,7 +848,8 @@ document.getElementById('queryBtn').addEventListener('click', function() {
         showError(translations[currentLang].enterAddress);
         return;
     }
-    queryServer(input);
+    stopRefresh();
+    queryServer(input, false);
 });
 
 document.getElementById('serverInput').addEventListener('keydown', function(e) {
@@ -812,7 +872,7 @@ renderHistory();
 const q = new URLSearchParams(window.location.search).get('q');
 if (q) {
     document.getElementById('serverInput').value = q;
-    setTimeout(() => queryServer(q), 500);
+    setTimeout(() => queryServer(q, false), 500);
 }
 </script>
 </body>
