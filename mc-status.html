@@ -6,12 +6,7 @@
     <title>服务器查询</title>
     <link rel="icon" type="image/png" href="/icon/icon.png">
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
+        * { margin: 0; padding: 0; box-sizing: border-box; }
         :root {
             --bg-color: #FFF5E6;
             --card-bg: #FFFFFF;
@@ -26,7 +21,6 @@
             --online-color: #27ae60;
             --offline-color: #d32f2f;
         }
-
         body.dark {
             --bg-color: #000000;
             --card-bg: #1a1a1a;
@@ -41,7 +35,6 @@
             --online-color: #2ecc71;
             --offline-color: #ff6b6b;
         }
-
         body {
             background-color: var(--bg-color);
             font-family: '微软雅黑', 'Segoe UI', system-ui, -apple-system, sans-serif;
@@ -52,7 +45,6 @@
             padding: 40px 20px;
             transition: background-color 0.3s;
         }
-
         .language-selector {
             position: fixed;
             top: 20px;
@@ -66,7 +58,6 @@
             gap: 8px;
             box-shadow: 0 2px 8px rgba(0,0,0,0.04);
         }
-
         .lang-btn {
             background: none;
             border: none;
@@ -87,7 +78,6 @@
             background-color: var(--icon-bg);
             color: var(--accent);
         }
-
         .top-left-buttons {
             position: fixed;
             top: 20px;
@@ -97,7 +87,6 @@
             gap: 12px;
             align-items: center;
         }
-
         .theme-btn {
             background-color: var(--card-bg);
             border: 1px solid var(--card-border);
@@ -115,7 +104,6 @@
             color: #fff;
             border-color: var(--accent);
         }
-
         .card {
             background-color: var(--card-bg);
             border: 1px solid var(--card-border);
@@ -125,18 +113,13 @@
             padding: 0 28px 36px;
             transition: background-color 0.3s;
         }
-
         .top-bar {
             background-color: var(--accent);
             height: 6px;
             width: calc(100% + 56px);
             margin: 0 -28px;
         }
-
-        .card-inner {
-            padding: 30px 0 20px;
-        }
-
+        .card-inner { padding: 30px 0 20px; }
         .title {
             font-size: 22px;
             font-weight: 700;
@@ -144,21 +127,18 @@
             text-align: center;
             margin-bottom: 8px;
         }
-
         .subtitle {
             font-size: 13px;
             color: var(--text-secondary);
             text-align: center;
             margin-bottom: 20px;
         }
-
         .search-group {
             display: flex;
             gap: 10px;
             flex-wrap: wrap;
             align-items: center;
         }
-
         .search-input {
             flex: 2;
             padding: 14px 18px;
@@ -172,23 +152,15 @@
             font-family: inherit;
             min-width: 140px;
         }
-        .search-input:focus {
-            border-color: var(--accent);
-        }
-        .search-input::placeholder {
-            color: var(--text-link);
-        }
-
+        .search-input:focus { border-color: var(--accent); }
+        .search-input::placeholder { color: var(--text-link); }
         .bedrock-inputs {
             display: none;
             flex: 2;
             gap: 8px;
             min-width: 140px;
         }
-        .bedrock-inputs.show {
-            display: flex;
-        }
-
+        .bedrock-inputs.show { display: flex; }
         .bedrock-host {
             flex: 2;
             padding: 14px 18px;
@@ -202,13 +174,8 @@
             font-family: inherit;
             min-width: 100px;
         }
-        .bedrock-host:focus {
-            border-color: var(--accent);
-        }
-        .bedrock-host::placeholder {
-            color: var(--text-link);
-        }
-
+        .bedrock-host:focus { border-color: var(--accent); }
+        .bedrock-host::placeholder { color: var(--text-link); }
         .bedrock-port {
             flex: 0.8;
             padding: 14px 18px;
@@ -223,20 +190,14 @@
             min-width: 80px;
             max-width: 120px;
         }
-        .bedrock-port:focus {
-            border-color: var(--accent);
-        }
-        .bedrock-port::placeholder {
-            color: var(--text-link);
-        }
-
+        .bedrock-port:focus { border-color: var(--accent); }
+        .bedrock-port::placeholder { color: var(--text-link); }
         .search-options {
             display: flex;
             align-items: center;
             gap: 8px;
             flex-shrink: 0;
         }
-
         .search-options label {
             display: flex;
             align-items: center;
@@ -247,14 +208,12 @@
             user-select: none;
             white-space: nowrap;
         }
-
         .search-options input[type="checkbox"] {
             width: 16px;
             height: 16px;
             accent-color: var(--accent);
             cursor: pointer;
         }
-
         .big-btn {
             background-color: var(--accent);
             color: #fff;
@@ -277,20 +236,17 @@
             cursor: not-allowed;
             transform: none;
         }
-
         .hint-text {
             color: var(--text-secondary);
             font-size: 11px;
             text-align: center;
             margin: 12px 0 0;
         }
-
         .divider {
             height: 1px;
             background-color: var(--card-border);
             margin: 20px 0;
         }
-
         .features {
             display: flex;
             flex-wrap: wrap;
@@ -298,7 +254,6 @@
             gap: 12px;
             margin: 16px 0 8px;
         }
-
         .feature-item {
             font-size: 12px;
             color: var(--text-secondary);
@@ -306,15 +261,11 @@
             padding: 6px 14px;
             border-radius: 20px;
         }
-
         .preview-area {
             margin: 20px 0;
             display: none;
         }
-        .preview-area.show {
-            display: block;
-        }
-
+        .preview-area.show { display: block; }
         .preview-title {
             font-size: 13px;
             color: var(--text-secondary);
@@ -322,14 +273,12 @@
             font-weight: 500;
             text-align: center;
         }
-
         .result-card {
             background: var(--icon-bg);
             border-radius: 12px;
             padding: 20px;
             border: 1px solid var(--card-border);
         }
-
         .result-header {
             display: flex;
             justify-content: space-between;
@@ -338,14 +287,12 @@
             flex-wrap: wrap;
             gap: 8px;
         }
-
         .result-address {
             font-weight: 700;
             font-size: 18px;
             color: var(--text-primary);
             word-break: break-all;
         }
-
         .status-badge {
             display: inline-block;
             padding: 4px 16px;
@@ -358,7 +305,6 @@
         .status-online { background: var(--online-color); }
         .status-offline { background: var(--offline-color); }
         .status-unknown { background: var(--text-link); }
-
         .info-row {
             display: flex;
             padding: 6px 0;
@@ -366,37 +312,30 @@
             font-size: 14px;
             gap: 12px;
         }
-        .info-row:last-child {
-            border-bottom: none;
-        }
-
+        .info-row:last-child { border-bottom: none; }
         .info-label {
             color: var(--text-secondary);
             flex-shrink: 0;
             min-width: 70px;
         }
-
         .info-value {
             color: var(--text-primary);
             font-weight: 500;
             word-break: break-all;
             flex: 1;
         }
-
         .info-value.motd {
             font-weight: 400;
             font-size: 13px;
             color: var(--text-secondary);
             line-height: 1.8;
         }
-
         .info-value.player-list {
             line-height: 1.8;
             max-height: 200px;
             overflow-y: auto;
             padding-right: 4px;
         }
-
         .info-value.player-list::-webkit-scrollbar {
             width: 6px;
         }
@@ -408,7 +347,6 @@
             background: var(--accent);
             border-radius: 10px;
         }
-
         .server-icon {
             text-align: center;
             margin-bottom: 16px;
@@ -420,7 +358,6 @@
             border: 2px solid var(--card-border);
             object-fit: cover;
         }
-
         .error-message {
             background-color: #fee;
             color: #c00;
@@ -434,7 +371,6 @@
             background-color: #2a1a1a;
             color: #ff6b6b;
         }
-
         .loading-indicator {
             text-align: center;
             padding: 20px;
@@ -442,7 +378,6 @@
             font-size: 13px;
             display: none;
         }
-
         .cookie-notice {
             text-align: center;
             font-size: 10px;
@@ -455,10 +390,7 @@
             color: var(--accent);
             text-decoration: none;
         }
-        .cookie-notice a:hover {
-            text-decoration: underline;
-        }
-
+        .cookie-notice a:hover { text-decoration: underline; }
         .history-section {
             margin-top: 16px;
         }
@@ -486,7 +418,6 @@
             border-color: var(--accent);
             color: var(--accent);
         }
-
         .back-link {
             display: inline-block;
             margin-top: 20px;
@@ -503,7 +434,6 @@
             background-color: var(--icon-bg);
             color: var(--accent);
         }
-
         .refresh-indicator {
             text-align: center;
             font-size: 11px;
@@ -511,10 +441,7 @@
             margin-top: 8px;
             display: none;
         }
-        .refresh-indicator.show {
-            display: block;
-        }
-
+        .refresh-indicator.show { display: block; }
         @media (max-width: 560px) {
             body { padding: 20px 16px; }
             .card { padding: 0 20px 28px; }
@@ -962,10 +889,29 @@ function displayResult(address, data, isBedrock = false) {
                 motdText = formatMOTD(motdText);
                 html += `<div class="info-row"><span class="info-label">${t.serverName}</span><span class="info-value motd">${motdText}</span></div>`;
             }
-            html += `<div class="info-row"><span class="info-label">${t.version}</span><span class="info-value">${data.version || '未知'}</span></div>`;
+            
+            let versionDisplay = data.version || '未知';
+            if (versionDisplay.startsWith('1.')) {
+                const versionNum = parseFloat(versionDisplay);
+                if (versionNum > 1.21) {
+                    versionDisplay = versionDisplay.substring(2);
+                }
+            }
+            html += `<div class="info-row"><span class="info-label">${t.version}</span><span class="info-value">${versionDisplay}</span></div>`;
+            
             html += `<div class="info-row"><span class="info-label">${t.edition}</span><span class="info-value">Bedrock</span></div>`;
             if (data.gamemode) {
-                html += `<div class="info-row"><span class="info-label">${t.gamemode}</span><span class="info-value">${data.gamemode}</span></div>`;
+                const gamemodeMap = {
+                    'Survival': '生存模式',
+                    'Creative': '创造模式',
+                    'Adventure': '冒险模式',
+                    'Spectator': '旁观模式'
+                };
+                let gamemodeDisplay = data.gamemode;
+                if (currentLang === 'zh' && gamemodeMap[data.gamemode]) {
+                    gamemodeDisplay = gamemodeMap[data.gamemode];
+                }
+                html += `<div class="info-row"><span class="info-label">${t.gamemode}</span><span class="info-value">${gamemodeDisplay}</span></div>`;
             }
             html += `<div class="info-row"><span class="info-label">${t.players}</span><span class="info-value">${data.players?.online || 0} / ${data.players?.max || '?'}</span></div>`;
         } else {
