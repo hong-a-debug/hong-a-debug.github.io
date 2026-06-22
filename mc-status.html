@@ -320,14 +320,11 @@
             margin-bottom: 16px;
         }
         .server-icon img {
-            max-width: 80px;
-            max-height: 80px;
+            width: 80px;
+            height: 80px;
             border-radius: 12px;
             border: 2px solid var(--card-border);
-        }
-        .no-icon {
-            font-size: 48px;
-            line-height: 80px;
+            object-fit: cover;
         }
 
         .error-message {
@@ -483,7 +480,7 @@
                 </div>
                 <div id="resultDetails"></div>
             </div>
-            <div class="refresh-indicator" id="refreshIndicator">🔄 每 60 秒自动刷新</div>
+            <div class="refresh-indicator" id="refreshIndicator">🔄 每 10 秒自动刷新</div>
         </div>
 
         <div class="history-section">
@@ -528,7 +525,10 @@ const translations = {
         backLink: "← 返回主页",
         cookieNotice: '如果你没有同意 Cookie，自定义选项不会被保存，点击 <a href="/">这里</a> 同意 cookie',
         enterAddress: "请输入一个域名或IP地址",
-        autoRefresh: "🔄 每 60 秒自动刷新"
+        autoRefresh: "🔄 每 10 秒自动刷新",
+        software: "服务端",
+        plugins: "插件",
+        mods: "模组"
     },
     en: {
         pageTitle: "Server Query",
@@ -557,7 +557,10 @@ const translations = {
         backLink: "← Back to Home",
         cookieNotice: 'If you do not consent to cookies, your custom preferences will not be saved, <a href="/">click here</a> to agree',
         enterAddress: "Please enter a domain or IP address",
-        autoRefresh: "🔄 Auto-refresh every 60s"
+        autoRefresh: "🔄 Auto-refresh every 10s",
+        software: "Software",
+        plugins: "Plugins",
+        mods: "Mods"
     }
 };
 
@@ -628,7 +631,6 @@ function switchLanguage(lang) {
         setCookie('lang', lang, 30);
     }
 
-    // 如果有缓存的查询结果，用新语言重新渲染
     const address = document.getElementById('resultAddress').textContent;
     if (address && address !== '—' && cachedData) {
         displayResult(address, cachedData);
@@ -705,7 +707,7 @@ function startRefresh(address) {
     document.getElementById('refreshIndicator').classList.add('show');
     refreshTimer = setInterval(() => {
         queryServer(address, true);
-    }, 60000);
+    }, 10000);
 }
 
 async function queryServer(address, silent = false) {
@@ -720,13 +722,18 @@ async function queryServer(address, silent = false) {
         stopRefresh();
     }
 
+    if (silent) {
+        document.getElementById('resultDetails').innerHTML = '';
+        document.getElementById('resultAddress').textContent = address + ' (刷新中...)';
+    }
+
     try {
         const parsed = parseAddress(address);
         if (!parsed) throw new Error('Invalid');
 
-        let url = `https://api.mcsrvstat.us/2/${encodeURIComponent(parsed.host)}`;
+        let url = `https://api.mcsrvstat.us/3/${encodeURIComponent(parsed.host)}`;
         if (parsed.port) {
-            url = `https://api.mcsrvstat.us/2/${encodeURIComponent(parsed.host)}:${parsed.port}`;
+            url = `https://api.mcsrvstat.us/3/${encodeURIComponent(parsed.host)}:${parsed.port}`;
         }
 
         const resp = await fetch(url);
@@ -768,13 +775,19 @@ function displayResult(address, data) {
         document.getElementById('statusBadge').innerHTML = `<span class="status-badge status-online">${t.online}</span>`;
 
         let html = '';
+
         if (data.icon) {
             html += `<div class="server-icon"><img src="${data.icon}" alt="Icon"></div>`;
         } else {
-            html += `<div class="server-icon"><span class="no-icon">⛏️</span></div>`;
+            html += `<div class="server-icon"><img src="https://api.mcsrvstat.us/icon/${encodeURIComponent(address)}" alt="Icon"></div>`;
         }
 
         html += `<div class="info-row"><span class="info-label">${t.version}</span><span class="info-value">${data.version || '未知'}</span></div>`;
+
+        if (data.software) {
+            html += `<div class="info-row"><span class="info-label">${t.software}</span><span class="info-value">${data.software}</span></div>`;
+        }
+
         html += `<div class="info-row"><span class="info-label">${t.players}</span><span class="info-value">${data.players?.online || 0} / ${data.players?.max || '?'}</span></div>`;
 
         if (data.motd?.clean?.length) {
@@ -785,10 +798,20 @@ function displayResult(address, data) {
         }
 
         if (data.players?.list && data.players.list.length > 0) {
-            let playerNames = data.players.list.join(', ');
+            let playerNames = data.players.list.map(p => p.name || p).join(', ');
             playerNames = playerNames.replace(/\n/g, ' ').replace(/\r/g, ' ').trim();
             const formattedPlayers = formatPlayers(playerNames.split(', '));
             html += `<div class="info-row"><span class="info-label">${t.playerList}</span><span class="info-value player-list">${formattedPlayers}</span></div>`;
+        }
+
+        if (data.plugins && data.plugins.length > 0) {
+            const pluginNames = data.plugins.map(p => p.name + (p.version ? ' v' + p.version : '')).join(', ');
+            html += `<div class="info-row"><span class="info-label">${t.plugins}</span><span class="info-value motd">${pluginNames}</span></div>`;
+        }
+
+        if (data.mods && data.mods.length > 0) {
+            const modNames = data.mods.map(m => m.name + (m.version ? ' v' + m.version : '')).join(', ');
+            html += `<div class="info-row"><span class="info-label">${t.mods}</span><span class="info-value motd">${modNames}</span></div>`;
         }
 
         html += `<div class="info-row" style="margin-top:12px;border-top:2px solid var(--card-border);padding-top:12px;">
