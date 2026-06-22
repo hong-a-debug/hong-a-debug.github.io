@@ -282,10 +282,10 @@
 
         .info-row {
             display: flex;
-            justify-content: space-between;
-            padding: 8px 0;
+            padding: 6px 0;
             border-bottom: 1px solid var(--card-border);
             font-size: 14px;
+            gap: 12px;
         }
         .info-row:last-child {
             border-bottom: none;
@@ -293,20 +293,26 @@
 
         .info-label {
             color: var(--text-secondary);
+            flex-shrink: 0;
+            min-width: 70px;
         }
 
         .info-value {
             color: var(--text-primary);
             font-weight: 500;
-            text-align: right;
             word-break: break-all;
-            max-width: 60%;
+            flex: 1;
         }
 
         .info-value.motd {
             font-weight: 400;
             font-size: 13px;
             color: var(--text-secondary);
+            line-height: 1.8;
+        }
+
+        .info-value.player-list {
+            line-height: 1.8;
         }
 
         .server-icon {
@@ -419,7 +425,7 @@
             .top-left-buttons { top: 12px; left: 16px; }
             .theme-btn { padding: 6px 12px; font-size: 14px; }
             .info-row { flex-direction: column; align-items: flex-start; gap: 2px; }
-            .info-value { max-width: 100%; text-align: left; }
+            .info-value { text-align: left; }
         }
     </style>
 </head>
@@ -641,6 +647,27 @@ function parseAddress(input) {
     return { host: input, port: null };
 }
 
+function formatPlayers(arr) {
+    const chunks = [];
+    for (let i = 0; i < arr.length; i += 3) {
+        let group = arr.slice(i, i + 3).join(', ');
+        if (i + 3 < arr.length) {
+            group += ',';
+        }
+        chunks.push(group);
+    }
+    return chunks.join('<br>');
+}
+
+function formatMOTD(text) {
+    const words = text.split(' ');
+    const chunks = [];
+    for (let i = 0; i < words.length; i += 3) {
+        chunks.push(words.slice(i, i + 3).join(' '));
+    }
+    return chunks.join('<br>');
+}
+
 async function queryServer(address) {
     const loading = document.getElementById('loadingIndicator');
     const area = document.getElementById('previewArea');
@@ -697,11 +724,17 @@ function displayResult(address, data) {
         html += `<div class="info-row"><span class="info-label">${t.players}</span><span class="info-value">${data.players?.online || 0} / ${data.players?.max || '?'}</span></div>`;
 
         if (data.motd?.clean?.length) {
-            html += `<div class="info-row"><span class="info-label">${t.motd}</span><span class="info-value motd">${data.motd.clean.join(' ')}</span></div>`;
+            let motdText = data.motd.clean.join(' ');
+            motdText = motdText.replace(/\n/g, ' ').replace(/\r/g, ' ').trim();
+            motdText = formatMOTD(motdText);
+            html += `<div class="info-row"><span class="info-label">${t.motd}</span><span class="info-value motd">${motdText}</span></div>`;
         }
 
-        if (data.players?.list?.length) {
-            html += `<div class="info-row"><span class="info-label">${t.playerList}</span><span class="info-value">${data.players.list.join(', ')}</span></div>`;
+        if (data.players?.list && data.players.list.length > 0) {
+            let playerNames = data.players.list.join(', ');
+            playerNames = playerNames.replace(/\n/g, ' ').replace(/\r/g, ' ').trim();
+            const formattedPlayers = formatPlayers(playerNames.split(', '));
+            html += `<div class="info-row"><span class="info-label">${t.playerList}</span><span class="info-value player-list">${formattedPlayers}</span></div>`;
         }
 
         html += `<div class="info-row" style="margin-top:12px;border-top:2px solid var(--card-border);padding-top:12px;">
@@ -711,12 +744,14 @@ function displayResult(address, data) {
         document.getElementById('resultDetails').innerHTML = html;
     } else {
         document.getElementById('statusBadge').innerHTML = `<span class="status-badge status-offline">${t.offline}</span>`;
-        document.getElementById('resultDetails').innerHTML = `
-            <div class="info-row">
-                <span class="info-label">${t.version}</span>
-                <span class="info-value" style="color:var(--offline-color);">${t.notMcServer}</span>
-            </div>
-        `;
+
+        let html = '';
+        html += `<div class="info-row">
+            <span class="info-label">${t.version}</span>
+            <span class="info-value" style="color:var(--offline-color);">${t.notMcServer}</span>
+        </div>`;
+
+        document.getElementById('resultDetails').innerHTML = html;
     }
 }
 
