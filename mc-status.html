@@ -155,10 +155,12 @@
         .search-group {
             display: flex;
             gap: 10px;
+            flex-wrap: wrap;
+            align-items: center;
         }
 
         .search-input {
-            flex: 1;
+            flex: 2;
             padding: 14px 18px;
             border: 2px solid var(--card-border);
             border-radius: 8px;
@@ -168,12 +170,89 @@
             outline: none;
             transition: border-color 0.3s;
             font-family: inherit;
+            min-width: 140px;
         }
         .search-input:focus {
             border-color: var(--accent);
         }
         .search-input::placeholder {
             color: var(--text-link);
+        }
+
+        .bedrock-inputs {
+            display: none;
+            flex: 2;
+            gap: 8px;
+            min-width: 140px;
+        }
+        .bedrock-inputs.show {
+            display: flex;
+        }
+
+        .bedrock-host {
+            flex: 2;
+            padding: 14px 18px;
+            border: 2px solid var(--card-border);
+            border-radius: 8px;
+            background: var(--search-bg);
+            color: var(--text-primary);
+            font-size: 15px;
+            outline: none;
+            transition: border-color 0.3s;
+            font-family: inherit;
+            min-width: 100px;
+        }
+        .bedrock-host:focus {
+            border-color: var(--accent);
+        }
+        .bedrock-host::placeholder {
+            color: var(--text-link);
+        }
+
+        .bedrock-port {
+            flex: 0.8;
+            padding: 14px 18px;
+            border: 2px solid var(--card-border);
+            border-radius: 8px;
+            background: var(--search-bg);
+            color: var(--text-primary);
+            font-size: 15px;
+            outline: none;
+            transition: border-color 0.3s;
+            font-family: inherit;
+            min-width: 80px;
+            max-width: 120px;
+        }
+        .bedrock-port:focus {
+            border-color: var(--accent);
+        }
+        .bedrock-port::placeholder {
+            color: var(--text-link);
+        }
+
+        .search-options {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            flex-shrink: 0;
+        }
+
+        .search-options label {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            font-size: 13px;
+            color: var(--text-secondary);
+            cursor: pointer;
+            user-select: none;
+            white-space: nowrap;
+        }
+
+        .search-options input[type="checkbox"] {
+            width: 16px;
+            height: 16px;
+            accent-color: var(--accent);
+            cursor: pointer;
         }
 
         .big-btn {
@@ -313,6 +392,21 @@
 
         .info-value.player-list {
             line-height: 1.8;
+            max-height: 200px;
+            overflow-y: auto;
+            padding-right: 4px;
+        }
+
+        .info-value.player-list::-webkit-scrollbar {
+            width: 6px;
+        }
+        .info-value.player-list::-webkit-scrollbar-track {
+            background: var(--card-border);
+            border-radius: 10px;
+        }
+        .info-value.player-list::-webkit-scrollbar-thumb {
+            background: var(--accent);
+            border-radius: 10px;
         }
 
         .server-icon {
@@ -426,6 +520,8 @@
             .card { padding: 0 20px 28px; }
             .top-bar { width: calc(100% + 40px); margin: 0 -20px; }
             .search-group { flex-direction: column; }
+            .search-options { justify-content: flex-start; }
+            .bedrock-port { max-width: 100%; }
             .big-btn { width: 100%; }
             .result-header { flex-direction: column; align-items: flex-start; }
             .language-selector { top: 12px; right: 16px; padding: 4px 8px; }
@@ -434,6 +530,8 @@
             .theme-btn { padding: 6px 12px; font-size: 14px; }
             .info-row { flex-direction: column; align-items: flex-start; gap: 2px; }
             .info-value { text-align: left; }
+            .info-value.player-list { max-height: 150px; }
+            .bedrock-inputs { flex-wrap: wrap; }
         }
     </style>
 </head>
@@ -456,9 +554,19 @@
 
         <div class="search-group">
             <input type="text" id="serverInput" class="search-input" placeholder="例如: xxx.xxx.xxx:00000">
+            <div class="bedrock-inputs" id="bedrockInputs">
+                <input type="text" id="bedrockHost" class="bedrock-host" placeholder="例如: xxx.xxx.xxx">
+                <input type="text" id="bedrockPort" class="bedrock-port" placeholder="端口">
+            </div>
+            <div class="search-options">
+                <label>
+                    <input type="checkbox" id="bedrockCheck">
+                    <span id="bedrockLabel">基岩版</span>
+                </label>
+            </div>
             <button id="queryBtn" class="big-btn">查询</button>
         </div>
-        <div class="hint-text" id="hintText">支持 Java 版服务器 · 实时探测状态</div>
+        <div class="hint-text" id="hintText">支持 Minecraft 服务器 · 实时探测状态</div>
 
         <div class="divider"></div>
 
@@ -502,7 +610,7 @@ const translations = {
         pageTitle: "服务器查询",
         pageTitleText: "服务器查询",
         subtitleText: "输入域名或IP，查询是否为Minecraft服务器",
-        hintText: "支持 Java 版服务器 · 实时探测状态",
+        hintText: "支持 Minecraft 服务器 · 实时探测状态",
         feature1: "任意域名/IP",
         feature2: "在线/离线检测",
         feature3: "玩家数 & 版本",
@@ -510,6 +618,8 @@ const translations = {
         previewTitle: "探测结果",
         queryBtn: "查询",
         placeholder: "例如: xxx.xxx.xxx:00000",
+        bedrockHostPlaceholder: "例如: xxx.xxx.xxx",
+        bedrockPortPlaceholder: "端口",
         loading: "正在探测服务器...",
         online: "在线",
         offline: "离线",
@@ -528,13 +638,17 @@ const translations = {
         autoRefresh: "🔄 每 10 秒自动刷新",
         software: "服务端",
         plugins: "插件",
-        mods: "模组"
+        mods: "模组",
+        bedrockLabel: "基岩版",
+        edition: "版本类型",
+        gamemode: "游戏模式",
+        serverName: "服务器名称"
     },
     en: {
         pageTitle: "Server Query",
         pageTitleText: "Server Query",
         subtitleText: "Enter a domain or IP to check if it's a Minecraft server",
-        hintText: "Java Edition supported · Real-time status",
+        hintText: "Minecraft Server Supported · Real-time Status",
         feature1: "Any domain/IP",
         feature2: "Online/Offline check",
         feature3: "Players & Version",
@@ -542,6 +656,8 @@ const translations = {
         previewTitle: "Result",
         queryBtn: "Query",
         placeholder: "e.g. xxx.xxx.xxx:00000",
+        bedrockHostPlaceholder: "e.g. xxx.xxx.xxx",
+        bedrockPortPlaceholder: "Port",
         loading: "Probing server...",
         online: "Online",
         offline: "Offline",
@@ -560,7 +676,11 @@ const translations = {
         autoRefresh: "🔄 Auto-refresh every 10s",
         software: "Software",
         plugins: "Plugins",
-        mods: "Mods"
+        mods: "Mods",
+        bedrockLabel: "Bedrock",
+        edition: "Edition",
+        gamemode: "Game Mode",
+        serverName: "Server Name"
     }
 };
 
@@ -569,6 +689,7 @@ let queryHistory = JSON.parse(localStorage.getItem('mcQueryHistory') || '[]');
 let refreshTimer = null;
 let currentAddress = null;
 let cachedData = null;
+let cachedIsBedrock = false;
 
 function getCookie(name) {
     const v = `; ${document.cookie}`;
@@ -621,11 +742,14 @@ function switchLanguage(lang) {
     document.getElementById('previewTitle').textContent = t.previewTitle;
     document.getElementById('queryBtn').textContent = t.queryBtn;
     document.getElementById('serverInput').placeholder = t.placeholder;
+    document.getElementById('bedrockHost').placeholder = t.bedrockHostPlaceholder;
+    document.getElementById('bedrockPort').placeholder = t.bedrockPortPlaceholder;
     document.getElementById('historyTitle').textContent = t.historyTitle;
     document.getElementById('backLink').textContent = t.backLink;
     document.getElementById('loadingIndicator').textContent = t.loading;
     document.getElementById('cookieNotice').innerHTML = t.cookieNotice;
     document.getElementById('refreshIndicator').textContent = t.autoRefresh;
+    document.getElementById('bedrockLabel').textContent = t.bedrockLabel;
 
     if (getCookie('cookie_consent') === 'accepted') {
         setCookie('lang', lang, 30);
@@ -633,7 +757,7 @@ function switchLanguage(lang) {
 
     const address = document.getElementById('resultAddress').textContent;
     if (address && address !== '—' && cachedData) {
-        displayResult(address, cachedData);
+        displayResult(address, cachedData, cachedIsBedrock);
     }
 }
 
@@ -644,6 +768,21 @@ document.querySelectorAll('.lang-btn').forEach(btn => {
         this.classList.add('active');
         switchLanguage(lang);
     });
+});
+
+document.getElementById('bedrockCheck').addEventListener('change', function() {
+    const inputs = document.getElementById('bedrockInputs');
+    const javaInput = document.getElementById('serverInput');
+    if (this.checked) {
+        inputs.classList.add('show');
+        javaInput.style.display = 'none';
+        javaInput.value = '';
+    } else {
+        inputs.classList.remove('show');
+        javaInput.style.display = 'block';
+        document.getElementById('bedrockHost').value = '';
+        document.getElementById('bedrockPort').value = '';
+    }
 });
 
 function showError(msg) {
@@ -657,6 +796,23 @@ function showError(msg) {
     el.textContent = msg;
     el.style.display = 'block';
     setTimeout(() => { el.style.display = 'none'; }, 5000);
+}
+
+function getAddress() {
+    const isBedrock = document.getElementById('bedrockCheck').checked;
+    if (isBedrock) {
+        const host = document.getElementById('bedrockHost').value.trim();
+        let port = document.getElementById('bedrockPort').value.trim();
+        if (!host) return null;
+        if (!port) {
+            port = '19132';
+        }
+        return host + ':' + port;
+    } else {
+        const input = document.getElementById('serverInput').value.trim();
+        if (!input) return null;
+        return input;
+    }
 }
 
 function parseAddress(input) {
@@ -702,15 +858,15 @@ function stopRefresh() {
     document.getElementById('refreshIndicator').classList.remove('show');
 }
 
-function startRefresh(address) {
+function startRefresh(address, isBedrock) {
     stopRefresh();
     document.getElementById('refreshIndicator').classList.add('show');
     refreshTimer = setInterval(() => {
-        queryServer(address, true);
+        queryServer(address, true, isBedrock);
     }, 10000);
 }
 
-async function queryServer(address, silent = false) {
+async function queryServer(address, silent = false, isBedrock = false) {
     const loading = document.getElementById('loadingIndicator');
     const area = document.getElementById('previewArea');
     const btn = document.getElementById('queryBtn');
@@ -724,16 +880,26 @@ async function queryServer(address, silent = false) {
 
     if (silent) {
         document.getElementById('resultDetails').innerHTML = '';
+        document.getElementById('statusBadge').innerHTML = '';
         document.getElementById('resultAddress').textContent = address + ' (刷新中...)';
+        loading.style.display = 'block';
     }
 
     try {
         const parsed = parseAddress(address);
         if (!parsed) throw new Error('Invalid');
 
-        let url = `https://api.mcsrvstat.us/3/${encodeURIComponent(parsed.host)}`;
-        if (parsed.port) {
-            url = `https://api.mcsrvstat.us/3/${encodeURIComponent(parsed.host)}:${parsed.port}`;
+        let url;
+        if (isBedrock) {
+            url = `https://api.mcsrvstat.us/bedrock/3/${encodeURIComponent(parsed.host)}`;
+            if (parsed.port) {
+                url = `https://api.mcsrvstat.us/bedrock/3/${encodeURIComponent(parsed.host)}:${parsed.port}`;
+            }
+        } else {
+            url = `https://api.mcsrvstat.us/3/${encodeURIComponent(parsed.host)}`;
+            if (parsed.port) {
+                url = `https://api.mcsrvstat.us/3/${encodeURIComponent(parsed.host)}:${parsed.port}`;
+            }
         }
 
         const resp = await fetch(url);
@@ -743,6 +909,9 @@ async function queryServer(address, silent = false) {
             loading.style.display = 'none';
             btn.disabled = false;
         }
+        if (silent) {
+            loading.style.display = 'none';
+        }
         area.classList.add('show');
 
         if (!silent) {
@@ -750,12 +919,16 @@ async function queryServer(address, silent = false) {
         }
         currentAddress = address;
         cachedData = data;
-        displayResult(address, data);
+        cachedIsBedrock = isBedrock;
+        displayResult(address, data, isBedrock);
 
     } catch (e) {
         if (!silent) {
             loading.style.display = 'none';
             btn.disabled = false;
+        }
+        if (silent) {
+            loading.style.display = 'none';
         }
         area.classList.add('show');
         const t = translations[currentLang];
@@ -767,7 +940,7 @@ async function queryServer(address, silent = false) {
     }
 }
 
-function displayResult(address, data) {
+function displayResult(address, data, isBedrock = false) {
     const t = translations[currentLang];
     document.getElementById('resultAddress').textContent = address;
 
@@ -782,36 +955,51 @@ function displayResult(address, data) {
             html += `<div class="server-icon"><img src="https://api.mcsrvstat.us/icon/${encodeURIComponent(address)}" alt="Icon"></div>`;
         }
 
-        html += `<div class="info-row"><span class="info-label">${t.version}</span><span class="info-value">${data.version || '未知'}</span></div>`;
+        if (isBedrock) {
+            if (data.motd?.clean?.length) {
+                let motdText = data.motd.clean.join(' ');
+                motdText = motdText.replace(/\n/g, ' ').replace(/\r/g, ' ').trim();
+                motdText = formatMOTD(motdText);
+                html += `<div class="info-row"><span class="info-label">${t.serverName}</span><span class="info-value motd">${motdText}</span></div>`;
+            }
+            html += `<div class="info-row"><span class="info-label">${t.version}</span><span class="info-value">${data.version || '未知'}</span></div>`;
+            html += `<div class="info-row"><span class="info-label">${t.edition}</span><span class="info-value">Bedrock</span></div>`;
+            if (data.gamemode) {
+                html += `<div class="info-row"><span class="info-label">${t.gamemode}</span><span class="info-value">${data.gamemode}</span></div>`;
+            }
+            html += `<div class="info-row"><span class="info-label">${t.players}</span><span class="info-value">${data.players?.online || 0} / ${data.players?.max || '?'}</span></div>`;
+        } else {
+            html += `<div class="info-row"><span class="info-label">${t.version}</span><span class="info-value">${data.version || '未知'}</span></div>`;
 
-        if (data.software) {
-            html += `<div class="info-row"><span class="info-label">${t.software}</span><span class="info-value">${data.software}</span></div>`;
-        }
+            if (data.software) {
+                html += `<div class="info-row"><span class="info-label">${t.software}</span><span class="info-value">${data.software}</span></div>`;
+            }
 
-        html += `<div class="info-row"><span class="info-label">${t.players}</span><span class="info-value">${data.players?.online || 0} / ${data.players?.max || '?'}</span></div>`;
+            html += `<div class="info-row"><span class="info-label">${t.players}</span><span class="info-value">${data.players?.online || 0} / ${data.players?.max || '?'}</span></div>`;
 
-        if (data.motd?.clean?.length) {
-            let motdText = data.motd.clean.join(' ');
-            motdText = motdText.replace(/\n/g, ' ').replace(/\r/g, ' ').trim();
-            motdText = formatMOTD(motdText);
-            html += `<div class="info-row"><span class="info-label">${t.motd}</span><span class="info-value motd">${motdText}</span></div>`;
-        }
+            if (data.motd?.clean?.length) {
+                let motdText = data.motd.clean.join(' ');
+                motdText = motdText.replace(/\n/g, ' ').replace(/\r/g, ' ').trim();
+                motdText = formatMOTD(motdText);
+                html += `<div class="info-row"><span class="info-label">${t.motd}</span><span class="info-value motd">${motdText}</span></div>`;
+            }
 
-        if (data.players?.list && data.players.list.length > 0) {
-            let playerNames = data.players.list.map(p => p.name || p).join(', ');
-            playerNames = playerNames.replace(/\n/g, ' ').replace(/\r/g, ' ').trim();
-            const formattedPlayers = formatPlayers(playerNames.split(', '));
-            html += `<div class="info-row"><span class="info-label">${t.playerList}</span><span class="info-value player-list">${formattedPlayers}</span></div>`;
-        }
+            if (data.players?.list && data.players.list.length > 0) {
+                let playerNames = data.players.list.map(p => p.name || p).join(', ');
+                playerNames = playerNames.replace(/\n/g, ' ').replace(/\r/g, ' ').trim();
+                const formattedPlayers = formatPlayers(playerNames.split(', '));
+                html += `<div class="info-row"><span class="info-label">${t.playerList}</span><span class="info-value player-list">${formattedPlayers}</span></div>`;
+            }
 
-        if (data.plugins && data.plugins.length > 0) {
-            const pluginNames = data.plugins.map(p => p.name + (p.version ? ' v' + p.version : '')).join(', ');
-            html += `<div class="info-row"><span class="info-label">${t.plugins}</span><span class="info-value motd">${pluginNames}</span></div>`;
-        }
+            if (data.plugins && data.plugins.length > 0) {
+                const pluginNames = data.plugins.map(p => p.name + (p.version ? ' v' + p.version : '')).join(', ');
+                html += `<div class="info-row"><span class="info-label">${t.plugins}</span><span class="info-value motd">${pluginNames}</span></div>`;
+            }
 
-        if (data.mods && data.mods.length > 0) {
-            const modNames = data.mods.map(m => m.name + (m.version ? ' v' + m.version : '')).join(', ');
-            html += `<div class="info-row"><span class="info-label">${t.mods}</span><span class="info-value motd">${modNames}</span></div>`;
+            if (data.mods && data.mods.length > 0) {
+                const modNames = data.mods.map(m => m.name + (m.version ? ' v' + m.version : '')).join(', ');
+                html += `<div class="info-row"><span class="info-label">${t.mods}</span><span class="info-value motd">${modNames}</span></div>`;
+            }
         }
 
         html += `<div class="info-row" style="margin-top:12px;border-top:2px solid var(--card-border);padding-top:12px;">
@@ -820,7 +1008,7 @@ function displayResult(address, data) {
 
         document.getElementById('resultDetails').innerHTML = html;
 
-        startRefresh(address);
+        startRefresh(address, isBedrock);
 
     } else {
         document.getElementById('statusBadge').innerHTML = `<span class="status-badge status-offline">${t.offline}</span>`;
@@ -858,24 +1046,48 @@ function renderHistory() {
     container.querySelectorAll('.history-tag').forEach(tag => {
         tag.addEventListener('click', function() {
             const addr = this.dataset.address;
-            document.getElementById('serverInput').value = addr;
+            const isBedrock = addr.includes('19132') || addr.includes('19133');
+            if (isBedrock) {
+                document.getElementById('bedrockCheck').checked = true;
+                const parts = addr.split(':');
+                document.getElementById('bedrockHost').value = parts[0];
+                document.getElementById('bedrockPort').value = parts[1] || '';
+                document.getElementById('bedrockInputs').classList.add('show');
+                document.getElementById('serverInput').style.display = 'none';
+                document.getElementById('serverInput').value = '';
+            } else {
+                document.getElementById('bedrockCheck').checked = false;
+                document.getElementById('bedrockInputs').classList.remove('show');
+                document.getElementById('serverInput').style.display = 'block';
+                document.getElementById('serverInput').value = addr;
+                document.getElementById('bedrockHost').value = '';
+                document.getElementById('bedrockPort').value = '';
+            }
             stopRefresh();
-            queryServer(addr, false);
+            const isBedrockNow = document.getElementById('bedrockCheck').checked;
+            queryServer(addr, false, isBedrockNow);
         });
     });
 }
 
 document.getElementById('queryBtn').addEventListener('click', function() {
-    const input = document.getElementById('serverInput').value.trim();
-    if (!input) {
+    const address = getAddress();
+    if (!address) {
         showError(translations[currentLang].enterAddress);
         return;
     }
     stopRefresh();
-    queryServer(input, false);
+    const isBedrock = document.getElementById('bedrockCheck').checked;
+    queryServer(address, false, isBedrock);
 });
 
 document.getElementById('serverInput').addEventListener('keydown', function(e) {
+    if (e.key === 'Enter') document.getElementById('queryBtn').click();
+});
+document.getElementById('bedrockHost').addEventListener('keydown', function(e) {
+    if (e.key === 'Enter') document.getElementById('queryBtn').click();
+});
+document.getElementById('bedrockPort').addEventListener('keydown', function(e) {
     if (e.key === 'Enter') document.getElementById('queryBtn').click();
 });
 
@@ -894,8 +1106,21 @@ renderHistory();
 
 const q = new URLSearchParams(window.location.search).get('q');
 if (q) {
-    document.getElementById('serverInput').value = q;
-    setTimeout(() => queryServer(q, false), 500);
+    const isBedrock = q.includes('19132') || q.includes('19133');
+    if (isBedrock) {
+        document.getElementById('bedrockCheck').checked = true;
+        const parts = q.split(':');
+        document.getElementById('bedrockHost').value = parts[0];
+        document.getElementById('bedrockPort').value = parts[1] || '';
+        document.getElementById('bedrockInputs').classList.add('show');
+        document.getElementById('serverInput').style.display = 'none';
+    } else {
+        document.getElementById('serverInput').value = q;
+    }
+    setTimeout(() => {
+        const isBedrockNow = document.getElementById('bedrockCheck').checked;
+        queryServer(q, false, isBedrockNow);
+    }, 500);
 }
 </script>
 </body>
