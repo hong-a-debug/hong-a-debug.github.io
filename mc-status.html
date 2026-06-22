@@ -6,7 +6,12 @@
     <title>服务器查询</title>
     <link rel="icon" type="image/png" href="/icon/icon.png">
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
         :root {
             --bg-color: #FFF5E6;
             --card-bg: #FFFFFF;
@@ -20,7 +25,9 @@
             --icon-bg: #FFF0E5;
             --online-color: #27ae60;
             --offline-color: #d32f2f;
+            --clear-btn-hover: #b71c1c;
         }
+
         body.dark {
             --bg-color: #000000;
             --card-bg: #1a1a1a;
@@ -34,7 +41,9 @@
             --icon-bg: #2a2a2a;
             --online-color: #2ecc71;
             --offline-color: #ff6b6b;
+            --clear-btn-hover: #c62828;
         }
+
         body {
             background-color: var(--bg-color);
             font-family: '微软雅黑', 'Segoe UI', system-ui, -apple-system, sans-serif;
@@ -45,6 +54,7 @@
             padding: 40px 20px;
             transition: background-color 0.3s;
         }
+
         .language-selector {
             position: fixed;
             top: 20px;
@@ -58,6 +68,7 @@
             gap: 8px;
             box-shadow: 0 2px 8px rgba(0,0,0,0.04);
         }
+
         .lang-btn {
             background: none;
             border: none;
@@ -78,6 +89,7 @@
             background-color: var(--icon-bg);
             color: var(--accent);
         }
+
         .top-left-buttons {
             position: fixed;
             top: 20px;
@@ -87,6 +99,7 @@
             gap: 12px;
             align-items: center;
         }
+
         .theme-btn {
             background-color: var(--card-bg);
             border: 1px solid var(--card-border);
@@ -104,6 +117,7 @@
             color: #fff;
             border-color: var(--accent);
         }
+
         .card {
             background-color: var(--card-bg);
             border: 1px solid var(--card-border);
@@ -113,13 +127,18 @@
             padding: 0 28px 36px;
             transition: background-color 0.3s;
         }
+
         .top-bar {
             background-color: var(--accent);
             height: 6px;
             width: calc(100% + 56px);
             margin: 0 -28px;
         }
-        .card-inner { padding: 30px 0 20px; }
+
+        .card-inner {
+            padding: 30px 0 20px;
+        }
+
         .title {
             font-size: 22px;
             font-weight: 700;
@@ -127,18 +146,21 @@
             text-align: center;
             margin-bottom: 8px;
         }
+
         .subtitle {
             font-size: 13px;
             color: var(--text-secondary);
             text-align: center;
             margin-bottom: 20px;
         }
+
         .search-group {
             display: flex;
             gap: 10px;
             flex-wrap: wrap;
             align-items: center;
         }
+
         .search-input {
             flex: 2;
             padding: 14px 18px;
@@ -152,15 +174,23 @@
             font-family: inherit;
             min-width: 140px;
         }
-        .search-input:focus { border-color: var(--accent); }
-        .search-input::placeholder { color: var(--text-link); }
+        .search-input:focus {
+            border-color: var(--accent);
+        }
+        .search-input::placeholder {
+            color: var(--text-link);
+        }
+
         .bedrock-inputs {
             display: none;
             flex: 2;
             gap: 8px;
             min-width: 140px;
         }
-        .bedrock-inputs.show { display: flex; }
+        .bedrock-inputs.show {
+            display: flex;
+        }
+
         .bedrock-host {
             flex: 2;
             padding: 14px 18px;
@@ -174,8 +204,13 @@
             font-family: inherit;
             min-width: 100px;
         }
-        .bedrock-host:focus { border-color: var(--accent); }
-        .bedrock-host::placeholder { color: var(--text-link); }
+        .bedrock-host:focus {
+            border-color: var(--accent);
+        }
+        .bedrock-host::placeholder {
+            color: var(--text-link);
+        }
+
         .bedrock-port {
             flex: 0.8;
             padding: 14px 18px;
@@ -190,14 +225,20 @@
             min-width: 80px;
             max-width: 120px;
         }
-        .bedrock-port:focus { border-color: var(--accent); }
-        .bedrock-port::placeholder { color: var(--text-link); }
+        .bedrock-port:focus {
+            border-color: var(--accent);
+        }
+        .bedrock-port::placeholder {
+            color: var(--text-link);
+        }
+
         .search-options {
             display: flex;
             align-items: center;
             gap: 8px;
             flex-shrink: 0;
         }
+
         .search-options label {
             display: flex;
             align-items: center;
@@ -208,12 +249,14 @@
             user-select: none;
             white-space: nowrap;
         }
+
         .search-options input[type="checkbox"] {
             width: 16px;
             height: 16px;
             accent-color: var(--accent);
             cursor: pointer;
         }
+
         .big-btn {
             background-color: var(--accent);
             color: #fff;
@@ -236,17 +279,20 @@
             cursor: not-allowed;
             transform: none;
         }
+
         .hint-text {
             color: var(--text-secondary);
             font-size: 11px;
             text-align: center;
             margin: 12px 0 0;
         }
+
         .divider {
             height: 1px;
             background-color: var(--card-border);
             margin: 20px 0;
         }
+
         .features {
             display: flex;
             flex-wrap: wrap;
@@ -254,6 +300,7 @@
             gap: 12px;
             margin: 16px 0 8px;
         }
+
         .feature-item {
             font-size: 12px;
             color: var(--text-secondary);
@@ -261,11 +308,15 @@
             padding: 6px 14px;
             border-radius: 20px;
         }
+
         .preview-area {
             margin: 20px 0;
             display: none;
         }
-        .preview-area.show { display: block; }
+        .preview-area.show {
+            display: block;
+        }
+
         .preview-title {
             font-size: 13px;
             color: var(--text-secondary);
@@ -273,12 +324,14 @@
             font-weight: 500;
             text-align: center;
         }
+
         .result-card {
             background: var(--icon-bg);
             border-radius: 12px;
             padding: 20px;
             border: 1px solid var(--card-border);
         }
+
         .result-header {
             display: flex;
             justify-content: space-between;
@@ -287,12 +340,14 @@
             flex-wrap: wrap;
             gap: 8px;
         }
+
         .result-address {
             font-weight: 700;
             font-size: 18px;
             color: var(--text-primary);
             word-break: break-all;
         }
+
         .status-badge {
             display: inline-block;
             padding: 4px 16px;
@@ -302,9 +357,16 @@
             white-space: nowrap;
             color: #fff;
         }
-        .status-online { background: var(--online-color); }
-        .status-offline { background: var(--offline-color); }
-        .status-unknown { background: var(--text-link); }
+        .status-online {
+            background: var(--online-color);
+        }
+        .status-offline {
+            background: var(--offline-color);
+        }
+        .status-unknown {
+            background: var(--text-link);
+        }
+
         .info-row {
             display: flex;
             padding: 6px 0;
@@ -312,30 +374,37 @@
             font-size: 14px;
             gap: 12px;
         }
-        .info-row:last-child { border-bottom: none; }
+        .info-row:last-child {
+            border-bottom: none;
+        }
+
         .info-label {
             color: var(--text-secondary);
             flex-shrink: 0;
             min-width: 70px;
         }
+
         .info-value {
             color: var(--text-primary);
             font-weight: 500;
             word-break: break-all;
             flex: 1;
         }
+
         .info-value.motd {
             font-weight: 400;
             font-size: 13px;
             color: var(--text-secondary);
             line-height: 1.8;
         }
+
         .info-value.player-list {
             line-height: 1.8;
             max-height: 200px;
             overflow-y: auto;
             padding-right: 4px;
         }
+
         .info-value.player-list::-webkit-scrollbar {
             width: 6px;
         }
@@ -347,6 +416,7 @@
             background: var(--accent);
             border-radius: 10px;
         }
+
         .server-icon {
             text-align: center;
             margin-bottom: 16px;
@@ -358,6 +428,7 @@
             border: 2px solid var(--card-border);
             object-fit: cover;
         }
+
         .error-message {
             background-color: #fee;
             color: #c00;
@@ -371,6 +442,7 @@
             background-color: #2a1a1a;
             color: #ff6b6b;
         }
+
         .loading-indicator {
             text-align: center;
             padding: 20px;
@@ -378,6 +450,7 @@
             font-size: 13px;
             display: none;
         }
+
         .cookie-notice {
             text-align: center;
             font-size: 10px;
@@ -390,15 +463,39 @@
             color: var(--accent);
             text-decoration: none;
         }
-        .cookie-notice a:hover { text-decoration: underline; }
+        .cookie-notice a:hover {
+            text-decoration: underline;
+        }
+
         .history-section {
             margin-top: 16px;
+        }
+        .history-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 8px;
         }
         .history-title {
             font-size: 12px;
             color: var(--text-secondary);
-            margin-bottom: 8px;
         }
+        .clear-history-btn {
+            padding: 4px 12px;
+            border: none;
+            border-radius: 12px;
+            background-color: var(--offline-color);
+            color: #fff;
+            font-size: 11px;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-family: inherit;
+        }
+        .clear-history-btn:hover {
+            background-color: var(--clear-btn-hover);
+            transform: scale(1.02);
+        }
+
         .history-tags {
             display: flex;
             flex-wrap: wrap;
@@ -418,6 +515,7 @@
             border-color: var(--accent);
             color: var(--accent);
         }
+
         .back-link {
             display: inline-block;
             margin-top: 20px;
@@ -434,6 +532,7 @@
             background-color: var(--icon-bg);
             color: var(--accent);
         }
+
         .refresh-indicator {
             text-align: center;
             font-size: 11px;
@@ -441,633 +540,712 @@
             margin-top: 8px;
             display: none;
         }
-        .refresh-indicator.show { display: block; }
+        .refresh-indicator.show {
+            display: block;
+        }
+
         @media (max-width: 560px) {
-            body { padding: 20px 16px; }
-            .card { padding: 0 20px 28px; }
-            .top-bar { width: calc(100% + 40px); margin: 0 -20px; }
-            .search-group { flex-direction: column; }
-            .search-options { justify-content: flex-start; }
-            .bedrock-port { max-width: 100%; }
-            .big-btn { width: 100%; }
-            .result-header { flex-direction: column; align-items: flex-start; }
-            .language-selector { top: 12px; right: 16px; padding: 4px 8px; }
-            .lang-btn { font-size: 11px; padding: 2px 8px; }
-            .top-left-buttons { top: 12px; left: 16px; }
-            .theme-btn { padding: 6px 12px; font-size: 14px; }
-            .info-row { flex-direction: column; align-items: flex-start; gap: 2px; }
-            .info-value { text-align: left; }
-            .info-value.player-list { max-height: 150px; }
-            .bedrock-inputs { flex-wrap: wrap; }
+            body {
+                padding: 20px 16px;
+            }
+            .card {
+                padding: 0 20px 28px;
+            }
+            .top-bar {
+                width: calc(100% + 40px);
+                margin: 0 -20px;
+            }
+            .search-group {
+                flex-direction: column;
+            }
+            .search-options {
+                justify-content: flex-start;
+            }
+            .bedrock-port {
+                max-width: 100%;
+            }
+            .big-btn {
+                width: 100%;
+            }
+            .result-header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            .language-selector {
+                top: 12px;
+                right: 16px;
+                padding: 4px 8px;
+            }
+            .lang-btn {
+                font-size: 11px;
+                padding: 2px 8px;
+            }
+            .top-left-buttons {
+                top: 12px;
+                left: 16px;
+            }
+            .theme-btn {
+                padding: 6px 12px;
+                font-size: 14px;
+            }
+            .info-row {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 2px;
+            }
+            .info-value {
+                text-align: left;
+            }
+            .info-value.player-list {
+                max-height: 150px;
+            }
+            .bedrock-inputs {
+                flex-wrap: wrap;
+            }
+            .history-header {
+                flex-wrap: wrap;
+                gap: 8px;
+            }
         }
     </style>
 </head>
 <body>
 
-<div class="top-left-buttons">
-    <button id="themeToggle" class="theme-btn">🌙</button>
-</div>
+    <div class="top-left-buttons">
+        <button id="themeToggle" class="theme-btn">🌙</button>
+    </div>
 
-<div class="language-selector">
-    <button class="lang-btn active" data-lang="zh">中文</button>
-    <button class="lang-btn" data-lang="en">English</button>
-</div>
+    <div class="language-selector">
+        <button class="lang-btn active" data-lang="zh">中文</button>
+        <button class="lang-btn" data-lang="en">English</button>
+    </div>
 
-<div class="card">
-    <div class="top-bar"></div>
-    <div class="card-inner">
-        <div class="title" id="pageTitleText">服务器查询</div>
-        <div class="subtitle" id="subtitleText">输入域名或IP，查询是否为Minecraft服务器</div>
+    <div class="card">
+        <div class="top-bar"></div>
+        <div class="card-inner">
+            <div class="title" id="pageTitleText">服务器查询</div>
+            <div class="subtitle" id="subtitleText">输入域名或IP，查询是否为Minecraft服务器</div>
 
-        <div class="search-group">
-            <input type="text" id="serverInput" class="search-input" placeholder="例如: xxx.xxx.xxx:00000">
-            <div class="bedrock-inputs" id="bedrockInputs">
-                <input type="text" id="bedrockHost" class="bedrock-host" placeholder="例如: xxx.xxx.xxx">
-                <input type="text" id="bedrockPort" class="bedrock-port" placeholder="端口">
-            </div>
-            <div class="search-options">
-                <label>
-                    <input type="checkbox" id="bedrockCheck">
-                    <span id="bedrockLabel">基岩版</span>
-                </label>
-            </div>
-            <button id="queryBtn" class="big-btn">查询</button>
-        </div>
-        <div class="hint-text" id="hintText">支持 Minecraft 服务器 · 实时探测状态</div>
-
-        <div class="divider"></div>
-
-        <div class="features">
-            <span class="feature-item" id="feature1">任意域名/IP</span>
-            <span class="feature-item" id="feature2">在线/离线检测</span>
-            <span class="feature-item" id="feature3">玩家数 &amp; 版本</span>
-            <span class="feature-item" id="feature4">服务器标语</span>
-        </div>
-
-        <div class="loading-indicator" id="loadingIndicator">正在探测服务器...</div>
-
-        <div id="previewArea" class="preview-area">
-            <div class="preview-title" id="previewTitle">探测结果</div>
-            <div class="result-card">
-                <div class="result-header">
-                    <span class="result-address" id="resultAddress">—</span>
-                    <span id="statusBadge"></span>
+            <div class="search-group">
+                <input type="text" id="serverInput" class="search-input" placeholder="例如: xxx.xxx.xxx:00000">
+                <div class="bedrock-inputs" id="bedrockInputs">
+                    <input type="text" id="bedrockHost" class="bedrock-host" placeholder="例如: xxx.xxx.xxx">
+                    <input type="text" id="bedrockPort" class="bedrock-port" placeholder="端口">
                 </div>
-                <div id="resultDetails"></div>
+                <div class="search-options">
+                    <label>
+                        <input type="checkbox" id="bedrockCheck">
+                        <span id="bedrockLabel">基岩版</span>
+                    </label>
+                </div>
+                <button id="queryBtn" class="big-btn">查询</button>
             </div>
-            <div class="refresh-indicator" id="refreshIndicator">🔄 每 10 秒自动刷新</div>
-        </div>
+            <div class="hint-text" id="hintText">支持 Minecraft 服务器 · 实时探测状态</div>
 
-        <div class="history-section">
-            <div class="history-title" id="historyTitle">最近查询</div>
-            <div class="history-tags" id="historyTags"></div>
-        </div>
+            <div class="divider"></div>
 
-        <a href="/" class="back-link" id="backLink">← 返回主页</a>
+            <div class="features">
+                <span class="feature-item" id="feature1">任意域名/IP</span>
+                <span class="feature-item" id="feature2">在线/离线检测</span>
+                <span class="feature-item" id="feature3">玩家数 &amp; 版本</span>
+                <span class="feature-item" id="feature4">服务器标语</span>
+            </div>
 
-        <div class="cookie-notice" id="cookieNotice">
-            如果你没有同意 Cookie，自定义选项不会被保存，点击 <a href="/">这里</a> 同意 cookie
+            <div class="loading-indicator" id="loadingIndicator">正在探测服务器...</div>
+
+            <div id="previewArea" class="preview-area">
+                <div class="preview-title" id="previewTitle">探测结果</div>
+                <div class="result-card">
+                    <div class="result-header">
+                        <span class="result-address" id="resultAddress">—</span>
+                        <span id="statusBadge"></span>
+                    </div>
+                    <div id="resultDetails"></div>
+                </div>
+                <div class="refresh-indicator" id="refreshIndicator">🔄 每 10 秒自动刷新</div>
+            </div>
+
+            <div class="history-section">
+                <div class="history-header">
+                    <div class="history-title" id="historyTitle">最近查询</div>
+                    <button id="clearHistoryBtn" class="clear-history-btn">清空历史</button>
+                </div>
+                <div class="history-tags" id="historyTags"></div>
+            </div>
+
+            <a href="/" class="back-link" id="backLink">← 返回主页</a>
+
+            <div class="cookie-notice" id="cookieNotice">
+                如果你没有同意 Cookie，自定义选项不会被保存，点击 <a href="/">这里</a> 同意 cookie
+            </div>
         </div>
     </div>
-</div>
 
-<script>
-const translations = {
-    zh: {
-        pageTitle: "服务器查询",
-        pageTitleText: "服务器查询",
-        subtitleText: "输入域名或IP，查询是否为Minecraft服务器",
-        hintText: "支持 Minecraft 服务器 · 实时探测状态",
-        feature1: "任意域名/IP",
-        feature2: "在线/离线检测",
-        feature3: "玩家数 & 版本",
-        feature4: "服务器标语",
-        previewTitle: "探测结果",
-        queryBtn: "查询",
-        placeholder: "例如: xxx.xxx.xxx:00000",
-        bedrockHostPlaceholder: "例如: xxx.xxx.xxx",
-        bedrockPortPlaceholder: "端口",
-        loading: "正在探测服务器...",
-        online: "在线",
-        offline: "离线",
-        unknown: "未知",
-        version: "版本",
-        players: "玩家",
-        motd: "标语",
-        playerList: "在线玩家",
-        notMcServer: "该地址可能不是Minecraft服务器，或服务器已关闭",
-        isMcServer: "确认为 Minecraft 服务器",
-        fetchFailed: "请求失败，请检查网络或稍后重试",
-        historyTitle: "最近查询",
-        backLink: "← 返回主页",
-        cookieNotice: '如果你没有同意 Cookie，自定义选项不会被保存，点击 <a href="/">这里</a> 同意 cookie',
-        enterAddress: "请输入一个域名或IP地址",
-        autoRefresh: "🔄 每 10 秒自动刷新",
-        software: "服务端",
-        plugins: "插件",
-        mods: "模组",
-        bedrockLabel: "基岩版",
-        edition: "版本类型",
-        gamemode: "游戏模式",
-        serverName: "服务器名称"
-    },
-    en: {
-        pageTitle: "Server Query",
-        pageTitleText: "Server Query",
-        subtitleText: "Enter a domain or IP to check if it's a Minecraft server",
-        hintText: "Minecraft Server Supported · Real-time Status",
-        feature1: "Any domain/IP",
-        feature2: "Online/Offline check",
-        feature3: "Players & Version",
-        feature4: "Server MOTD",
-        previewTitle: "Result",
-        queryBtn: "Query",
-        placeholder: "e.g. xxx.xxx.xxx:00000",
-        bedrockHostPlaceholder: "e.g. xxx.xxx.xxx",
-        bedrockPortPlaceholder: "Port",
-        loading: "Probing server...",
-        online: "Online",
-        offline: "Offline",
-        unknown: "Unknown",
-        version: "Version",
-        players: "Players",
-        motd: "MOTD",
-        playerList: "Online Players",
-        notMcServer: "This address may not be a Minecraft server, or the server is offline",
-        isMcServer: "Confirmed as Minecraft server",
-        fetchFailed: "Request failed, please check your network and try again",
-        historyTitle: "Recent Queries",
-        backLink: "← Back to Home",
-        cookieNotice: 'If you do not consent to cookies, your custom preferences will not be saved, <a href="/">click here</a> to agree',
-        enterAddress: "Please enter a domain or IP address",
-        autoRefresh: "🔄 Auto-refresh every 10s",
-        software: "Software",
-        plugins: "Plugins",
-        mods: "Mods",
-        bedrockLabel: "Bedrock",
-        edition: "Edition",
-        gamemode: "Game Mode",
-        serverName: "Server Name"
-    }
-};
-
-let currentLang = 'zh';
-let queryHistory = JSON.parse(localStorage.getItem('mcQueryHistory') || '[]');
-let refreshTimer = null;
-let currentAddress = null;
-let cachedData = null;
-let cachedIsBedrock = false;
-
-function getCookie(name) {
-    const v = `; ${document.cookie}`;
-    const parts = v.split(`; ${name}=`);
-    if (parts.length === 2) return parts.pop().split(';').shift();
-    return null;
-}
-
-function setCookie(name, value, days) {
-    const d = new Date();
-    d.setTime(d.getTime() + days * 86400000);
-    document.cookie = name + '=' + value + '; expires=' + d.toUTCString() + '; path=/';
-}
-
-function initTheme() {
-    const saved = getCookie('theme');
-    if (saved === 'dark') {
-        document.body.classList.add('dark');
-        document.getElementById('themeToggle').innerHTML = '☀️';
-    } else {
-        document.body.classList.remove('dark');
-        document.getElementById('themeToggle').innerHTML = '🌙';
-    }
-}
-
-document.getElementById('themeToggle').addEventListener('click', function() {
-    if (document.body.classList.contains('dark')) {
-        document.body.classList.remove('dark');
-        setCookie('theme', 'light', 30);
-        this.innerHTML = '🌙';
-    } else {
-        document.body.classList.add('dark');
-        setCookie('theme', 'dark', 30);
-        this.innerHTML = '☀️';
-    }
-});
-
-function switchLanguage(lang) {
-    currentLang = lang;
-    const t = translations[lang];
-
-    document.title = t.pageTitle;
-    document.getElementById('pageTitleText').textContent = t.pageTitleText;
-    document.getElementById('subtitleText').textContent = t.subtitleText;
-    document.getElementById('hintText').textContent = t.hintText;
-    document.getElementById('feature1').textContent = t.feature1;
-    document.getElementById('feature2').textContent = t.feature2;
-    document.getElementById('feature3').textContent = t.feature3;
-    document.getElementById('feature4').textContent = t.feature4;
-    document.getElementById('previewTitle').textContent = t.previewTitle;
-    document.getElementById('queryBtn').textContent = t.queryBtn;
-    document.getElementById('serverInput').placeholder = t.placeholder;
-    document.getElementById('bedrockHost').placeholder = t.bedrockHostPlaceholder;
-    document.getElementById('bedrockPort').placeholder = t.bedrockPortPlaceholder;
-    document.getElementById('historyTitle').textContent = t.historyTitle;
-    document.getElementById('backLink').textContent = t.backLink;
-    document.getElementById('loadingIndicator').textContent = t.loading;
-    document.getElementById('cookieNotice').innerHTML = t.cookieNotice;
-    document.getElementById('refreshIndicator').textContent = t.autoRefresh;
-    document.getElementById('bedrockLabel').textContent = t.bedrockLabel;
-
-    if (getCookie('cookie_consent') === 'accepted') {
-        setCookie('lang', lang, 30);
-    }
-
-    const address = document.getElementById('resultAddress').textContent;
-    if (address && address !== '—' && cachedData) {
-        displayResult(address, cachedData, cachedIsBedrock);
-    }
-}
-
-document.querySelectorAll('.lang-btn').forEach(btn => {
-    btn.addEventListener('click', function() {
-        const lang = this.dataset.lang;
-        document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active'));
-        this.classList.add('active');
-        switchLanguage(lang);
-    });
-});
-
-document.getElementById('bedrockCheck').addEventListener('change', function() {
-    const inputs = document.getElementById('bedrockInputs');
-    const javaInput = document.getElementById('serverInput');
-    if (this.checked) {
-        inputs.classList.add('show');
-        javaInput.style.display = 'none';
-        javaInput.value = '';
-    } else {
-        inputs.classList.remove('show');
-        javaInput.style.display = 'block';
-        document.getElementById('bedrockHost').value = '';
-        document.getElementById('bedrockPort').value = '';
-    }
-});
-
-function showError(msg) {
-    let el = document.getElementById('errorMessage');
-    if (!el) {
-        el = document.createElement('div');
-        el.id = 'errorMessage';
-        el.className = 'error-message';
-        document.querySelector('.card-inner').insertBefore(el, document.getElementById('previewArea'));
-    }
-    el.textContent = msg;
-    el.style.display = 'block';
-    setTimeout(() => { el.style.display = 'none'; }, 5000);
-}
-
-function getAddress() {
-    const isBedrock = document.getElementById('bedrockCheck').checked;
-    if (isBedrock) {
-        const host = document.getElementById('bedrockHost').value.trim();
-        let port = document.getElementById('bedrockPort').value.trim();
-        if (!host) return null;
-        if (!port) {
-            port = '19132';
-        }
-        return host + ':' + port;
-    } else {
-        const input = document.getElementById('serverInput').value.trim();
-        if (!input) return null;
-        return input;
-    }
-}
-
-function parseAddress(input) {
-    input = input.trim();
-    if (!input) return null;
-    if (input.includes(':')) {
-        const parts = input.split(':');
-        const host = parts[0];
-        const port = parseInt(parts[1]);
-        if (host && port && !isNaN(port)) {
-            return { host, port };
-        }
-    }
-    return { host: input, port: null };
-}
-
-function formatPlayers(arr) {
-    const chunks = [];
-    for (let i = 0; i < arr.length; i += 3) {
-        let group = arr.slice(i, i + 3).join(', ');
-        if (i + 3 < arr.length) {
-            group += ',';
-        }
-        chunks.push(group);
-    }
-    return chunks.join('<br>');
-}
-
-function formatMOTD(text) {
-    const words = text.split(' ');
-    const chunks = [];
-    for (let i = 0; i < words.length; i += 3) {
-        chunks.push(words.slice(i, i + 3).join(' '));
-    }
-    return chunks.join('<br>');
-}
-
-function stopRefresh() {
-    if (refreshTimer) {
-        clearInterval(refreshTimer);
-        refreshTimer = null;
-    }
-    document.getElementById('refreshIndicator').classList.remove('show');
-}
-
-function startRefresh(address, isBedrock) {
-    stopRefresh();
-    document.getElementById('refreshIndicator').classList.add('show');
-    refreshTimer = setInterval(() => {
-        queryServer(address, true, isBedrock);
-    }, 10000);
-}
-
-async function queryServer(address, silent = false, isBedrock = false) {
-    const loading = document.getElementById('loadingIndicator');
-    const area = document.getElementById('previewArea');
-    const btn = document.getElementById('queryBtn');
-
-    if (!silent) {
-        loading.style.display = 'block';
-        area.classList.remove('show');
-        btn.disabled = true;
-        stopRefresh();
-    }
-
-    if (silent) {
-        document.getElementById('resultDetails').innerHTML = '';
-        document.getElementById('statusBadge').innerHTML = '';
-        document.getElementById('resultAddress').textContent = address + ' (刷新中...)';
-        loading.style.display = 'block';
-    }
-
-    try {
-        const parsed = parseAddress(address);
-        if (!parsed) throw new Error('Invalid');
-
-        let url;
-        if (isBedrock) {
-            url = `https://api.mcsrvstat.us/bedrock/3/${encodeURIComponent(parsed.host)}`;
-            if (parsed.port) {
-                url = `https://api.mcsrvstat.us/bedrock/3/${encodeURIComponent(parsed.host)}:${parsed.port}`;
+    <script>
+        const translations = {
+            zh: {
+                pageTitle: "服务器查询",
+                pageTitleText: "服务器查询",
+                subtitleText: "输入域名或IP，查询是否为Minecraft服务器",
+                hintText: "支持 Minecraft 服务器 · 实时探测状态",
+                feature1: "任意域名/IP",
+                feature2: "在线/离线检测",
+                feature3: "玩家数 & 版本",
+                feature4: "服务器标语",
+                previewTitle: "探测结果",
+                queryBtn: "查询",
+                placeholder: "例如: xxx.xxx.xxx:00000",
+                bedrockHostPlaceholder: "例如: xxx.xxx.xxx",
+                bedrockPortPlaceholder: "端口",
+                loading: "正在探测服务器...",
+                online: "在线",
+                offline: "离线",
+                unknown: "未知",
+                version: "版本",
+                players: "玩家",
+                motd: "标语",
+                playerList: "在线玩家",
+                notMcServer: "该地址可能不是Minecraft服务器，或服务器已关闭",
+                isMcServer: "确认为 Minecraft 服务器",
+                fetchFailed: "请求失败，请检查网络或稍后重试",
+                historyTitle: "最近查询",
+                clearHistory: "清空历史",
+                clearConfirm: "确定要清空所有查询历史吗？",
+                backLink: "← 返回主页",
+                cookieNotice: '如果你没有同意 Cookie，自定义选项不会被保存，点击 <a href="/">这里</a> 同意 cookie',
+                enterAddress: "请输入一个域名或IP地址",
+                autoRefresh: "🔄 每 10 秒自动刷新",
+                software: "服务端",
+                plugins: "插件",
+                mods: "模组",
+                bedrockLabel: "基岩版",
+                edition: "版本类型",
+                gamemode: "游戏模式",
+                serverName: "服务器名称"
+            },
+            en: {
+                pageTitle: "Server Query",
+                pageTitleText: "Server Query",
+                subtitleText: "Enter a domain or IP to check if it's a Minecraft server",
+                hintText: "Minecraft Server Supported · Real-time Status",
+                feature1: "Any domain/IP",
+                feature2: "Online/Offline check",
+                feature3: "Players & Version",
+                feature4: "Server MOTD",
+                previewTitle: "Result",
+                queryBtn: "Query",
+                placeholder: "e.g. xxx.xxx.xxx:00000",
+                bedrockHostPlaceholder: "e.g. xxx.xxx.xxx",
+                bedrockPortPlaceholder: "Port",
+                loading: "Probing server...",
+                online: "Online",
+                offline: "Offline",
+                unknown: "Unknown",
+                version: "Version",
+                players: "Players",
+                motd: "MOTD",
+                playerList: "Online Players",
+                notMcServer: "This address may not be a Minecraft server, or the server is offline",
+                isMcServer: "Confirmed as Minecraft server",
+                fetchFailed: "Request failed, please check your network and try again",
+                historyTitle: "Recent Queries",
+                clearHistory: "Clear History",
+                clearConfirm: "Are you sure you want to clear all query history?",
+                backLink: "← Back to Home",
+                cookieNotice: 'If you do not consent to cookies, your custom preferences will not be saved, <a href="/">click here</a> to agree',
+                enterAddress: "Please enter a domain or IP address",
+                autoRefresh: "🔄 Auto-refresh every 10s",
+                software: "Software",
+                plugins: "Plugins",
+                mods: "Mods",
+                bedrockLabel: "Bedrock",
+                edition: "Edition",
+                gamemode: "Game Mode",
+                serverName: "Server Name"
             }
-        } else {
-            url = `https://api.mcsrvstat.us/3/${encodeURIComponent(parsed.host)}`;
-            if (parsed.port) {
-                url = `https://api.mcsrvstat.us/3/${encodeURIComponent(parsed.host)}:${parsed.port}`;
+        };
+
+        let currentLang = 'zh';
+        let queryHistory = JSON.parse(localStorage.getItem('mcQueryHistory') || '[]');
+        let refreshTimer = null;
+        let currentAddress = null;
+        let cachedData = null;
+        let cachedIsBedrock = false;
+
+        function getCookie(name) {
+            const v = `; ${document.cookie}`;
+            const parts = v.split(`; ${name}=`);
+            if (parts.length === 2) return parts.pop().split(';').shift();
+            return null;
+        }
+
+        function setCookie(name, value, days) {
+            const d = new Date();
+            d.setTime(d.getTime() + days * 86400000);
+            document.cookie = name + '=' + value + '; expires=' + d.toUTCString() + '; path=/';
+        }
+
+        function initTheme() {
+            const saved = getCookie('theme');
+            if (saved === 'dark') {
+                document.body.classList.add('dark');
+                document.getElementById('themeToggle').innerHTML = '☀️';
+            } else {
+                document.body.classList.remove('dark');
+                document.getElementById('themeToggle').innerHTML = '🌙';
             }
         }
 
-        const resp = await fetch(url);
-        const data = await resp.json();
-
-        if (!silent) {
-            loading.style.display = 'none';
-            btn.disabled = false;
-        }
-        if (silent) {
-            loading.style.display = 'none';
-        }
-        area.classList.add('show');
-
-        if (!silent) {
-            saveHistory(address);
-        }
-        currentAddress = address;
-        cachedData = data;
-        cachedIsBedrock = isBedrock;
-        displayResult(address, data, isBedrock);
-
-    } catch (e) {
-        if (!silent) {
-            loading.style.display = 'none';
-            btn.disabled = false;
-        }
-        if (silent) {
-            loading.style.display = 'none';
-        }
-        area.classList.add('show');
-        const t = translations[currentLang];
-        document.getElementById('resultAddress').textContent = address;
-        document.getElementById('statusBadge').innerHTML = `<span class="status-badge status-unknown">${t.unknown}</span>`;
-        document.getElementById('resultDetails').innerHTML = `<div style="color:var(--text-secondary);text-align:center;padding:10px;">${t.fetchFailed}</div>`;
-        stopRefresh();
-        cachedData = null;
-    }
-}
-
-function displayResult(address, data, isBedrock = false) {
-    const t = translations[currentLang];
-    document.getElementById('resultAddress').textContent = address;
-
-    if (data.online === true) {
-        document.getElementById('statusBadge').innerHTML = `<span class="status-badge status-online">${t.online}</span>`;
-
-        let html = '';
-
-        if (data.icon) {
-            html += `<div class="server-icon"><img src="${data.icon}" alt="Icon"></div>`;
-        } else {
-            html += `<div class="server-icon"><img src="https://api.mcsrvstat.us/icon/${encodeURIComponent(address)}" alt="Icon"></div>`;
-        }
-
-        if (isBedrock) {
-            if (data.motd?.clean?.length) {
-                let motdText = data.motd.clean.join(' ');
-                motdText = motdText.replace(/\n/g, ' ').replace(/\r/g, ' ').trim();
-                motdText = formatMOTD(motdText);
-                html += `<div class="info-row"><span class="info-label">${t.serverName}</span><span class="info-value motd">${motdText}</span></div>`;
+        document.getElementById('themeToggle').addEventListener('click', function() {
+            if (document.body.classList.contains('dark')) {
+                document.body.classList.remove('dark');
+                setCookie('theme', 'light', 30);
+                this.innerHTML = '🌙';
+            } else {
+                document.body.classList.add('dark');
+                setCookie('theme', 'dark', 30);
+                this.innerHTML = '☀️';
             }
-            
-            let versionDisplay = data.version || '未知';
-            if (versionDisplay.startsWith('1.')) {
-                const versionNum = parseFloat(versionDisplay);
-                if (versionNum > 1.21) {
-                    versionDisplay = versionDisplay.substring(2);
+        });
+
+        function switchLanguage(lang) {
+            currentLang = lang;
+            const t = translations[lang];
+
+            document.title = t.pageTitle;
+            document.getElementById('pageTitleText').textContent = t.pageTitleText;
+            document.getElementById('subtitleText').textContent = t.subtitleText;
+            document.getElementById('hintText').textContent = t.hintText;
+            document.getElementById('feature1').textContent = t.feature1;
+            document.getElementById('feature2').textContent = t.feature2;
+            document.getElementById('feature3').textContent = t.feature3;
+            document.getElementById('feature4').textContent = t.feature4;
+            document.getElementById('previewTitle').textContent = t.previewTitle;
+            document.getElementById('queryBtn').textContent = t.queryBtn;
+            document.getElementById('serverInput').placeholder = t.placeholder;
+            document.getElementById('bedrockHost').placeholder = t.bedrockHostPlaceholder;
+            document.getElementById('bedrockPort').placeholder = t.bedrockPortPlaceholder;
+            document.getElementById('historyTitle').textContent = t.historyTitle;
+            document.getElementById('clearHistoryBtn').textContent = t.clearHistory;
+            document.getElementById('backLink').textContent = t.backLink;
+            document.getElementById('loadingIndicator').textContent = t.loading;
+            document.getElementById('cookieNotice').innerHTML = t.cookieNotice;
+            document.getElementById('refreshIndicator').textContent = t.autoRefresh;
+            document.getElementById('bedrockLabel').textContent = t.bedrockLabel;
+
+            if (getCookie('cookie_consent') === 'accepted') {
+                setCookie('lang', lang, 30);
+            }
+
+            const address = document.getElementById('resultAddress').textContent;
+            if (address && address !== '—' && cachedData) {
+                displayResult(address, cachedData, cachedIsBedrock);
+            }
+        }
+
+        document.querySelectorAll('.lang-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                const lang = this.dataset.lang;
+                document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active'));
+                this.classList.add('active');
+                switchLanguage(lang);
+            });
+        });
+
+        document.getElementById('bedrockCheck').addEventListener('change', function() {
+            const inputs = document.getElementById('bedrockInputs');
+            const javaInput = document.getElementById('serverInput');
+            if (this.checked) {
+                inputs.classList.add('show');
+                javaInput.style.display = 'none';
+                javaInput.value = '';
+            } else {
+                inputs.classList.remove('show');
+                javaInput.style.display = 'block';
+                document.getElementById('bedrockHost').value = '';
+                document.getElementById('bedrockPort').value = '';
+            }
+        });
+
+        function showError(msg) {
+            let el = document.getElementById('errorMessage');
+            if (!el) {
+                el = document.createElement('div');
+                el.id = 'errorMessage';
+                el.className = 'error-message';
+                document.querySelector('.card-inner').insertBefore(el, document.getElementById('previewArea'));
+            }
+            el.textContent = msg;
+            el.style.display = 'block';
+            setTimeout(() => { el.style.display = 'none'; }, 5000);
+        }
+
+        function getAddress() {
+            const isBedrock = document.getElementById('bedrockCheck').checked;
+            if (isBedrock) {
+                const host = document.getElementById('bedrockHost').value.trim();
+                let port = document.getElementById('bedrockPort').value.trim();
+                if (!host) return null;
+                if (!port) {
+                    port = '19132';
+                }
+                return host + ':' + port;
+            } else {
+                const input = document.getElementById('serverInput').value.trim();
+                if (!input) return null;
+                return input;
+            }
+        }
+
+        function parseAddress(input) {
+            input = input.trim();
+            if (!input) return null;
+            if (input.includes(':')) {
+                const parts = input.split(':');
+                const host = parts[0];
+                const port = parseInt(parts[1]);
+                if (host && port && !isNaN(port)) {
+                    return { host, port };
                 }
             }
-            html += `<div class="info-row"><span class="info-label">${t.version}</span><span class="info-value">${versionDisplay}</span></div>`;
-            
-            html += `<div class="info-row"><span class="info-label">${t.edition}</span><span class="info-value">Bedrock</span></div>`;
-            if (data.gamemode) {
-                const gamemodeMap = {
-                    'Survival': '生存模式',
-                    'Creative': '创造模式',
-                    'Adventure': '冒险模式',
-                    'Spectator': '旁观模式'
-                };
-                let gamemodeDisplay = data.gamemode;
-                if (currentLang === 'zh' && gamemodeMap[data.gamemode]) {
-                    gamemodeDisplay = gamemodeMap[data.gamemode];
+            return { host: input, port: null };
+        }
+
+        function formatPlayers(arr) {
+            const chunks = [];
+            for (let i = 0; i < arr.length; i += 3) {
+                let group = arr.slice(i, i + 3).join(', ');
+                if (i + 3 < arr.length) {
+                    group += ',';
                 }
-                html += `<div class="info-row"><span class="info-label">${t.gamemode}</span><span class="info-value">${gamemodeDisplay}</span></div>`;
+                chunks.push(group);
             }
-            html += `<div class="info-row"><span class="info-label">${t.players}</span><span class="info-value">${data.players?.online || 0} / ${data.players?.max || '?'}</span></div>`;
-        } else {
-            html += `<div class="info-row"><span class="info-label">${t.version}</span><span class="info-value">${data.version || '未知'}</span></div>`;
+            return chunks.join('<br>');
+        }
 
-            if (data.software) {
-                html += `<div class="info-row"><span class="info-label">${t.software}</span><span class="info-value">${data.software}</span></div>`;
+        function formatMOTD(text) {
+            const words = text.split(' ');
+            const chunks = [];
+            for (let i = 0; i < words.length; i += 3) {
+                chunks.push(words.slice(i, i + 3).join(' '));
+            }
+            return chunks.join('<br>');
+        }
+
+        function stopRefresh() {
+            if (refreshTimer) {
+                clearInterval(refreshTimer);
+                refreshTimer = null;
+            }
+            document.getElementById('refreshIndicator').classList.remove('show');
+        }
+
+        function startRefresh(address, isBedrock) {
+            stopRefresh();
+            document.getElementById('refreshIndicator').classList.add('show');
+            refreshTimer = setInterval(() => {
+                queryServer(address, true, isBedrock);
+            }, 10000);
+        }
+
+        async function queryServer(address, silent = false, isBedrock = false) {
+            const loading = document.getElementById('loadingIndicator');
+            const area = document.getElementById('previewArea');
+            const btn = document.getElementById('queryBtn');
+
+            if (!silent) {
+                loading.style.display = 'block';
+                area.classList.remove('show');
+                btn.disabled = true;
+                stopRefresh();
             }
 
-            html += `<div class="info-row"><span class="info-label">${t.players}</span><span class="info-value">${data.players?.online || 0} / ${data.players?.max || '?'}</span></div>`;
-
-            if (data.motd?.clean?.length) {
-                let motdText = data.motd.clean.join(' ');
-                motdText = motdText.replace(/\n/g, ' ').replace(/\r/g, ' ').trim();
-                motdText = formatMOTD(motdText);
-                html += `<div class="info-row"><span class="info-label">${t.motd}</span><span class="info-value motd">${motdText}</span></div>`;
+            if (silent) {
+                document.getElementById('resultDetails').innerHTML = '';
+                document.getElementById('statusBadge').innerHTML = '';
+                document.getElementById('resultAddress').textContent = address + ' (刷新中...)';
+                loading.style.display = 'block';
             }
 
-            if (data.players?.list && data.players.list.length > 0) {
-                let playerNames = data.players.list.map(p => p.name || p).join(', ');
-                playerNames = playerNames.replace(/\n/g, ' ').replace(/\r/g, ' ').trim();
-                const formattedPlayers = formatPlayers(playerNames.split(', '));
-                html += `<div class="info-row"><span class="info-label">${t.playerList}</span><span class="info-value player-list">${formattedPlayers}</span></div>`;
-            }
+            try {
+                const parsed = parseAddress(address);
+                if (!parsed) throw new Error('Invalid');
 
-            if (data.plugins && data.plugins.length > 0) {
-                const pluginNames = data.plugins.map(p => p.name + (p.version ? ' v' + p.version : '')).join(', ');
-                html += `<div class="info-row"><span class="info-label">${t.plugins}</span><span class="info-value motd">${pluginNames}</span></div>`;
-            }
+                let url;
+                if (isBedrock) {
+                    url = `https://api.mcsrvstat.us/bedrock/3/${encodeURIComponent(parsed.host)}`;
+                    if (parsed.port) {
+                        url = `https://api.mcsrvstat.us/bedrock/3/${encodeURIComponent(parsed.host)}:${parsed.port}`;
+                    }
+                } else {
+                    url = `https://api.mcsrvstat.us/3/${encodeURIComponent(parsed.host)}`;
+                    if (parsed.port) {
+                        url = `https://api.mcsrvstat.us/3/${encodeURIComponent(parsed.host)}:${parsed.port}`;
+                    }
+                }
 
-            if (data.mods && data.mods.length > 0) {
-                const modNames = data.mods.map(m => m.name + (m.version ? ' v' + m.version : '')).join(', ');
-                html += `<div class="info-row"><span class="info-label">${t.mods}</span><span class="info-value motd">${modNames}</span></div>`;
+                const resp = await fetch(url);
+                const data = await resp.json();
+
+                if (!silent) {
+                    loading.style.display = 'none';
+                    btn.disabled = false;
+                }
+                if (silent) {
+                    loading.style.display = 'none';
+                }
+                area.classList.add('show');
+
+                if (!silent) {
+                    saveHistory(address);
+                }
+                currentAddress = address;
+                cachedData = data;
+                cachedIsBedrock = isBedrock;
+                displayResult(address, data, isBedrock);
+
+            } catch (e) {
+                if (!silent) {
+                    loading.style.display = 'none';
+                    btn.disabled = false;
+                }
+                if (silent) {
+                    loading.style.display = 'none';
+                }
+                area.classList.add('show');
+                const t = translations[currentLang];
+                document.getElementById('resultAddress').textContent = address;
+                document.getElementById('statusBadge').innerHTML = `<span class="status-badge status-unknown">${t.unknown}</span>`;
+                document.getElementById('resultDetails').innerHTML =
+                    `<div style="color:var(--text-secondary);text-align:center;padding:10px;">${t.fetchFailed}</div>`;
+                stopRefresh();
+                cachedData = null;
             }
         }
 
-        html += `<div class="info-row" style="margin-top:12px;border-top:2px solid var(--card-border);padding-top:12px;">
+        function displayResult(address, data, isBedrock = false) {
+            const t = translations[currentLang];
+            document.getElementById('resultAddress').textContent = address;
+
+            if (data.online === true) {
+                document.getElementById('statusBadge').innerHTML = `<span class="status-badge status-online">${t.online}</span>`;
+
+                let html = '';
+
+                if (data.icon) {
+                    html += `<div class="server-icon"><img src="${data.icon}" alt="Icon"></div>`;
+                } else {
+                    html +=
+                        `<div class="server-icon"><img src="https://api.mcsrvstat.us/icon/${encodeURIComponent(address)}" alt="Icon"></div>`;
+                }
+
+                if (isBedrock) {
+                    if (data.motd?.clean?.length) {
+                        let motdText = data.motd.clean.join(' ');
+                        motdText = motdText.replace(/\n/g, ' ').replace(/\r/g, ' ').trim();
+                        motdText = formatMOTD(motdText);
+                        html +=
+                            `<div class="info-row"><span class="info-label">${t.serverName}</span><span class="info-value motd">${motdText}</span></div>`;
+                    }
+
+                    let versionDisplay = data.version || '未知';
+                    if (versionDisplay.startsWith('1.')) {
+                        const versionNum = parseFloat(versionDisplay);
+                        if (versionNum > 1.21) {
+                            versionDisplay = versionDisplay.substring(2);
+                        }
+                    }
+                    html +=
+                        `<div class="info-row"><span class="info-label">${t.version}</span><span class="info-value">${versionDisplay}</span></div>`;
+
+                    html +=
+                        `<div class="info-row"><span class="info-label">${t.edition}</span><span class="info-value">Bedrock</span></div>`;
+                    if (data.gamemode) {
+                        const gamemodeMap = {
+                            'Survival': '生存模式',
+                            'Creative': '创造模式',
+                            'Adventure': '冒险模式',
+                            'Spectator': '旁观模式'
+                        };
+                        let gamemodeDisplay = data.gamemode;
+                        if (currentLang === 'zh' && gamemodeMap[data.gamemode]) {
+                            gamemodeDisplay = gamemodeMap[data.gamemode];
+                        }
+                        html +=
+                            `<div class="info-row"><span class="info-label">${t.gamemode}</span><span class="info-value">${gamemodeDisplay}</span></div>`;
+                    }
+                    html +=
+                        `<div class="info-row"><span class="info-label">${t.players}</span><span class="info-value">${data.players?.online || 0} / ${data.players?.max || '?'}</span></div>`;
+                } else {
+                    html +=
+                        `<div class="info-row"><span class="info-label">${t.version}</span><span class="info-value">${data.version || '未知'}</span></div>`;
+
+                    if (data.software) {
+                        html +=
+                            `<div class="info-row"><span class="info-label">${t.software}</span><span class="info-value">${data.software}</span></div>`;
+                    }
+
+                    html +=
+                        `<div class="info-row"><span class="info-label">${t.players}</span><span class="info-value">${data.players?.online || 0} / ${data.players?.max || '?'}</span></div>`;
+
+                    if (data.motd?.clean?.length) {
+                        let motdText = data.motd.clean.join(' ');
+                        motdText = motdText.replace(/\n/g, ' ').replace(/\r/g, ' ').trim();
+                        motdText = formatMOTD(motdText);
+                        html +=
+                            `<div class="info-row"><span class="info-label">${t.motd}</span><span class="info-value motd">${motdText}</span></div>`;
+                    }
+
+                    if (data.players?.list && data.players.list.length > 0) {
+                        let playerNames = data.players.list.map(p => p.name || p).join(', ');
+                        playerNames = playerNames.replace(/\n/g, ' ').replace(/\r/g, ' ').trim();
+                        const formattedPlayers = formatPlayers(playerNames.split(', '));
+                        html +=
+                            `<div class="info-row"><span class="info-label">${t.playerList}</span><span class="info-value player-list">${formattedPlayers}</span></div>`;
+                    }
+
+                    if (data.plugins && data.plugins.length > 0) {
+                        const pluginNames = data.plugins.map(p => p.name + (p.version ? ' v' + p.version : '')).join(', ');
+                        html +=
+                            `<div class="info-row"><span class="info-label">${t.plugins}</span><span class="info-value motd">${pluginNames}</span></div>`;
+                    }
+
+                    if (data.mods && data.mods.length > 0) {
+                        const modNames = data.mods.map(m => m.name + (m.version ? ' v' + m.version : '')).join(', ');
+                        html +=
+                            `<div class="info-row"><span class="info-label">${t.mods}</span><span class="info-value motd">${modNames}</span></div>`;
+                    }
+                }
+
+                html += `<div class="info-row" style="margin-top:12px;border-top:2px solid var(--card-border);padding-top:12px;">
             <span style="color:var(--online-color);font-weight:500;">${t.isMcServer}</span>
         </div>`;
 
-        document.getElementById('resultDetails').innerHTML = html;
+                document.getElementById('resultDetails').innerHTML = html;
 
-        startRefresh(address, isBedrock);
+                startRefresh(address, isBedrock);
 
-    } else {
-        document.getElementById('statusBadge').innerHTML = `<span class="status-badge status-offline">${t.offline}</span>`;
+            } else {
+                document.getElementById('statusBadge').innerHTML = `<span class="status-badge status-offline">${t.offline}</span>`;
 
-        let html = '';
-        html += `<div class="info-row">
+                let html = '';
+                html += `<div class="info-row">
             <span class="info-label">${t.version}</span>
             <span class="info-value" style="color:var(--offline-color);">${t.notMcServer}</span>
         </div>`;
 
-        document.getElementById('resultDetails').innerHTML = html;
-        stopRefresh();
-    }
-}
+                document.getElementById('resultDetails').innerHTML = html;
+                stopRefresh();
+            }
+        }
 
-function saveHistory(addr) {
-    queryHistory = queryHistory.filter(item => item !== addr);
-    queryHistory.unshift(addr);
-    if (queryHistory.length > 10) queryHistory.pop();
-    localStorage.setItem('mcQueryHistory', JSON.stringify(queryHistory));
-    renderHistory();
-}
+        function saveHistory(addr) {
+            queryHistory = queryHistory.filter(item => item !== addr);
+            queryHistory.unshift(addr);
+            if (queryHistory.length > 10) queryHistory.pop();
+            localStorage.setItem('mcQueryHistory', JSON.stringify(queryHistory));
+            renderHistory();
+        }
 
-function renderHistory() {
-    const container = document.getElementById('historyTags');
-    if (!container) return;
-    if (queryHistory.length === 0) {
-        container.innerHTML = '<span style="color:var(--text-link);font-size:12px;">暂无查询记录</span>';
-        return;
-    }
-    container.innerHTML = queryHistory.map(addr =>
-        `<span class="history-tag" data-address="${addr}">${addr}</span>`
-    ).join('');
+        function renderHistory() {
+            const container = document.getElementById('historyTags');
+            if (!container) return;
+            if (queryHistory.length === 0) {
+                container.innerHTML = '<span style="color:var(--text-link);font-size:12px;">暂无查询记录</span>';
+                return;
+            }
+            container.innerHTML = queryHistory.map(addr =>
+                `<span class="history-tag" data-address="${addr}">${addr}</span>`
+            ).join('');
 
-    container.querySelectorAll('.history-tag').forEach(tag => {
-        tag.addEventListener('click', function() {
-            const addr = this.dataset.address;
-            const isBedrock = addr.includes('19132') || addr.includes('19133');
+            container.querySelectorAll('.history-tag').forEach(tag => {
+                tag.addEventListener('click', function() {
+                    const addr = this.dataset.address;
+                    const isBedrock = addr.includes('19132') || addr.includes('19133');
+                    if (isBedrock) {
+                        document.getElementById('bedrockCheck').checked = true;
+                        const parts = addr.split(':');
+                        document.getElementById('bedrockHost').value = parts[0];
+                        document.getElementById('bedrockPort').value = parts[1] || '';
+                        document.getElementById('bedrockInputs').classList.add('show');
+                        document.getElementById('serverInput').style.display = 'none';
+                        document.getElementById('serverInput').value = '';
+                    } else {
+                        document.getElementById('bedrockCheck').checked = false;
+                        document.getElementById('bedrockInputs').classList.remove('show');
+                        document.getElementById('serverInput').style.display = 'block';
+                        document.getElementById('serverInput').value = addr;
+                        document.getElementById('bedrockHost').value = '';
+                        document.getElementById('bedrockPort').value = '';
+                    }
+                    stopRefresh();
+                    const isBedrockNow = document.getElementById('bedrockCheck').checked;
+                    queryServer(addr, false, isBedrockNow);
+                });
+            });
+        }
+
+        document.getElementById('clearHistoryBtn').addEventListener('click', function() {
+            const t = translations[currentLang];
+            if (confirm(t.clearConfirm)) {
+                queryHistory = [];
+                localStorage.removeItem('mcQueryHistory');
+                renderHistory();
+            }
+        });
+
+        document.getElementById('queryBtn').addEventListener('click', function() {
+            const address = getAddress();
+            if (!address) {
+                showError(translations[currentLang].enterAddress);
+                return;
+            }
+            stopRefresh();
+            const isBedrock = document.getElementById('bedrockCheck').checked;
+            queryServer(address, false, isBedrock);
+        });
+
+        document.getElementById('serverInput').addEventListener('keydown', function(e) {
+            if (e.key === 'Enter') document.getElementById('queryBtn').click();
+        });
+        document.getElementById('bedrockHost').addEventListener('keydown', function(e) {
+            if (e.key === 'Enter') document.getElementById('queryBtn').click();
+        });
+        document.getElementById('bedrockPort').addEventListener('keydown', function(e) {
+            if (e.key === 'Enter') document.getElementById('queryBtn').click();
+        });
+
+        const savedLang = getCookie('lang');
+        if (savedLang === 'zh' || savedLang === 'en') {
+            document.querySelectorAll('.lang-btn').forEach(b => {
+                b.classList.toggle('active', b.dataset.lang === savedLang);
+            });
+            switchLanguage(savedLang);
+        } else {
+            switchLanguage('zh');
+        }
+
+        initTheme();
+        renderHistory();
+
+        const q = new URLSearchParams(window.location.search).get('q');
+        if (q) {
+            const isBedrock = q.includes('19132') || q.includes('19133');
             if (isBedrock) {
                 document.getElementById('bedrockCheck').checked = true;
-                const parts = addr.split(':');
+                const parts = q.split(':');
                 document.getElementById('bedrockHost').value = parts[0];
                 document.getElementById('bedrockPort').value = parts[1] || '';
                 document.getElementById('bedrockInputs').classList.add('show');
                 document.getElementById('serverInput').style.display = 'none';
-                document.getElementById('serverInput').value = '';
             } else {
-                document.getElementById('bedrockCheck').checked = false;
-                document.getElementById('bedrockInputs').classList.remove('show');
-                document.getElementById('serverInput').style.display = 'block';
-                document.getElementById('serverInput').value = addr;
-                document.getElementById('bedrockHost').value = '';
-                document.getElementById('bedrockPort').value = '';
+                document.getElementById('serverInput').value = q;
             }
-            stopRefresh();
-            const isBedrockNow = document.getElementById('bedrockCheck').checked;
-            queryServer(addr, false, isBedrockNow);
-        });
-    });
-}
-
-document.getElementById('queryBtn').addEventListener('click', function() {
-    const address = getAddress();
-    if (!address) {
-        showError(translations[currentLang].enterAddress);
-        return;
-    }
-    stopRefresh();
-    const isBedrock = document.getElementById('bedrockCheck').checked;
-    queryServer(address, false, isBedrock);
-});
-
-document.getElementById('serverInput').addEventListener('keydown', function(e) {
-    if (e.key === 'Enter') document.getElementById('queryBtn').click();
-});
-document.getElementById('bedrockHost').addEventListener('keydown', function(e) {
-    if (e.key === 'Enter') document.getElementById('queryBtn').click();
-});
-document.getElementById('bedrockPort').addEventListener('keydown', function(e) {
-    if (e.key === 'Enter') document.getElementById('queryBtn').click();
-});
-
-const savedLang = getCookie('lang');
-if (savedLang === 'zh' || savedLang === 'en') {
-    document.querySelectorAll('.lang-btn').forEach(b => {
-        b.classList.toggle('active', b.dataset.lang === savedLang);
-    });
-    switchLanguage(savedLang);
-} else {
-    switchLanguage('zh');
-}
-
-initTheme();
-renderHistory();
-
-const q = new URLSearchParams(window.location.search).get('q');
-if (q) {
-    const isBedrock = q.includes('19132') || q.includes('19133');
-    if (isBedrock) {
-        document.getElementById('bedrockCheck').checked = true;
-        const parts = q.split(':');
-        document.getElementById('bedrockHost').value = parts[0];
-        document.getElementById('bedrockPort').value = parts[1] || '';
-        document.getElementById('bedrockInputs').classList.add('show');
-        document.getElementById('serverInput').style.display = 'none';
-    } else {
-        document.getElementById('serverInput').value = q;
-    }
-    setTimeout(() => {
-        const isBedrockNow = document.getElementById('bedrockCheck').checked;
-        queryServer(q, false, isBedrockNow);
-    }, 500);
-}
-</script>
+            setTimeout(() => {
+                const isBedrockNow = document.getElementById('bedrockCheck').checked;
+                queryServer(q, false, isBedrockNow);
+            }, 500);
+        }
+    </script>
 </body>
 </html>
