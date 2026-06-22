@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-    <title>MC服务器状态查询</title>
+    <title>服务器查询</title>
     <link rel="icon" type="image/png" href="/icon/icon.png">
     <style>
         * {
@@ -437,7 +437,7 @@
 <div class="card">
     <div class="top-bar"></div>
     <div class="card-inner">
-        <div class="title" id="pageTitleText">服务器探测</div>
+        <div class="title" id="pageTitleText">服务器查询</div>
         <div class="subtitle" id="subtitleText">输入域名或IP，查询是否为Minecraft服务器</div>
 
         <div class="search-group">
@@ -473,7 +473,7 @@
             <div class="history-tags" id="historyTags"></div>
         </div>
 
-        <a href="/" class="back-link" id="backLink">返回主页</a>
+        <a href="/" class="back-link" id="backLink">← 返回主页</a>
 
         <div class="cookie-notice" id="cookieNotice">
             如果你没有同意 Cookie，自定义选项不会被保存，点击 <a href="/">这里</a> 同意 cookie
@@ -484,8 +484,8 @@
 <script>
 const translations = {
     zh: {
-        pageTitle: "MC服务器状态查询",
-        pageTitleText: "服务器探测",
+        pageTitle: "服务器查询",
+        pageTitleText: "服务器查询",
         subtitleText: "输入域名或IP，查询是否为Minecraft服务器",
         hintText: "支持 Java 版服务器 · 实时探测状态",
         feature1: "任意域名/IP",
@@ -507,13 +507,13 @@ const translations = {
         isMcServer: "确认为 Minecraft 服务器",
         fetchFailed: "请求失败，请检查网络或稍后重试",
         historyTitle: "最近查询",
-        backLink: "返回主页",
+        backLink: "← 返回主页",
         cookieNotice: '如果你没有同意 Cookie，自定义选项不会被保存，点击 <a href="/">这里</a> 同意 cookie',
         enterAddress: "请输入一个域名或IP地址"
     },
     en: {
-        pageTitle: "MC Server Status Check",
-        pageTitleText: "Server Probe",
+        pageTitle: "Server Query",
+        pageTitleText: "Server Query",
         subtitleText: "Enter a domain or IP to check if it's a Minecraft server",
         hintText: "Java Edition supported · Real-time status",
         feature1: "Any domain/IP",
@@ -535,7 +535,7 @@ const translations = {
         isMcServer: "Confirmed as Minecraft server",
         fetchFailed: "Request failed, please check your network and try again",
         historyTitle: "Recent Queries",
-        backLink: "Back to Home",
+        backLink: "← Back to Home",
         cookieNotice: 'If you do not consent to cookies, your custom preferences will not be saved, <a href="/">click here</a> to agree',
         enterAddress: "Please enter a domain or IP address"
     }
