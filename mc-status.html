@@ -1032,10 +1032,24 @@
 
         async function queryGeo(ip) {
             try {
-                const resp = await fetch(`https://ip-api.com/json/${ip}?fields=country,city,regionName&lang=zh-CN`);
+                const controller = new AbortController();
+                const timeout = setTimeout(() => controller.abort(), 5000);
+                const resp = await fetch(`https://api.ip.sb/geoip/${ip}`, {
+                    signal: controller.signal,
+                    headers: {
+                        'Accept': 'application/json'
+                    }
+                });
+                clearTimeout(timeout);
+                if (!resp.ok) return null;
                 const data = await resp.json();
-                if (data.status === 'success') {
-                    return `${data.country} ${data.regionName ? data.regionName : ''} ${data.city ? data.city : ''}`.trim();
+                if (data.country) {
+                    const country = data.country === 'China' ? '中国' : data.country;
+                    const isp = data.organization || data.isp || '';
+                    if (isp) {
+                        return `${country} (${isp})`;
+                    }
+                    return `${country}`;
                 }
                 return null;
             } catch (e) {
