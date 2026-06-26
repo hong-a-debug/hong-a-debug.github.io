@@ -26,6 +26,7 @@
             --online-color: #27ae60;
             --offline-color: #d32f2f;
             --clear-btn-hover: #b71c1c;
+            --copy-success: #27ae60;
         }
 
         body.dark {
@@ -42,6 +43,7 @@
             --online-color: #2ecc71;
             --offline-color: #ff6b6b;
             --clear-btn-hover: #c62828;
+            --copy-success: #2ecc71;
         }
 
         body {
@@ -336,7 +338,7 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 16px;
+            margin-bottom: 12px;
             flex-wrap: wrap;
             gap: 8px;
         }
@@ -427,6 +429,51 @@
             border-radius: 12px;
             border: 2px solid var(--card-border);
             object-fit: cover;
+        }
+
+        .extra-info {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-top: 10px;
+            padding-top: 10px;
+            border-top: 1px solid var(--card-border);
+        }
+
+        .extra-item {
+            font-size: 13px;
+            color: var(--text-secondary);
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+        .extra-item .val {
+            color: var(--text-primary);
+            font-weight: 500;
+        }
+
+        .copy-btn {
+            background: none;
+            border: 1px solid var(--accent);
+            border-radius: 16px;
+            padding: 2px 12px;
+            font-size: 12px;
+            cursor: pointer;
+            color: var(--accent);
+            font-family: inherit;
+            transition: all 0.2s;
+        }
+        .copy-btn:hover {
+            background: var(--accent);
+            color: #fff;
+        }
+        .copy-btn.copied {
+            border-color: var(--copy-success);
+            color: var(--copy-success);
+        }
+        .copy-btn.copied:hover {
+            background: var(--copy-success);
+            color: #fff;
         }
 
         .error-message {
@@ -606,6 +653,10 @@
                 flex-wrap: wrap;
                 gap: 8px;
             }
+            .extra-info {
+                flex-direction: column;
+                gap: 6px;
+            }
         }
     </style>
 </head>
@@ -661,6 +712,14 @@
                         <span id="statusBadge"></span>
                     </div>
                     <div id="resultDetails"></div>
+                    <div class="extra-info" id="extraInfo">
+                        <span class="extra-item" id="pingDisplay">📶 Ping: <span class="val" id="pingValue">--</span>ms</span>
+                        <span class="extra-item" id="geoDisplay">🌍 位置: <span class="val" id="geoValue">--</span></span>
+                        <span class="extra-item" id="realIpDisplay">🖥️ 真实IP: <span class="val" id="realIpValue">--</span></span>
+                        <span class="extra-item" id="copyDisplay">
+                            <button class="copy-btn" id="copyBtn">📋 复制地址</button>
+                        </span>
+                    </div>
                 </div>
                 <div class="refresh-indicator" id="refreshIndicator">🔄 每 10 秒自动刷新</div>
             </div>
@@ -721,7 +780,14 @@
                 bedrockLabel: "基岩版",
                 edition: "版本类型",
                 gamemode: "游戏模式",
-                serverName: "服务器名称"
+                serverName: "服务器名称",
+                ping: "Ping",
+                location: "位置",
+                realIp: "真实IP",
+                copyAddr: "复制地址",
+                copied: "已复制!",
+                unknownLocation: "未知",
+                ms: "ms"
             },
             en: {
                 pageTitle: "Server Query",
@@ -761,7 +827,14 @@
                 bedrockLabel: "Bedrock",
                 edition: "Edition",
                 gamemode: "Game Mode",
-                serverName: "Server Name"
+                serverName: "Server Name",
+                ping: "Ping",
+                location: "Location",
+                realIp: "Real IP",
+                copyAddr: "Copy Address",
+                copied: "Copied!",
+                unknownLocation: "Unknown",
+                ms: "ms"
             }
         };
 
@@ -771,6 +844,9 @@
         let currentAddress = null;
         let cachedData = null;
         let cachedIsBedrock = false;
+        let cachedIp = null;
+        let cachedPort = null;
+        let cachedFullAddress = null;
 
         function getCookie(name) {
             const v = `; ${document.cookie}`;
@@ -832,6 +908,7 @@
             document.getElementById('cookieNotice').innerHTML = t.cookieNotice;
             document.getElementById('refreshIndicator').textContent = t.autoRefresh;
             document.getElementById('bedrockLabel').textContent = t.bedrockLabel;
+            document.getElementById('copyBtn').textContent = t.copyAddr;
 
             if (getCookie('cookie_consent') === 'accepted') {
                 setCookie('lang', lang, 30);
@@ -948,10 +1025,73 @@
             }, 10000);
         }
 
+        async function queryGeo(ip) {
+            try {
+                const resp = await fetch(`https://ip-api.com/json/${ip}?fields=country,city,regionName&lang=zh-CN`);
+                const data = await resp.json();
+                if (data.status === 'success') {
+                    return `${data.country} ${data.regionName ? data.regionName : ''} ${data.city ? data.city : ''}`.trim();
+                }
+                return null;
+            } catch (e) {
+                return null;
+            }
+        }
+
+        function copyToClipboard(text) {
+            if (navigator.clipboard && navigator.clipboard.writeText) {
+                navigator.clipboard.writeText(text).then(() => {
+                    const btn = document.getElementById('copyBtn');
+                    const t = translations[currentLang];
+                    btn.textContent = t.copied;
+                    btn.classList.add('copied');
+                    setTimeout(() => {
+                        btn.textContent = t.copyAddr;
+                        btn.classList.remove('copied');
+                    }, 2000);
+                }).catch(() => {
+                    fallbackCopy(text);
+                });
+            } else {
+                fallbackCopy(text);
+            }
+        }
+
+        function fallbackCopy(text) {
+            const textarea = document.createElement('textarea');
+            textarea.value = text;
+            textarea.style.position = 'fixed';
+            textarea.style.opacity = '0';
+            document.body.appendChild(textarea);
+            textarea.select();
+            try {
+                document.execCommand('copy');
+                const btn = document.getElementById('copyBtn');
+                const t = translations[currentLang];
+                btn.textContent = t.copied;
+                btn.classList.add('copied');
+                setTimeout(() => {
+                    btn.textContent = t.copyAddr;
+                    btn.classList.remove('copied');
+                }, 2000);
+            } catch (e) {
+                alert('复制失败，请手动复制');
+            }
+            document.body.removeChild(textarea);
+        }
+
         async function queryServer(address, silent = false, isBedrock = false) {
             const loading = document.getElementById('loadingIndicator');
             const area = document.getElementById('previewArea');
             const btn = document.getElementById('queryBtn');
+
+            const parsed = parseAddress(address);
+            if (parsed) {
+                cachedIp = parsed.host;
+                cachedPort = parsed.port || (isBedrock ? 19132 : 25565);
+                cachedFullAddress = `${cachedIp}:${cachedPort}`;
+                document.getElementById('realIpValue').textContent = cachedFullAddress;
+            }
 
             if (!silent) {
                 loading.style.display = 'block';
@@ -968,7 +1108,6 @@
             }
 
             try {
-                const parsed = parseAddress(address);
                 if (!parsed) throw new Error('Invalid');
 
                 let url;
@@ -984,7 +1123,11 @@
                     }
                 }
 
+                const startTime = performance.now();
                 const resp = await fetch(url);
+                const endTime = performance.now();
+                const ping = Math.round(endTime - startTime);
+
                 const data = await resp.json();
 
                 if (!silent) {
@@ -1002,7 +1145,14 @@
                 currentAddress = address;
                 cachedData = data;
                 cachedIsBedrock = isBedrock;
-                displayResult(address, data, isBedrock);
+                if (data.ip) {
+                    cachedIp = data.ip;
+                    cachedPort = data.port || parsed.port || (isBedrock ? 19132 : 25565);
+                    cachedFullAddress = `${cachedIp}:${cachedPort}`;
+                    document.getElementById('realIpValue').textContent = cachedFullAddress;
+                }
+
+                displayResult(address, data, isBedrock, ping);
 
             } catch (e) {
                 if (!silent) {
@@ -1018,12 +1168,14 @@
                 document.getElementById('statusBadge').innerHTML = `<span class="status-badge status-unknown">${t.unknown}</span>`;
                 document.getElementById('resultDetails').innerHTML =
                     `<div style="color:var(--text-secondary);text-align:center;padding:10px;">${t.fetchFailed}</div>`;
+                document.getElementById('pingValue').textContent = '--';
+                document.getElementById('geoValue').textContent = '--';
                 stopRefresh();
                 cachedData = null;
             }
         }
 
-        function displayResult(address, data, isBedrock = false) {
+        async function displayResult(address, data, isBedrock = false, ping = 0) {
             const t = translations[currentLang];
             document.getElementById('resultAddress').textContent = address;
 
@@ -1118,10 +1270,17 @@
                 }
 
                 html += `<div class="info-row" style="margin-top:12px;border-top:2px solid var(--card-border);padding-top:12px;">
-            <span style="color:var(--online-color);font-weight:500;">${t.isMcServer}</span>
-        </div>`;
+                    <span style="color:var(--online-color);font-weight:500;">${t.isMcServer}</span>
+                </div>`;
 
                 document.getElementById('resultDetails').innerHTML = html;
+
+                document.getElementById('pingValue').textContent = ping;
+
+                if (cachedIp && document.getElementById('geoValue').textContent === '--') {
+                    const geo = await queryGeo(cachedIp);
+                    document.getElementById('geoValue').textContent = geo || t.unknownLocation;
+                }
 
                 startRefresh(address, isBedrock);
 
@@ -1130,14 +1289,30 @@
 
                 let html = '';
                 html += `<div class="info-row">
-            <span class="info-label">${t.version}</span>
-            <span class="info-value" style="color:var(--offline-color);">${t.notMcServer}</span>
-        </div>`;
+                    <span class="info-label">${t.version}</span>
+                    <span class="info-value" style="color:var(--offline-color);">${t.notMcServer}</span>
+                </div>`;
 
                 document.getElementById('resultDetails').innerHTML = html;
+                document.getElementById('pingValue').textContent = '--';
+                document.getElementById('geoValue').textContent = '--';
                 stopRefresh();
             }
         }
+
+        document.getElementById('copyBtn').addEventListener('click', function() {
+            const t = translations[currentLang];
+            if (cachedFullAddress) {
+                copyToClipboard(cachedFullAddress);
+            } else {
+                const address = document.getElementById('resultAddress').textContent;
+                if (address && address !== '—') {
+                    copyToClipboard(address);
+                } else {
+                    alert('没有可复制的地址');
+                }
+            }
+        });
 
         function saveHistory(addr) {
             queryHistory = queryHistory.filter(item => item !== addr);
