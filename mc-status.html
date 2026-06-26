@@ -847,7 +847,7 @@
         let cachedIp = null;
         let cachedPort = null;
         let cachedFullAddress = null;
-        let geoFetched = false;
+        let cachedGeo = null;
         let currentPing = 0;
 
         function getCookie(name) {
@@ -915,24 +915,98 @@
             document.getElementById('geoLabel').textContent = t.location;
             document.getElementById('realIpLabel').textContent = t.realIp;
 
-            // 只更新"未知"的翻译，不改变已有的位置和IP值
-            const geoValue = document.getElementById('geoValue').textContent;
-            if (geoValue === '未知' || geoValue === 'Unknown') {
-                document.getElementById('geoValue').textContent = t.unknownLocation;
-            }
-
             if (getCookie('cookie_consent') === 'accepted') {
                 setCookie('lang', lang, 30);
             }
 
-            // 如果有缓存数据，只更新状态标签文字，不改动位置和IP
             if (cachedData) {
-                const statusBadge = document.getElementById('statusBadge');
-                if (cachedData.online === true) {
-                    statusBadge.innerHTML = '<span class="status-badge status-online">' + t.online + '</span>';
-                } else if (cachedData.online === false) {
-                    statusBadge.innerHTML = '<span class="status-badge status-offline">' + t.offline + '</span>';
+                renderResultCard(currentAddress, cachedData, cachedIsBedrock);
+            }
+        }
+
+        function renderResultCard(address, data, isBedrock) {
+            const t = translations[currentLang];
+            document.getElementById('resultAddress').textContent = address;
+
+            if (data.online === true) {
+                document.getElementById('statusBadge').innerHTML = `<span class="status-badge status-online">${t.online}</span>`;
+
+                let html = '';
+
+                if (data.icon) {
+                    html += `<div class="server-icon"><img src="${data.icon}" alt="Icon"></div>`;
+                } else {
+                    html += `<div class="server-icon"><img src="https://api.mcsrvstat.us/icon/${encodeURIComponent(address)}" alt="Icon"></div>`;
                 }
+
+                if (isBedrock) {
+                    if (data.motd?.clean?.length) {
+                        let motdText = data.motd.clean.join(' ');
+                        motdText = motdText.replace(/\n/g, ' ').replace(/\r/g, ' ').trim();
+                        motdText = formatMOTD(motdText);
+                        html += `<div class="info-row"><span class="info-label">${t.serverName}</span><span class="info-value motd">${motdText}</span></div>`;
+                    }
+
+                    let versionDisplay = data.version || '未知';
+                    if (versionDisplay.startsWith('1.')) {
+                        const versionNum = parseFloat(versionDisplay);
+                        if (versionNum > 1.21) {
+                            versionDisplay = versionDisplay.substring(2);
+                        }
+                    }
+                    html += `<div class="info-row"><span class="info-label">${t.version}</span><span class="info-value">${versionDisplay}</span></div>`;
+                    html += `<div class="info-row"><span class="info-label">${t.edition}</span><span class="info-value">Bedrock</span></div>`;
+                    if (data.gamemode) {
+                        const gamemodeMap = { 'Survival': '生存模式', 'Creative': '创造模式', 'Adventure': '冒险模式', 'Spectator': '旁观模式' };
+                        let gamemodeDisplay = data.gamemode;
+                        if (currentLang === 'zh' && gamemodeMap[data.gamemode]) {
+                            gamemodeDisplay = gamemodeMap[data.gamemode];
+                        }
+                        html += `<div class="info-row"><span class="info-label">${t.gamemode}</span><span class="info-value">${gamemodeDisplay}</span></div>`;
+                    }
+                    html += `<div class="info-row"><span class="info-label">${t.players}</span><span class="info-value">${data.players?.online || 0} / ${data.players?.max || '?'}</span></div>`;
+                } else {
+                    html += `<div class="info-row"><span class="info-label">${t.version}</span><span class="info-value">${data.version || '未知'}</span></div>`;
+                    if (data.software) {
+                        html += `<div class="info-row"><span class="info-label">${t.software}</span><span class="info-value">${data.software}</span></div>`;
+                    }
+                    html += `<div class="info-row"><span class="info-label">${t.players}</span><span class="info-value">${data.players?.online || 0} / ${data.players?.max || '?'}</span></div>`;
+                    if (data.motd?.clean?.length) {
+                        let motdText = data.motd.clean.join(' ');
+                        motdText = motdText.replace(/\n/g, ' ').replace(/\r/g, ' ').trim();
+                        motdText = formatMOTD(motdText);
+                        html += `<div class="info-row"><span class="info-label">${t.motd}</span><span class="info-value motd">${motdText}</span></div>`;
+                    }
+                    if (data.players?.list && data.players.list.length > 0) {
+                        let playerNames = data.players.list.map(p => p.name || p).join(', ');
+                        playerNames = playerNames.replace(/\n/g, ' ').replace(/\r/g, ' ').trim();
+                        const formattedPlayers = formatPlayers(playerNames.split(', '));
+                        html += `<div class="info-row"><span class="info-label">${t.playerList}</span><span class="info-value player-list">${formattedPlayers}</span></div>`;
+                    }
+                    if (data.plugins && data.plugins.length > 0) {
+                        const pluginNames = data.plugins.map(p => p.name + (p.version ? ' v' + p.version : '')).join(', ');
+                        html += `<div class="info-row"><span class="info-label">${t.plugins}</span><span class="info-value motd">${pluginNames}</span></div>`;
+                    }
+                    if (data.mods && data.mods.length > 0) {
+                        const modNames = data.mods.map(m => m.name + (m.version ? ' v' + m.version : '')).join(', ');
+                        html += `<div class="info-row"><span class="info-label">${t.mods}</span><span class="info-value motd">${modNames}</span></div>`;
+                    }
+                }
+
+                html += `<div class="info-row" style="margin-top:12px;border-top:2px solid var(--card-border);padding-top:12px;">
+                    <span style="color:var(--online-color);font-weight:500;">${t.isMcServer}</span>
+                </div>`;
+
+                document.getElementById('resultDetails').innerHTML = html;
+
+            } else {
+                document.getElementById('statusBadge').innerHTML = `<span class="status-badge status-offline">${t.offline}</span>`;
+                let html = '';
+                html += `<div class="info-row">
+                    <span class="info-label">${t.version}</span>
+                    <span class="info-value" style="color:var(--offline-color);">${t.notMcServer}</span>
+                </div>`;
+                document.getElementById('resultDetails').innerHTML = html;
             }
         }
 
@@ -1045,7 +1119,7 @@
             try {
                 const controller = new AbortController();
                 const timeout = setTimeout(() => controller.abort(), 5000);
-                const resp = await fetch('https://api.ip.sb/geoip/' + ip, {
+                const resp = await fetch(`https://api.ip.sb/geoip/${ip}`, {
                     signal: controller.signal,
                     headers: {
                         'Accept': 'application/json'
@@ -1058,9 +1132,9 @@
                     const country = data.country === 'China' ? '中国' : data.country;
                     const isp = data.organization || data.isp || '';
                     if (isp) {
-                        return country + ' (' + isp + ')';
+                        return `${country} (${isp})`;
                     }
-                    return country;
+                    return `${country}`;
                 }
                 return null;
             } catch (e) {
@@ -1110,6 +1184,14 @@
             document.body.removeChild(textarea);
         }
 
+        async function displayResult(address, data, isBedrock = false, ping = 0) {
+            renderResultCard(address, data, isBedrock);
+            if (ping > 0) {
+                document.getElementById('pingValue').textContent = ping;
+            }
+            startRefresh(address, isBedrock);
+        }
+
         async function queryServer(address, silent = false, isBedrock = false) {
             const loading = document.getElementById('loadingIndicator');
             const area = document.getElementById('previewArea');
@@ -1119,7 +1201,7 @@
             if (parsed) {
                 cachedIp = parsed.host;
                 cachedPort = parsed.port || (isBedrock ? 19132 : 25565);
-                cachedFullAddress = cachedIp + ':' + cachedPort;
+                cachedFullAddress = `${cachedIp}:${cachedPort}`;
                 document.getElementById('realIpValue').textContent = cachedFullAddress;
             }
 
@@ -1147,14 +1229,14 @@
 
                 let url;
                 if (isBedrock) {
-                    url = 'https://api.mcsrvstat.us/bedrock/3/' + encodeURIComponent(parsed.host);
+                    url = `https://api.mcsrvstat.us/bedrock/3/${encodeURIComponent(parsed.host)}`;
                     if (parsed.port) {
-                        url = 'https://api.mcsrvstat.us/bedrock/3/' + encodeURIComponent(parsed.host) + ':' + parsed.port;
+                        url = `https://api.mcsrvstat.us/bedrock/3/${encodeURIComponent(parsed.host)}:${parsed.port}`;
                     }
                 } else {
-                    url = 'https://api.mcsrvstat.us/3/' + encodeURIComponent(parsed.host);
+                    url = `https://api.mcsrvstat.us/3/${encodeURIComponent(parsed.host)}`;
                     if (parsed.port) {
-                        url = 'https://api.mcsrvstat.us/3/' + encodeURIComponent(parsed.host) + ':' + parsed.port;
+                        url = `https://api.mcsrvstat.us/3/${encodeURIComponent(parsed.host)}:${parsed.port}`;
                     }
                 }
 
@@ -1173,7 +1255,7 @@
                 if (data.ip) {
                     cachedIp = data.ip;
                     cachedPort = data.port || parsed.port || (isBedrock ? 19132 : 25565);
-                    cachedFullAddress = cachedIp + ':' + cachedPort;
+                    cachedFullAddress = `${cachedIp}:${cachedPort}`;
                     document.getElementById('realIpValue').textContent = cachedFullAddress;
                 }
 
@@ -1199,10 +1281,14 @@
 
             const t = translations[currentLang];
 
-            if (!geoFetched && cachedIp) {
+            if (cachedGeo === null && cachedIp) {
                 const geo = await queryGeo(cachedIp);
-                document.getElementById('geoValue').textContent = geo || t.unknownLocation;
-                geoFetched = true;
+                cachedGeo = geo || t.unknownLocation;
+                document.getElementById('geoValue').textContent = cachedGeo;
+            } else if (cachedGeo !== null) {
+                document.getElementById('geoValue').textContent = cachedGeo;
+            } else {
+                document.getElementById('geoValue').textContent = t.unknownLocation;
             }
 
             if (ping > 0) {
@@ -1213,24 +1299,24 @@
 
             if (requestFailed) {
                 document.getElementById('resultAddress').textContent = address;
-                document.getElementById('statusBadge').innerHTML = '<span class="status-badge status-unknown">' + t.unknown + '</span>';
+                document.getElementById('statusBadge').innerHTML = `<span class="status-badge status-unknown">${t.unknown}</span>`;
                 document.getElementById('resultDetails').innerHTML =
-                    '<div style="color:var(--text-secondary);text-align:center;padding:10px;">' + t.fetchFailed + '</div>';
-                stopRefresh();
+                    `<div style="color:var(--text-secondary);text-align:center;padding:10px;">${t.fetchFailed}</div>`;
+                startRefresh(address, isBedrock);
                 cachedData = null;
                 return;
             }
 
             if (offline || data.online === false) {
                 document.getElementById('resultAddress').textContent = address;
-                document.getElementById('statusBadge').innerHTML = '<span class="status-badge status-offline">' + t.offline + '</span>';
+                document.getElementById('statusBadge').innerHTML = `<span class="status-badge status-offline">${t.offline}</span>`;
                 let html = '';
-                html += '<div class="info-row">';
-                html += '    <span class="info-label">' + t.version + '</span>';
-                html += '    <span class="info-value" style="color:var(--offline-color);">' + t.notMcServer + '</span>';
-                html += '</div>';
+                html += `<div class="info-row">
+                    <span class="info-label">${t.version}</span>
+                    <span class="info-value" style="color:var(--offline-color);">${t.notMcServer}</span>
+                </div>`;
                 document.getElementById('resultDetails').innerHTML = html;
-                stopRefresh();
+                startRefresh(address, isBedrock);
                 cachedData = data;
                 return;
             }
@@ -1238,102 +1324,6 @@
             if (data && data.online === true) {
                 cachedData = data;
                 await displayResult(address, data, isBedrock, ping);
-            }
-        }
-
-        async function displayResult(address, data, isBedrock = false, ping = 0) {
-            const t = translations[currentLang];
-            document.getElementById('resultAddress').textContent = address;
-
-            if (data.online === true) {
-                document.getElementById('statusBadge').innerHTML = '<span class="status-badge status-online">' + t.online + '</span>';
-
-                let html = '';
-
-                if (data.icon) {
-                    html += '<div class="server-icon"><img src="' + data.icon + '" alt="Icon"></div>';
-                } else {
-                    html +=
-                        '<div class="server-icon"><img src="https://api.mcsrvstat.us/icon/' + encodeURIComponent(address) + '" alt="Icon"></div>';
-                }
-
-                if (isBedrock) {
-                    if (data.motd && data.motd.clean && data.motd.clean.length) {
-                        let motdText = data.motd.clean.join(' ');
-                        motdText = motdText.replace(/\n/g, ' ').replace(/\r/g, ' ').trim();
-                        motdText = formatMOTD(motdText);
-                        html += '<div class="info-row"><span class="info-label">' + t.serverName + '</span><span class="info-value motd">' + motdText + '</span></div>';
-                    }
-
-                    let versionDisplay = data.version || '未知';
-                    if (versionDisplay.startsWith('1.')) {
-                        const versionNum = parseFloat(versionDisplay);
-                        if (versionNum > 1.21) {
-                            versionDisplay = versionDisplay.substring(2);
-                        }
-                    }
-                    html += '<div class="info-row"><span class="info-label">' + t.version + '</span><span class="info-value">' + versionDisplay + '</span></div>';
-
-                    html += '<div class="info-row"><span class="info-label">' + t.edition + '</span><span class="info-value">Bedrock</span></div>';
-                    if (data.gamemode) {
-                        const gamemodeMap = {
-                            'Survival': '生存模式',
-                            'Creative': '创造模式',
-                            'Adventure': '冒险模式',
-                            'Spectator': '旁观模式'
-                        };
-                        let gamemodeDisplay = data.gamemode;
-                        if (currentLang === 'zh' && gamemodeMap[data.gamemode]) {
-                            gamemodeDisplay = gamemodeMap[data.gamemode];
-                        }
-                        html += '<div class="info-row"><span class="info-label">' + t.gamemode + '</span><span class="info-value">' + gamemodeDisplay + '</span></div>';
-                    }
-                    html += '<div class="info-row"><span class="info-label">' + t.players + '</span><span class="info-value">' + (data.players?.online || 0) + ' / ' + (data.players?.max || '?') + '</span></div>';
-                } else {
-                    html += '<div class="info-row"><span class="info-label">' + t.version + '</span><span class="info-value">' + (data.version || '未知') + '</span></div>';
-
-                    if (data.software) {
-                        html += '<div class="info-row"><span class="info-label">' + t.software + '</span><span class="info-value">' + data.software + '</span></div>';
-                    }
-
-                    html += '<div class="info-row"><span class="info-label">' + t.players + '</span><span class="info-value">' + (data.players?.online || 0) + ' / ' + (data.players?.max || '?') + '</span></div>';
-
-                    if (data.motd && data.motd.clean && data.motd.clean.length) {
-                        let motdText = data.motd.clean.join(' ');
-                        motdText = motdText.replace(/\n/g, ' ').replace(/\r/g, ' ').trim();
-                        motdText = formatMOTD(motdText);
-                        html += '<div class="info-row"><span class="info-label">' + t.motd + '</span><span class="info-value motd">' + motdText + '</span></div>';
-                    }
-
-                    if (data.players && data.players.list && data.players.list.length > 0) {
-                        let playerNames = data.players.list.map(function(p) { return p.name || p; }).join(', ');
-                        playerNames = playerNames.replace(/\n/g, ' ').replace(/\r/g, ' ').trim();
-                        var formattedPlayers = formatPlayers(playerNames.split(', '));
-                        html += '<div class="info-row"><span class="info-label">' + t.playerList + '</span><span class="info-value player-list">' + formattedPlayers + '</span></div>';
-                    }
-
-                    if (data.plugins && data.plugins.length > 0) {
-                        var pluginNames = data.plugins.map(function(p) { return p.name + (p.version ? ' v' + p.version : ''); }).join(', ');
-                        html += '<div class="info-row"><span class="info-label">' + t.plugins + '</span><span class="info-value motd">' + pluginNames + '</span></div>';
-                    }
-
-                    if (data.mods && data.mods.length > 0) {
-                        var modNames = data.mods.map(function(m) { return m.name + (m.version ? ' v' + m.version : ''); }).join(', ');
-                        html += '<div class="info-row"><span class="info-label">' + t.mods + '</span><span class="info-value motd">' + modNames + '</span></div>';
-                    }
-                }
-
-                html += '<div class="info-row" style="margin-top:12px;border-top:2px solid var(--card-border);padding-top:12px;">';
-                html += '    <span style="color:var(--online-color);font-weight:500;">' + t.isMcServer + '</span>';
-                html += '</div>';
-
-                document.getElementById('resultDetails').innerHTML = html;
-
-                if (ping > 0) {
-                    document.getElementById('pingValue').textContent = ping;
-                }
-
-                startRefresh(address, isBedrock);
             }
         }
 
@@ -1352,7 +1342,7 @@
         });
 
         function saveHistory(addr) {
-            queryHistory = queryHistory.filter(function(item) { return item !== addr; });
+            queryHistory = queryHistory.filter(item => item !== addr);
             queryHistory.unshift(addr);
             if (queryHistory.length > 10) queryHistory.pop();
             localStorage.setItem('mcQueryHistory', JSON.stringify(queryHistory));
@@ -1366,11 +1356,11 @@
                 container.innerHTML = '<span style="color:var(--text-link);font-size:12px;">暂无查询记录</span>';
                 return;
             }
-            container.innerHTML = queryHistory.map(function(addr) {
-                return '<span class="history-tag" data-address="' + addr + '">' + addr + '</span>';
-            }).join('');
+            container.innerHTML = queryHistory.map(addr =>
+                `<span class="history-tag" data-address="${addr}">${addr}</span>`
+            ).join('');
 
-            container.querySelectorAll('.history-tag').forEach(function(tag) {
+            container.querySelectorAll('.history-tag').forEach(tag => {
                 tag.addEventListener('click', function() {
                     const addr = this.dataset.address;
                     const isBedrock = addr.includes('19132') || addr.includes('19133');
@@ -1392,7 +1382,7 @@
                     }
                     stopRefresh();
                     const isBedrockNow = document.getElementById('bedrockCheck').checked;
-                    geoFetched = false;
+                    cachedGeo = null;
                     queryServer(addr, false, isBedrockNow);
                 });
             });
@@ -1415,7 +1405,7 @@
             }
             stopRefresh();
             const isBedrock = document.getElementById('bedrockCheck').checked;
-            geoFetched = false;
+            cachedGeo = null;
             queryServer(address, false, isBedrock);
         });
 
@@ -1431,7 +1421,7 @@
 
         const savedLang = getCookie('lang');
         if (savedLang === 'zh' || savedLang === 'en') {
-            document.querySelectorAll('.lang-btn').forEach(function(b) {
+            document.querySelectorAll('.lang-btn').forEach(b => {
                 b.classList.toggle('active', b.dataset.lang === savedLang);
             });
             switchLanguage(savedLang);
@@ -1455,9 +1445,9 @@
             } else {
                 document.getElementById('serverInput').value = q;
             }
-            setTimeout(function() {
+            setTimeout(() => {
                 const isBedrockNow = document.getElementById('bedrockCheck').checked;
-                geoFetched = false;
+                cachedGeo = null;
                 queryServer(q, false, isBedrockNow);
             }, 500);
         }
