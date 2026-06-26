@@ -847,6 +847,7 @@
         let cachedIp = null;
         let cachedPort = null;
         let cachedFullAddress = null;
+        let geoFetched = false;
 
         function getCookie(name) {
             const v = `; ${document.cookie}`;
@@ -1107,6 +1108,11 @@
                 loading.style.display = 'block';
             }
 
+            let ping = 0;
+            let data = null;
+            let requestFailed = false;
+            let offline = false;
+
             try {
                 if (!parsed) throw new Error('Invalid');
 
@@ -1126,25 +1132,14 @@
                 const startTime = performance.now();
                 const resp = await fetch(url);
                 const endTime = performance.now();
-                const ping = Math.round(endTime - startTime);
+                ping = Math.round(endTime - startTime);
 
-                const data = await resp.json();
+                data = await resp.json();
 
-                if (!silent) {
-                    loading.style.display = 'none';
-                    btn.disabled = false;
+                if (data.online === false) {
+                    offline = true;
                 }
-                if (silent) {
-                    loading.style.display = 'none';
-                }
-                area.classList.add('show');
 
-                if (!silent) {
-                    saveHistory(address);
-                }
-                currentAddress = address;
-                cachedData = data;
-                cachedIsBedrock = isBedrock;
                 if (data.ip) {
                     cachedIp = data.ip;
                     cachedPort = data.port || parsed.port || (isBedrock ? 19132 : 25565);
@@ -1152,26 +1147,67 @@
                     document.getElementById('realIpValue').textContent = cachedFullAddress;
                 }
 
-                displayResult(address, data, isBedrock, ping);
-
             } catch (e) {
-                if (!silent) {
-                    loading.style.display = 'none';
-                    btn.disabled = false;
-                }
-                if (silent) {
-                    loading.style.display = 'none';
-                }
-                area.classList.add('show');
+                requestFailed = true;
+            }
+
+            if (!silent) {
+                loading.style.display = 'none';
+                btn.disabled = false;
+            }
+            if (silent) {
+                loading.style.display = 'none';
+            }
+            area.classList.add('show');
+
+            if (!silent && !requestFailed && data && data.online === true) {
+                saveHistory(address);
+            }
+
+            currentAddress = address;
+            cachedIsBedrock = isBedrock;
+
+            if (!geoFetched && cachedIp) {
+                const geo = await queryGeo(cachedIp);
+                document.getElementById('geoValue').textContent = geo || translations[currentLang].unknownLocation;
+                geoFetched = true;
+            }
+
+            if (ping > 0) {
+                document.getElementById('pingValue').textContent = ping;
+            } else {
+                document.getElementById('pingValue').textContent = '--';
+            }
+
+            if (requestFailed) {
                 const t = translations[currentLang];
                 document.getElementById('resultAddress').textContent = address;
                 document.getElementById('statusBadge').innerHTML = `<span class="status-badge status-unknown">${t.unknown}</span>`;
                 document.getElementById('resultDetails').innerHTML =
                     `<div style="color:var(--text-secondary);text-align:center;padding:10px;">${t.fetchFailed}</div>`;
-                document.getElementById('pingValue').textContent = '--';
-                document.getElementById('geoValue').textContent = '--';
                 stopRefresh();
                 cachedData = null;
+                return;
+            }
+
+            if (offline || data.online === false) {
+                const t = translations[currentLang];
+                document.getElementById('resultAddress').textContent = address;
+                document.getElementById('statusBadge').innerHTML = `<span class="status-badge status-offline">${t.offline}</span>`;
+                let html = '';
+                html += `<div class="info-row">
+                    <span class="info-label">${t.version}</span>
+                    <span class="info-value" style="color:var(--offline-color);">${t.notMcServer}</span>
+                </div>`;
+                document.getElementById('resultDetails').innerHTML = html;
+                stopRefresh();
+                cachedData = data;
+                return;
+            }
+
+            if (data && data.online === true) {
+                cachedData = data;
+                await displayResult(address, data, isBedrock, ping);
             }
         }
 
@@ -1275,28 +1311,11 @@
 
                 document.getElementById('resultDetails').innerHTML = html;
 
-                document.getElementById('pingValue').textContent = ping;
-
-                if (cachedIp && document.getElementById('geoValue').textContent === '--') {
-                    const geo = await queryGeo(cachedIp);
-                    document.getElementById('geoValue').textContent = geo || t.unknownLocation;
+                if (ping > 0) {
+                    document.getElementById('pingValue').textContent = ping;
                 }
 
                 startRefresh(address, isBedrock);
-
-            } else {
-                document.getElementById('statusBadge').innerHTML = `<span class="status-badge status-offline">${t.offline}</span>`;
-
-                let html = '';
-                html += `<div class="info-row">
-                    <span class="info-label">${t.version}</span>
-                    <span class="info-value" style="color:var(--offline-color);">${t.notMcServer}</span>
-                </div>`;
-
-                document.getElementById('resultDetails').innerHTML = html;
-                document.getElementById('pingValue').textContent = '--';
-                document.getElementById('geoValue').textContent = '--';
-                stopRefresh();
             }
         }
 
@@ -1355,6 +1374,7 @@
                     }
                     stopRefresh();
                     const isBedrockNow = document.getElementById('bedrockCheck').checked;
+                    geoFetched = false;
                     queryServer(addr, false, isBedrockNow);
                 });
             });
@@ -1377,6 +1397,7 @@
             }
             stopRefresh();
             const isBedrock = document.getElementById('bedrockCheck').checked;
+            geoFetched = false;
             queryServer(address, false, isBedrock);
         });
 
@@ -1418,6 +1439,7 @@
             }
             setTimeout(() => {
                 const isBedrockNow = document.getElementById('bedrockCheck').checked;
+                geoFetched = false;
                 queryServer(q, false, isBedrockNow);
             }, 500);
         }
