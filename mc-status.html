@@ -713,21 +713,21 @@
                     </div>
                     <div id="resultDetails"></div>
                     <div class="extra-info" id="extraInfo">
-                        <span class="extra-item" id="pingDisplay">📶 Ping: <span class="val" id="pingValue">--</span>ms</span>
-                        <span class="extra-item" id="geoDisplay">🌍 位置: <span class="val" id="geoValue">--</span></span>
-                        <span class="extra-item" id="realIpDisplay">🖥️ 真实IP: <span class="val" id="realIpValue">--</span></span>
+                        <span class="extra-item" id="pingDisplay">📶 <span id="pingLabel">Ping</span>: <span class="val" id="pingValue">--</span>ms</span>
+                        <span class="extra-item" id="geoDisplay">🌍 <span id="geoLabel">位置</span>: <span class="val" id="geoValue">--</span></span>
+                        <span class="extra-item" id="realIpDisplay">🖥️ <span id="realIpLabel">真实IP</span>: <span class="val" id="realIpValue">--</span></span>
                         <span class="extra-item" id="copyDisplay">
-                            <button class="copy-btn" id="copyBtn">📋 复制地址</button>
+                            <button class="copy-btn" id="copyBtn">📋 <span id="copyLabel">复制地址</span></button>
                         </span>
                     </div>
                 </div>
-                <div class="refresh-indicator" id="refreshIndicator">🔄 每 10 秒自动刷新</div>
+                <div class="refresh-indicator" id="refreshIndicator">🔄 <span id="autoRefreshLabel">每 10 秒自动刷新</span></div>
             </div>
 
             <div class="history-section">
                 <div class="history-header">
                     <div class="history-title" id="historyTitle">最近查询</div>
-                    <button id="clearHistoryBtn" class="clear-history-btn">清空历史</button>
+                    <button id="clearHistoryBtn" class="clear-history-btn"><span id="clearLabel">清空历史</span></button>
                 </div>
                 <div class="history-tags" id="historyTags"></div>
             </div>
@@ -773,7 +773,7 @@
                 backLink: "← 返回主页",
                 cookieNotice: '如果你没有同意 Cookie，自定义选项不会被保存，点击 <a href="/">这里</a> 同意 cookie',
                 enterAddress: "请输入一个域名或IP地址",
-                autoRefresh: "🔄 每 10 秒自动刷新",
+                autoRefresh: "每 10 秒自动刷新",
                 software: "服务端",
                 plugins: "插件",
                 mods: "模组",
@@ -820,7 +820,7 @@
                 backLink: "← Back to Home",
                 cookieNotice: 'If you do not consent to cookies, your custom preferences will not be saved, <a href="/">click here</a> to agree',
                 enterAddress: "Please enter a domain or IP address",
-                autoRefresh: "🔄 Auto-refresh every 10s",
+                autoRefresh: "Auto-refresh every 10s",
                 software: "Software",
                 plugins: "Plugins",
                 mods: "Mods",
@@ -848,6 +848,7 @@
         let cachedPort = null;
         let cachedFullAddress = null;
         let geoFetched = false;
+        let currentPing = 0;
 
         function getCookie(name) {
             const v = `; ${document.cookie}`;
@@ -903,21 +904,23 @@
             document.getElementById('bedrockHost').placeholder = t.bedrockHostPlaceholder;
             document.getElementById('bedrockPort').placeholder = t.bedrockPortPlaceholder;
             document.getElementById('historyTitle').textContent = t.historyTitle;
-            document.getElementById('clearHistoryBtn').textContent = t.clearHistory;
+            document.getElementById('clearLabel').textContent = t.clearHistory;
             document.getElementById('backLink').textContent = t.backLink;
             document.getElementById('loadingIndicator').textContent = t.loading;
             document.getElementById('cookieNotice').innerHTML = t.cookieNotice;
-            document.getElementById('refreshIndicator').textContent = t.autoRefresh;
+            document.getElementById('autoRefreshLabel').textContent = t.autoRefresh;
             document.getElementById('bedrockLabel').textContent = t.bedrockLabel;
-            document.getElementById('copyBtn').textContent = t.copyAddr;
+            document.getElementById('copyLabel').textContent = t.copyAddr;
+            document.getElementById('pingLabel').textContent = t.ping;
+            document.getElementById('geoLabel').textContent = t.location;
+            document.getElementById('realIpLabel').textContent = t.realIp;
 
             if (getCookie('cookie_consent') === 'accepted') {
                 setCookie('lang', lang, 30);
             }
 
-            const address = document.getElementById('resultAddress').textContent;
-            if (address && address !== '—' && cachedData) {
-                displayResult(address, cachedData, cachedIsBedrock);
+            if (cachedData) {
+                displayResult(currentAddress, cachedData, cachedIsBedrock);
             }
         }
 
@@ -1044,10 +1047,10 @@
                 navigator.clipboard.writeText(text).then(() => {
                     const btn = document.getElementById('copyBtn');
                     const t = translations[currentLang];
-                    btn.textContent = t.copied;
+                    document.getElementById('copyLabel').textContent = t.copied;
                     btn.classList.add('copied');
                     setTimeout(() => {
-                        btn.textContent = t.copyAddr;
+                        document.getElementById('copyLabel').textContent = t.copyAddr;
                         btn.classList.remove('copied');
                     }, 2000);
                 }).catch(() => {
@@ -1069,10 +1072,10 @@
                 document.execCommand('copy');
                 const btn = document.getElementById('copyBtn');
                 const t = translations[currentLang];
-                btn.textContent = t.copied;
+                document.getElementById('copyLabel').textContent = t.copied;
                 btn.classList.add('copied');
                 setTimeout(() => {
-                    btn.textContent = t.copyAddr;
+                    document.getElementById('copyLabel').textContent = t.copyAddr;
                     btn.classList.remove('copied');
                 }, 2000);
             } catch (e) {
@@ -1133,6 +1136,7 @@
                 const resp = await fetch(url);
                 const endTime = performance.now();
                 ping = Math.round(endTime - startTime);
+                currentPing = ping;
 
                 data = await resp.json();
 
