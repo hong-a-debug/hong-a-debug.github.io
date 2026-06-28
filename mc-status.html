@@ -713,7 +713,7 @@
                     </div>
                     <div id="resultDetails"></div>
                     <div class="extra-info" id="extraInfo">
-                        <span class="extra-item" id="pingDisplay">📶 <span id="pingLabel">Ping</span>: <span class="val" id="pingValue">--</span>ms</span>
+                        <span class="extra-item" id="pingDisplay">📶 <span id="pingLabel">Ping</span>: <span class="val" id="pingValue">--</span></span>
                         <span class="extra-item" id="geoDisplay">🌍 <span id="geoLabel">位置</span>: <span class="val" id="geoValue">--</span></span>
                         <span class="extra-item" id="realIpDisplay">🖥️ <span id="realIpLabel">真实IP</span>: <span class="val" id="realIpValue">--</span></span>
                         <span class="extra-item" id="copyDisplay">
@@ -741,6 +741,10 @@
     </div>
 
     <script>
+        const CONFIG = {
+            pingApi: "https://v2.xxapi.cn/api/ping"
+        };
+
         const translations = {
             zh: {
                 pageTitle: "服务器查询",
@@ -787,7 +791,8 @@
                 copyAddr: "复制地址",
                 copied: "已复制!",
                 unknownLocation: "未知",
-                ms: "ms"
+                ms: "ms",
+                pingFrom: "测速节点"
             },
             en: {
                 pageTitle: "Server Query",
@@ -834,7 +839,8 @@
                 copyAddr: "Copy Address",
                 copied: "Copied!",
                 unknownLocation: "Unknown",
-                ms: "ms"
+                ms: "ms",
+                pingFrom: "Node"
             }
         };
 
@@ -849,6 +855,7 @@
         let cachedFullAddress = null;
         let cachedGeo = null;
         let currentPing = 0;
+        let currentPingNode = '';
 
         function getCookie(name) {
             const v = `; ${document.cookie}`;
@@ -1184,10 +1191,15 @@
             document.body.removeChild(textarea);
         }
 
-        async function displayResult(address, data, isBedrock = false, ping = 0) {
+        async function displayResult(address, data, isBedrock = false, ping = 0, pingNode = '') {
             renderResultCard(address, data, isBedrock);
             if (ping > 0) {
-                document.getElementById('pingValue').textContent = ping;
+                const t = translations[currentLang];
+                let pingDisplay = `${ping}ms`;
+                if (pingNode) {
+                    pingDisplay += ` (${pingNode})`;
+                }
+                document.getElementById('pingValue').textContent = pingDisplay;
             }
             startRefresh(address, isBedrock);
         }
@@ -1220,6 +1232,7 @@
             }
 
             let ping = 0;
+            let pingNode = '';
             let data = null;
             let requestFailed = false;
             let offline = false;
@@ -1240,13 +1253,34 @@
                     }
                 }
 
+                const pingUrl = `${CONFIG.pingApi}?url=${encodeURIComponent(parsed.host)}`;
+
                 const startTime = performance.now();
-                const resp = await fetch(url);
+                const [statusResp, pingResp] = await Promise.all([
+                    fetch(url),
+                    fetch(pingUrl)
+                ]);
                 const endTime = performance.now();
                 ping = Math.round(endTime - startTime);
                 currentPing = ping;
 
-                data = await resp.json();
+                data = await statusResp.json();
+
+                if (pingResp.ok) {
+                    const pingData = await pingResp.json();
+                    if (pingData.code === 200 && pingData.data && pingData.data.time) {
+                        const timeStr = pingData.data.time;
+                        const timeNum = parseFloat(timeStr);
+                        if (!isNaN(timeNum)) {
+                            ping = Math.round(timeNum);
+                            currentPing = ping;
+                        }
+                        if (pingData.data.server) {
+                            pingNode = pingData.data.server;
+                            currentPingNode = pingNode;
+                        }
+                    }
+                }
 
                 if (data.online === false) {
                     offline = true;
@@ -1292,7 +1326,11 @@
             }
 
             if (ping > 0) {
-                document.getElementById('pingValue').textContent = ping;
+                let pingDisplay = `${ping}ms`;
+                if (pingNode) {
+                    pingDisplay += ` (${pingNode})`;
+                }
+                document.getElementById('pingValue').textContent = pingDisplay;
             } else {
                 document.getElementById('pingValue').textContent = '--';
             }
@@ -1323,7 +1361,7 @@
 
             if (data && data.online === true) {
                 cachedData = data;
-                await displayResult(address, data, isBedrock, ping);
+                await displayResult(address, data, isBedrock, ping, pingNode);
             }
         }
 
