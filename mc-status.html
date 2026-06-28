@@ -792,7 +792,8 @@
                 copied: "已复制!",
                 unknownLocation: "未知",
                 ms: "ms",
-                pingFrom: "测速节点"
+                pingFrom: "测速节点",
+                loadingPing: "获取中..."
             },
             en: {
                 pageTitle: "Server Query",
@@ -840,7 +841,8 @@
                 copied: "Copied!",
                 unknownLocation: "Unknown",
                 ms: "ms",
-                pingFrom: "Node"
+                pingFrom: "Node",
+                loadingPing: "Loading..."
             }
         };
 
@@ -855,6 +857,8 @@
         let cachedGeo = null;
         let extraInfoInited = false;
         let currentPingNode = '';
+        let pingRequestId = 0;
+        let isPingRequesting = false;
 
         function getCookie(name) {
             const v = `; ${document.cookie}`;
@@ -1034,9 +1038,11 @@
         function startRefresh(address, isBedrock) {
             stopRefresh();
             document.getElementById('refreshIndicator').classList.add('show');
+
             statusTimer = setInterval(() => {
                 refreshServerStatus(address, isBedrock);
             }, 300000);
+
             pingTimer = setInterval(() => {
                 refreshPingOnly(address);
             }, 1000);
@@ -1068,12 +1074,25 @@
         }
 
         async function refreshPingOnly(address) {
+            if (isPingRequesting) return;
+            isPingRequesting = true;
+
             const parsed = parseAddress(address);
-            if (!parsed) return;
+            if (!parsed) {
+                isPingRequesting = false;
+                return;
+            }
+
+            const currentId = ++pingRequestId;
 
             try {
                 const resp = await fetch(`${CONFIG.pingApi}?url=${encodeURIComponent(parsed.host)}`);
                 const pingData = await resp.json();
+
+                if (currentId !== pingRequestId) {
+                    isPingRequesting = false;
+                    return;
+                }
 
                 let ping = 0;
                 let pingNode = '';
@@ -1091,10 +1110,14 @@
                 }
 
                 updatePingDisplay(ping, pingNode);
-            } catch (e) {}
+            } catch (e) {
+            } finally {
+                isPingRequesting = false;
+            }
         }
 
         function updatePingDisplay(ping, pingNode) {
+            const t = translations[currentLang];
             if (ping > 0) {
                 let display = `${ping}ms`;
                 if (pingNode) {
@@ -1252,6 +1275,8 @@
                 btn.disabled = true;
                 stopRefresh();
                 extraInfoInited = false;
+                pingRequestId = 0;
+                isPingRequesting = false;
             }
 
             let ping = 0;
@@ -1462,6 +1487,8 @@
                     const isBedrockNow = document.getElementById('bedrockCheck').checked;
                     cachedGeo = null;
                     extraInfoInited = false;
+                    pingRequestId = 0;
+                    isPingRequesting = false;
                     queryServer(addr, false, isBedrockNow);
                 });
             });
@@ -1486,6 +1513,8 @@
             const isBedrock = document.getElementById('bedrockCheck').checked;
             cachedGeo = null;
             extraInfoInited = false;
+            pingRequestId = 0;
+            isPingRequesting = false;
             queryServer(address, false, isBedrock);
         });
 
@@ -1529,6 +1558,8 @@
                 const isBedrockNow = document.getElementById('bedrockCheck').checked;
                 cachedGeo = null;
                 extraInfoInited = false;
+                pingRequestId = 0;
+                isPingRequesting = false;
                 queryServer(q, false, isBedrockNow);
             }, 500);
         }
