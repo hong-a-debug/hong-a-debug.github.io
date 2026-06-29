@@ -591,6 +591,80 @@
             display: block;
         }
 
+        .diagnostic-area {
+            margin-top: 16px;
+            padding-top: 16px;
+            border-top: 1px solid var(--card-border);
+            display: none;
+        }
+        .diagnostic-area.show {
+            display: block;
+        }
+
+        .diag-title {
+            font-size: 13px;
+            color: var(--text-secondary);
+            margin-bottom: 12px;
+            font-weight: 500;
+            text-align: center;
+        }
+
+        .diag-buttons {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            justify-content: center;
+        }
+
+        .diag-btn {
+            padding: 6px 16px;
+            border-radius: 20px;
+            border: 1px solid var(--card-border);
+            background: var(--card-bg);
+            color: var(--text-secondary);
+            font-size: 12px;
+            cursor: pointer;
+            font-family: inherit;
+            transition: all 0.2s;
+        }
+        .diag-btn:hover {
+            border-color: var(--accent);
+            color: var(--accent);
+        }
+        .diag-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .diag-result {
+            margin-top: 12px;
+            padding: 12px 16px;
+            background: var(--icon-bg);
+            border-radius: 8px;
+            border: 1px solid var(--card-border);
+            font-size: 13px;
+            color: var(--text-primary);
+            word-break: break-all;
+            min-height: 40px;
+            display: none;
+        }
+        .diag-result.show {
+            display: block;
+        }
+        .diag-result .label {
+            color: var(--text-secondary);
+        }
+        .diag-result .value {
+            font-weight: 500;
+            color: var(--text-primary);
+        }
+        .diag-result .success {
+            color: var(--online-color);
+        }
+        .diag-result .fail {
+            color: var(--offline-color);
+        }
+
         @media (max-width: 560px) {
             body {
                 padding: 20px 16px;
@@ -657,6 +731,10 @@
                 flex-direction: column;
                 gap: 6px;
             }
+            .diag-buttons {
+                flex-direction: column;
+                align-items: stretch;
+            }
         }
     </style>
 </head>
@@ -721,6 +799,17 @@
                         </span>
                     </div>
                 </div>
+
+                <div class="diagnostic-area" id="diagnosticArea">
+                    <div class="diag-title" id="diagTitle">🔧 网络诊断</div>
+                    <div class="diag-buttons">
+                        <button class="diag-btn" id="tcpingBtn">TCPing</button>
+                        <button class="diag-btn" id="portscanBtn">端口扫描</button>
+                        <button class="diag-btn" id="whoisBtn">Whois</button>
+                    </div>
+                    <div class="diag-result" id="diagResult"></div>
+                </div>
+
                 <div class="refresh-indicator" id="refreshIndicator">🔄 <span id="autoRefreshLabel">每 5 分钟刷新状态 · 每秒刷新 Ping</span></div>
             </div>
 
@@ -742,7 +831,11 @@
 
     <script>
         const CONFIG = {
-            pingApi: "https://v2.xxapi.cn/api/ping"
+            pingApi: "https://v2.xxapi.cn/api/ping",
+            tcpingApi: "https://v2.xxapi.cn/api/tcping",
+            ipApi: "https://v2.xxapi.cn/api/ip",
+            portscanApi: "https://v2.xxapi.cn/api/port-scan",
+            whoisApi: "https://v2.xxapi.cn/api/whois"
         };
 
         const translations = {
@@ -791,9 +884,19 @@
                 copyAddr: "复制地址",
                 copied: "已复制!",
                 unknownLocation: "未知",
-                ms: "ms",
                 pingFrom: "测速节点",
-                loadingPing: "获取中..."
+                loadingPing: "获取中...",
+                diagTitle: "🔧 网络诊断",
+                tcpingBtn: "TCPing",
+                portscanBtn: "端口扫描",
+                whoisBtn: "Whois",
+                tcpingResult: "TCPing 延迟",
+                tcpingPort: "端口",
+                portscanResult: "端口扫描结果",
+                portscanOpen: "开放",
+                portscanClosed: "关闭",
+                whoisResult: "Whois 信息",
+                whoisNotFound: "未查到 Whois 信息"
             },
             en: {
                 pageTitle: "Server Query",
@@ -840,9 +943,19 @@
                 copyAddr: "Copy Address",
                 copied: "Copied!",
                 unknownLocation: "Unknown",
-                ms: "ms",
                 pingFrom: "Node",
-                loadingPing: "Loading..."
+                loadingPing: "Loading...",
+                diagTitle: "🔧 Network Diagnostic",
+                tcpingBtn: "TCPing",
+                portscanBtn: "Port Scan",
+                whoisBtn: "Whois",
+                tcpingResult: "TCPing Latency",
+                tcpingPort: "Port",
+                portscanResult: "Port Scan Results",
+                portscanOpen: "Open",
+                portscanClosed: "Closed",
+                whoisResult: "Whois Info",
+                whoisNotFound: "Whois info not found"
             }
         };
 
@@ -859,6 +972,9 @@
         let currentPingNode = '';
         let pingRequestId = 0;
         let isPingRequesting = false;
+        let currentHost = null;
+        let currentPort = 25565;
+        let isBedrockMode = false;
 
         function getCookie(name) {
             const v = `; ${document.cookie}`;
@@ -924,6 +1040,10 @@
             document.getElementById('pingLabel').textContent = t.ping;
             document.getElementById('geoLabel').textContent = t.location;
             document.getElementById('realIpLabel').textContent = t.realIp;
+            document.getElementById('diagTitle').textContent = t.diagTitle;
+            document.getElementById('tcpingBtn').textContent = t.tcpingBtn;
+            document.getElementById('portscanBtn').textContent = t.portscanBtn;
+            document.getElementById('whoisBtn').textContent = t.whoisBtn;
 
             if (getCookie('cookie_consent') === 'accepted') {
                 setCookie('lang', lang, 30);
@@ -1117,7 +1237,6 @@
         }
 
         function updatePingDisplay(ping, pingNode) {
-            const t = translations[currentLang];
             if (ping > 0) {
                 let display = `${ping}ms`;
                 if (pingNode) {
@@ -1215,6 +1334,45 @@
             }
         }
 
+        async function queryGeo(ip) {
+            let geo = null;
+            let isp = null;
+
+            try {
+                const resp = await fetch(`https://api.ip.sb/geoip/${ip}`);
+                const data = await resp.json();
+                if (data.country) {
+                    geo = data.country === 'China' ? '中国' : data.country;
+                }
+                if (data.organization) {
+                    isp = data.organization;
+                } else if (data.isp) {
+                    isp = data.isp;
+                }
+            } catch (e) {}
+
+            if (!geo) {
+                try {
+                    const resp = await fetch(`https://v2.xxapi.cn/api/ip?ip=${ip}`);
+                    const data = await resp.json();
+                    if (data.code === 200 && data.data && data.data.address) {
+                        geo = data.data.address;
+                    }
+                } catch (e) {}
+            }
+
+            if (geo && isp) {
+                return `${geo} (${isp})`;
+            }
+            if (geo) {
+                return geo;
+            }
+            if (isp) {
+                return `(${isp})`;
+            }
+            return null;
+        }
+
         function initExtraInfo(address, ip, port, geo, ping, pingNode) {
             const t = translations[currentLang];
             cachedFullAddress = `${ip}:${port}`;
@@ -1236,30 +1394,121 @@
             extraInfoInited = true;
         }
 
-        async function queryGeo(ip) {
-            try {
-                const controller = new AbortController();
-                const timeout = setTimeout(() => controller.abort(), 5000);
-                const resp = await fetch(`https://api.ip.sb/geoip/${ip}`, {
-                    signal: controller.signal,
-                    headers: { 'Accept': 'application/json' }
-                });
-                clearTimeout(timeout);
-                if (!resp.ok) return null;
-                const data = await resp.json();
-                if (data.country) {
-                    const country = data.country === 'China' ? '中国' : data.country;
-                    const isp = data.organization || data.isp || '';
-                    if (isp) {
-                        return `${country} (${isp})`;
-                    }
-                    return `${country}`;
-                }
-                return null;
-            } catch (e) {
-                return null;
-            }
+        function showDiagnosticArea() {
+            document.getElementById('diagnosticArea').classList.add('show');
         }
+
+        function setDiagResult(html) {
+            const el = document.getElementById('diagResult');
+            el.innerHTML = html;
+            el.classList.add('show');
+        }
+
+        function clearDiagResult() {
+            document.getElementById('diagResult').classList.remove('show');
+        }
+
+        async function runTcping() {
+            if (!currentHost) {
+                setDiagResult('<span class="fail">请先查询一个服务器</span>');
+                return;
+            }
+            const t = translations[currentLang];
+            const btn = document.getElementById('tcpingBtn');
+            btn.disabled = true;
+
+            try {
+                const port = isBedrockMode ? (currentPort || 19132) : (currentPort || 25565);
+                const resp = await fetch(`${CONFIG.tcpingApi}?address=${encodeURIComponent(currentHost)}&port=${port}`);
+                const data = await resp.json();
+
+                if (data.code === 200 && data.data && data.data.ping) {
+                    setDiagResult(`
+                        <div><span class="label">${t.tcpingResult}:</span> <span class="value success">${data.data.ping}</span></div>
+                        <div><span class="label">${t.tcpingPort}:</span> <span class="value">${data.data.port || port}</span></div>
+                    `);
+                } else {
+                    setDiagResult(`<span class="fail">TCPing 失败: 端口 ${port} 可能未开放或超时</span>`);
+                }
+            } catch (e) {
+                setDiagResult(`<span class="fail">TCPing 请求失败</span>`);
+            }
+            btn.disabled = false;
+        }
+
+        async function runPortscan() {
+            if (!currentHost) {
+                setDiagResult('<span class="fail">请先查询一个服务器</span>');
+                return;
+            }
+            const t = translations[currentLang];
+            const btn = document.getElementById('portscanBtn');
+            btn.disabled = true;
+
+            try {
+                const resp = await fetch(`${CONFIG.portscanApi}?address=${encodeURIComponent(currentHost)}`);
+                const data = await resp.json();
+
+                if (data.code === 200 && data.data) {
+                    let html = `<div class="label">${t.portscanResult}:</div><div>`;
+                    const ports = data.data.ports || data.data || {};
+                    let hasPorts = false;
+                    for (const [port, status] of Object.entries(ports)) {
+                        const statusText = status === 'open' || status === true ? t.portscanOpen : t.portscanClosed;
+                        const cls = status === 'open' || status === true ? 'success' : 'fail';
+                        html += `<span style="margin-right:12px;">端口 ${port}: <span class="${cls}">${statusText}</span></span>`;
+                        hasPorts = true;
+                    }
+                    html += '</div>';
+                    if (!hasPorts) {
+                        html = `<span class="fail">未扫描到端口信息</span>`;
+                    }
+                    setDiagResult(html);
+                } else {
+                    setDiagResult(`<span class="fail">端口扫描失败</span>`);
+                }
+            } catch (e) {
+                setDiagResult(`<span class="fail">端口扫描请求失败</span>`);
+            }
+            btn.disabled = false;
+        }
+
+        async function runWhois() {
+            if (!currentHost) {
+                setDiagResult('<span class="fail">请先查询一个服务器</span>');
+                return;
+            }
+            const t = translations[currentLang];
+            const btn = document.getElementById('whoisBtn');
+            btn.disabled = true;
+
+            try {
+                const resp = await fetch(`${CONFIG.whoisApi}?domain=${encodeURIComponent(currentHost)}`);
+                const data = await resp.json();
+
+                if (data.code === 200 && data.data) {
+                    let html = `<div class="label">${t.whoisResult}:</div><div style="font-size:12px;color:var(--text-secondary);word-break:break-all;max-height:200px;overflow-y:auto;">`;
+                    if (typeof data.data === 'string') {
+                        html += data.data.replace(/\n/g, '<br>');
+                    } else if (data.data.raw) {
+                        html += data.data.raw.replace(/\n/g, '<br>');
+                    } else {
+                        html += JSON.stringify(data.data, null, 2).replace(/\n/g, '<br>');
+                    }
+                    html += '</div>';
+                    setDiagResult(html);
+                } else {
+                    setDiagResult(`<span class="fail">${t.whoisNotFound}</span>`);
+                }
+            } catch (e) {
+                setDiagResult(`<span class="fail">Whois 请求失败</span>`);
+            }
+            btn.disabled = false;
+        }
+
+        document.getElementById('tcpingBtn').addEventListener('click', runTcping);
+        document.getElementById('portscanBtn').addEventListener('click', runPortscan);
+        document.getElementById('whoisBtn').addEventListener('click', runWhois);
 
         async function queryServer(address, silent = false, isBedrock = false) {
             const loading = document.getElementById('loadingIndicator');
@@ -1269,6 +1518,10 @@
             const parsed = parseAddress(address);
             if (!parsed) return;
 
+            currentHost = parsed.host;
+            currentPort = parsed.port || (isBedrock ? 19132 : 25565);
+            isBedrockMode = isBedrock;
+
             if (!silent) {
                 loading.style.display = 'block';
                 area.classList.remove('show');
@@ -1277,6 +1530,8 @@
                 extraInfoInited = false;
                 pingRequestId = 0;
                 isPingRequesting = false;
+                clearDiagResult();
+                document.getElementById('diagnosticArea').classList.remove('show');
             }
 
             let ping = 0;
@@ -1349,6 +1604,7 @@
 
             let ip = data?.ip || parsed.host;
             let port = data?.port || parsed.port || (isBedrock ? 19132 : 25565);
+            currentPort = port;
 
             if (!extraInfoInited) {
                 const geo = await queryGeo(ip);
@@ -1375,6 +1631,7 @@
                 </div>`;
                 document.getElementById('resultDetails').innerHTML = html;
                 startRefresh(address, isBedrock);
+                showDiagnosticArea();
                 return;
             }
 
@@ -1386,6 +1643,7 @@
                     initExtraInfo(address, ip, port, geoDisplay, ping, pingNode);
                 }
                 startRefresh(address, isBedrock);
+                showDiagnosticArea();
             }
         }
 
