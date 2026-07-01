@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="zh-CN" data-theme="light">
+<html lang="zh-CN">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
@@ -149,7 +149,7 @@ img{max-width:100%;display:block}
 <a href="#" class="active">首页</a>
 </div>
 <div class="nav-actions">
-<button onclick="toggleTheme()" title="切换主题"><i class="fas fa-moon"></i></button>
+<button id="themeBtn" onclick="toggleTheme()" title="切换主题"><i class="fas fa-moon"></i></button>
 </div>
 </nav>
 <h1 id="site-title"><i class="fas fa-cube"></i> 红怪博客</h1>
@@ -260,7 +260,32 @@ img{max-width:100%;display:block}
 <div class="modal-overlay" id="downloadModal"><div class="modal-box"><h3>📥 下载确认</h3><div class="tip">该工具下载后如被 Windows 提示"不安全"，这是微软的误报机制，与 Fabric、(Neo)Forge 等知名模组加载器遇到的情况完全相同。请放心点击"保留"继续使用。</div><div class="content">📥 小鸡头像自动工具 (18.0M)</div><div class="btn-group"><button class="btn-success" onclick="downloadFile()">下载</button><button class="btn-secondary" onclick="closeModal('downloadModal')">取消</button></div></div></div>
 
 <script>
-function toggleTheme(){document.documentElement.getAttribute('data-theme')==='light'?document.documentElement.setAttribute('data-theme','dark'):document.documentElement.setAttribute('data-theme','light')}
+function getCookie(name){const v='; '+document.cookie;const parts=v.split('; '+name+'=');if(parts.length===2)return parts.pop().split(';').shift();return null}
+function setCookie(name,value,days){const d=new Date();d.setTime(d.getTime()+days*86400000);document.cookie=name+'='+value+'; expires='+d.toUTCString()+'; path=/'}
+
+function toggleTheme(){
+const isDark=document.documentElement.getAttribute('data-theme')==='dark';
+const newTheme=isDark?'light':'dark';
+document.documentElement.setAttribute('data-theme',newTheme);
+setCookie('theme',newTheme,30);
+const btn=document.querySelector('#themeBtn i');
+if(btn)btn.className=newTheme==='dark'?'fas fa-sun':'fas fa-moon';
+const rightBtn=document.querySelector('#rightside button:first-child i');
+if(rightBtn)rightBtn.className='fas fa-adjust';
+}
+
+function initTheme(){
+const saved=getCookie('theme');
+if(saved==='dark'){
+document.documentElement.setAttribute('data-theme','dark');
+document.querySelector('#themeBtn i').className='fas fa-sun';
+}else{
+document.documentElement.setAttribute('data-theme','light');
+document.querySelector('#themeBtn i').className='fas fa-moon';
+}
+}
+initTheme();
+
 function showPCLModal(){document.getElementById('pclModal').classList.add('active')}
 function showQQModal(){document.getElementById('qqModal').classList.add('active')}
 function showDownloadModal(){document.getElementById('downloadModal').classList.add('active')}
