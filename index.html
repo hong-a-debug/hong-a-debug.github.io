@@ -59,7 +59,6 @@ img{max-width:100%;display:block}
 .link-card.hidden{display:none}
 .link-card.tool .icon{background:var(--orange);color:#fff}
 .link-card.tool .badge{background:var(--orange);color:#fff}
-.link-card.download .icon{background:var(--success);color:#fff}
 .aside-content{display:flex;flex-direction:column;gap:20px}
 .card-widget{background:var(--card);border-radius:var(--radius);box-shadow:var(--shadow);padding:20px 22px;border:1px solid var(--border)}
 .card-widget .headline{font-size:.95rem;font-weight:650;color:var(--text);margin-bottom:12px;display:flex;align-items:center;gap:8px}
@@ -170,9 +169,8 @@ img{max-width:100%;display:block}
 <a href="https://discord.gg/nB2w3NQhkE" target="_blank" class="link-card" data-name="Discord 社区" data-desc="红怪的 Discord 邀请链接"><div class="icon"><i class="fab fa-discord"></i></div><div class="info"><div class="name">Discord 社区</div><div class="desc">红怪的 Discord 邀请链接</div></div><span class="badge">邀请</span></a>
 <a href="https://github.com/hong-a-debug" target="_blank" class="link-card" data-name="GitHub 主页" data-desc="杂七杂八的东西"><div class="icon"><i class="fab fa-github"></i></div><div class="info"><div class="name">GitHub 主页</div><div class="desc">杂七杂八的东西</div></div><span class="badge">代码</span></a>
 <a href="https://modrinth.com/user/HongGuai" target="_blank" class="link-card" data-name="红怪的Modrinth主页" data-desc="主要是一些Minecraft相关的东西"><div class="icon"><i class="fas fa-cubes"></i></div><div class="info"><div class="name">红怪的Modrinth主页</div><div class="desc">主要是一些Minecraft相关的东西</div></div><span class="badge">模组</span></a>
-<div class="link-card tool download" data-name="小鸡头像自动工具" data-desc="下载版 | 18.0M" onclick="showDownloadModal()"><div class="icon"><i class="fas fa-download"></i></div><div class="info"><div class="name">小鸡头像自动工具</div><div class="desc">下载版 | 18.0M</div></div><span class="badge">下载</span></div>
 <div class="link-card" data-name="PCL主页" data-desc="点击弹窗复制内容" onclick="showPCLModal()"><div class="icon"><i class="fas fa-rocket"></i></div><div class="info"><div class="name">PCL主页</div><div class="desc">点击弹窗复制内容</div></div><span class="badge">复制</span></div>
-<div class="link-card" data-name="QQ社区" data-desc="点击复制QQ号" onclick="showQQModal()"><div class="icon"><i class="fab fa-qq"></i></div><div class="info"><div class="name">QQ社区</div><div class="desc">点击复制QQ号</div></div><span class="badge">复制</span></div>
+<div class="link-card" data-name="QQ社区" data-desc="点击复制QQ号" onclick="showQQModal()"><div class="icon"><i class="fab fa-qq"></i></div><div class="info"><div class="name">QQ社区</div><div class="desc">点击复制QQ号</div></div><span class="badge">QQ号</span></div>
 </div>
 <div class="no-result" id="noResult">😢 没有找到相关链接</div>
 
@@ -234,7 +232,7 @@ img{max-width:100%;display:block}
 <div class="avatar"><img src="/icon/icon.png" alt="红怪" onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%2272%22 height=%2272%22%3E%3Crect fill=%22%234a6fa5%22 width=%2272%22 height=%2272%22/%3E%3Ctext x=%2236%22 y=%2246%22 text-anchor=%22middle%22 fill=%22white%22 font-size=%2230%22 font-family=%22sans-serif%22%3E⛏%3C/text%3E%3C/svg%3E'"></div>
 <div class="name">红怪</div>
 <div class="bio">⛏️ 红石小白</div>
-<div class="stats"><div><div class="num">3</div><div class="label">工具</div></div><div><div class="num">6</div><div class="label">链接</div></div><div><div class="num">4</div><div class="label">分类</div></div></div>
+<div class="stats"><div><div class="num">2</div><div class="label">工具</div></div><div><div class="num">6</div><div class="label">链接</div></div><div><div class="num">4</div><div class="label">分类</div></div></div>
 <div class="social-icons">
 <a href="https://space.bilibili.com/394466602" target="_blank" title="B站"><i class="fab fa-bilibili"></i></a>
 <a href="https://github.com/hong-a-debug" target="_blank" title="GitHub"><i class="fab fa-github"></i></a>
@@ -257,7 +255,6 @@ img{max-width:100%;display:block}
 
 <div class="modal-overlay" id="pclModal"><div class="modal-box"><h3>📋 复制内容</h3><div class="tip">复制到设置→个性化→主页→联网更新→下载地址</div><div class="content">https://blog.hgb.j3.ink/Custom.xaml</div><div class="btn-group"><button class="btn-primary" onclick="copyText('https://blog.hgb.j3.ink/Custom.xaml',this)">复制</button><button class="btn-secondary" onclick="closeModal('pclModal')">关闭</button></div></div></div>
 <div class="modal-overlay" id="qqModal"><div class="modal-box"><h3>📋 QQ社区</h3><div class="content">301595234</div><div class="btn-group"><button class="btn-primary" onclick="copyText('301595234',this)">复制</button><button class="btn-secondary" onclick="closeModal('qqModal')">关闭</button></div></div></div>
-<div class="modal-overlay" id="downloadModal"><div class="modal-box"><h3>📥 下载确认</h3><div class="tip">该工具下载后如被 Windows 提示"不安全"，这是微软的误报机制，与 Fabric、(Neo)Forge 等知名模组加载器遇到的情况完全相同。请放心点击"保留"继续使用。</div><div class="content">📥 小鸡头像自动工具 (18.0M)</div><div class="btn-group"><button class="btn-success" onclick="downloadFile()">下载</button><button class="btn-secondary" onclick="closeModal('downloadModal')">取消</button></div></div></div>
 
 <script>
 function getCookie(name){const v='; '+document.cookie;const parts=v.split('; '+name+'=');if(parts.length===2)return parts.pop().split(';').shift();return null}
@@ -288,10 +285,8 @@ initTheme();
 
 function showPCLModal(){document.getElementById('pclModal').classList.add('active')}
 function showQQModal(){document.getElementById('qqModal').classList.add('active')}
-function showDownloadModal(){document.getElementById('downloadModal').classList.add('active')}
 function closeModal(id){document.getElementById(id).classList.remove('active')}
 function copyText(text,btn){navigator.clipboard.writeText(text).then(()=>{const t=btn.textContent;btn.textContent='✅ 已复制';setTimeout(()=>{btn.textContent=t},1500)})}
-function downloadFile(){const a=document.createElement('a');a.href='/启动.exe';a.download='启动.exe';document.body.appendChild(a);a.click();document.body.removeChild(a);closeModal('downloadModal')}
 document.querySelectorAll('.modal-overlay').forEach(el=>{el.addEventListener('click',function(e){if(e.target===this)this.classList.remove('active')})});
 document.getElementById('searchBtn').addEventListener('click',function(){const q=document.getElementById('searchInput').value.trim().toLowerCase();const cards=document.querySelectorAll('.link-card');let show=false;cards.forEach(c=>{const n=c.dataset.name?.toLowerCase()||'',d=c.dataset.desc?.toLowerCase()||'';if(q===''||n.includes(q)||d.includes(q)){c.classList.remove('hidden');show=true}else{c.classList.add('hidden')}});document.getElementById('noResult').classList.toggle('show',!show&&q!=='')});
 document.getElementById('searchInput').addEventListener('input',function(){if(this.value.trim()==='')document.getElementById('searchBtn').click()});
