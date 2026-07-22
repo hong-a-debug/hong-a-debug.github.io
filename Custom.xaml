@@ -11,7 +11,7 @@
             <Border Grid.Column="0" Width="56" Height="56" CornerRadius="28" 
                     Background="White" Margin="0,0,12,0">
                 <local:MyImage Width="48" Height="48" 
-                               Source="https://hgb.j3.ink/icon/icon.png" 
+                               Source="https://blog.hg-chat.win/icon/icon.png" 
                                Stretch="Uniform"
                                ToolTip="我的主页"/>
             </Border>
@@ -68,7 +68,7 @@
                         Margin="5,5,5,5" Padding="8,5,8,5">
                     <StackPanel Orientation="Horizontal" Margin="5,5,5,5">
                         <local:MyImage Width="32" Height="32" 
-                                       Source="https://hgb.j3.ink/Wiki.png" 
+                                       Source="https://blog.hg-chat.win/Wiki.png" 
                                        Stretch="Uniform" Margin="0,0,10,0"/>
                         <local:MyButton Width="150" Height="32" Padding="8,0,8,0" ColorType="Highlight"
                                         Text="中文Wiki" EventType="打开网页" EventData="https://zh.minecraft.wiki/" />
@@ -90,7 +90,7 @@
                         Margin="5,5,5,5" Padding="8,5,8,5">
                     <StackPanel Orientation="Horizontal" Margin="5,5,5,5">
                         <local:MyImage Width="32" Height="32" 
-                                       Source="https://hgb.j3.ink/MTR.png" 
+                                       Source="https://blog.hg-chat.win/MTR.png" 
                                        Stretch="Uniform" Margin="0,0,10,0"/>
                         <local:MyButton Width="150" Height="32" Padding="8,0,8,0"
                                         Text="MTRBBS" EventType="打开网页" EventData="https://www.mtrbbs.top/" />
@@ -101,7 +101,7 @@
                         Margin="5,5,5,5" Padding="8,5,8,5">
                     <StackPanel Orientation="Horizontal" Margin="5,5,5,5">
                         <local:MyImage Width="32" Height="32" 
-                                       Source="https://hgb.j3.ink/JavaID.png" 
+                                       Source="https://blog.hg-chat.win/JavaID.png" 
                                        Stretch="Uniform" Margin="0,0,10,0"/>
                         <local:MyButton Width="150" Height="32" Padding="8,0,8,0"
                                         Text="Java版ID表" EventType="打开网页" EventData="https://mcid.lingningyu.cn/" />
@@ -112,7 +112,7 @@
                         Margin="5,5,5,5" Padding="8,5,8,5">
                     <StackPanel Orientation="Horizontal" Margin="5,5,5,5">
                         <local:MyImage Width="32" Height="32" 
-                                       Source="https://hgb.j3.ink/blockfront.png" 
+                                       Source="https://blog.hg-chat.win/blockfront.png" 
                                        Stretch="Uniform" Margin="0,0,10,0"/>
                         <local:MyButton Width="150" Height="32" Padding="8,0,8,0"
                                         Text="方块前线" EventType="打开网页" EventData="https://www.blockfrontmc.com/" />
@@ -123,7 +123,7 @@
                         Margin="5,5,5,5" Padding="8,5,8,5">
                     <StackPanel Orientation="Horizontal" Margin="5,5,5,5">
                         <local:MyImage Width="32" Height="32" 
-                                       Source="https://hgb.j3.ink/SIMMC.png" 
+                                       Source="https://blog.hg-chat.win/SIMMC.png" 
                                        Stretch="Uniform" Margin="0,0,10,0"/>
                         <local:MyButton Width="150" Height="32" Padding="8,0,8,0"
                                         Text="SIMMC Wiki" EventType="打开网页" EventData="https://simmc.huijiwiki.com/wiki/%E9%A6%96%E9%A1%B5" />
@@ -134,7 +134,7 @@
                         Margin="5,5,5,5" Padding="8,5,8,5">
                     <StackPanel Orientation="Horizontal" Margin="5,5,5,5">
                         <local:MyImage Width="32" Height="32" 
-                                       Source="https://hgb.j3.ink/MTRmap.png" 
+                                       Source="https://blog.hg-chat.win/MTRmap.png" 
                                        Stretch="Uniform" Margin="0,0,10,0"/>
                         <local:MyButton Width="150" Height="32" Padding="8,0,8,0"
                                         Text="MTR地图" EventType="打开网页" EventData="https://map.lpsguide.cn/" />
@@ -187,7 +187,7 @@
                         Margin="5,5,5,5" Padding="8,5,8,5">
                     <StackPanel Orientation="Horizontal" Margin="5,5,5,5">
                         <local:MyImage Width="32" Height="32" 
-                                       Source="https://hgb.j3.ink/youtube.png" 
+                                       Source="https://blog.hg-chat.win/youtube.png" 
                                        Stretch="Uniform" Margin="0,0,10,0"/>
                         <local:MyButton Width="150" Height="32" Padding="8,0,8,0"
                                         Text="YouTube" EventType="打开网页" EventData="https://www.youtube.com/" />
@@ -210,7 +210,7 @@
             <local:MyTextButton Text="💬 反馈建议" EventType="打开网页" EventData="https://github.com/hong-a-debug/hong-a-debug.github.io/issues" />
         </StackPanel>
 
-        <TextBlock Text="📅 v2026-06-18 17:25" 
+        <TextBlock Text="📅 v2026-07-22" 
                    FontSize="10" Foreground="{DynamicResource ColorBrush6}"
                    HorizontalAlignment="Center" Margin="0,12,0,0"/>
     </StackPanel>
