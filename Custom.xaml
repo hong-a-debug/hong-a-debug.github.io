@@ -179,7 +179,7 @@
                                         Text="🎬 我的视频主页" 
                                         ToolTip="点击进入我的B站空间"
                                         EventType="打开网页" 
-                                        EventData="https://space.bilibili.com/394466602" />
+                                        EventData="https://link.hg-chat.win/bilibili" />
                     </StackPanel>
                 </Border>
 
@@ -205,12 +205,12 @@
                    FontSize="11" Foreground="{DynamicResource ColorBrush5}"
                    HorizontalAlignment="Center"/>
         <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,8,0,0">
-            <local:MyTextButton Text="⭐ GitHub 仓库" EventType="打开网页" EventData="https://github.com/hong-a-debug/hong-a-debug.github.io" />
+            <local:MyTextButton Text="⭐ GitHub 仓库" EventType="打开网页" EventData="https://github.com/hong-a-debug/toolbox.hg-chat.win" />
             <TextBlock Text=" · " Foreground="{DynamicResource ColorBrush5}" Margin="5,0,5,0"/>
-            <local:MyTextButton Text="💬 反馈建议" EventType="打开网页" EventData="https://github.com/hong-a-debug/hong-a-debug.github.io/issues" />
+            <local:MyTextButton Text="💬 反馈建议" EventType="打开网页" EventData="https://github.com/hong-a-debug/toolbox.hg-chat.win/issues" />
         </StackPanel>
 
-        <TextBlock Text="📅 v2026-08-09" 
+        <TextBlock Text="📅 v2026-08-13" 
                    FontSize="10" Foreground="{DynamicResource ColorBrush6}"
                    HorizontalAlignment="Center" Margin="0,12,0,0"/>
     </StackPanel>
